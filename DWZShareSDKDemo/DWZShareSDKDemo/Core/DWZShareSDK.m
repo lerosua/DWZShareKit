@@ -8,8 +8,9 @@
 
 #import "DWZShareSDK.h"
 #import "weiboSDK.h"
+#import "DWZShareViewController.h"
 
-@interface DWZShareSDK()<WeiboSDKDelegate>
+@interface DWZShareSDK()<WeiboSDKDelegate,UIActionSheetDelegate>
 
 //新浪数据
 @property (nonatomic,strong) NSString *sinaWeiboAppKey;
@@ -28,6 +29,8 @@
 //微信数据
 @property (nonatomic,strong) NSString *weChatAppId;
 
+
+@property (nonatomic,weak) UIViewController *baseViewController;
 
 
 
@@ -56,6 +59,9 @@
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:appKey];
     
+    shareSDK.sinaWeiboAppKey = appKey;
+    shareSDK.sinaWeiboAppSecret = appSecret;
+    shareSDK.sinaWeiboAppUrl = redirectUri;
     
     
 }
@@ -79,5 +85,50 @@
                      wechatCls:(Class)wechatCls
 {
     
+}
+
++ (id) showDefaultShareWithTitle:(NSString *)title
+                serviceShareList:(NSArray *)shareList
+              withViewController:(UIViewController *)viewController;
+
+{
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    shareSDK.baseViewController = viewController;
+    
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:(id<UIActionSheetDelegate>)self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil,nil];
+
+    [sheet addButtonWithTitle:@"新浪微博"];
+    [sheet addButtonWithTitle:@"腾讯微博"];
+    [sheet addButtonWithTitle:@"QQ空间"];
+    [sheet addButtonWithTitle:@"微信"];
+    [sheet addButtonWithTitle:@"取消"];
+    sheet.cancelButtonIndex = sheet.numberOfButtons - 1;
+
+    [sheet showInView:[UIApplication sharedApplication].keyWindow];
+    
+    return nil;
+    
+}
+
++ (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"click %d",buttonIndex);
+//    switch (buttonIndex) {
+//        case 0:
+//
+//            break;
+//        case 1:
+//        default:
+//            break;
+//    }
+    
+
+    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+//    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:viewController animated:YES completion:nil];
+//    UIViewController *vc = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+//    [vc presentViewController:viewController animated:YES completion:nil];
 }
 @end

@@ -28,6 +28,7 @@
 		E9F55A7718FFBF5300A5E0E4 /* libTCWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A6D18FFBF5300A5E0E4 /* libTCWeiboSDK.a */; };
 		E9F55A7818FFBF5300A5E0E4 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A7018FFBF5300A5E0E4 /* libWeChatSDK.a */; };
 		E9F55A7B18FFBF8600A5E0E4 /* DWZShareSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */; };
+		E9F55A7F19010FAB00A5E0E4 /* DWZShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,8 @@
 		E9F55A7218FFBF5300A5E0E4 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		E9F55A7918FFBF8600A5E0E4 /* DWZShareSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareSDK.h; path = Core/DWZShareSDK.h; sourceTree = "<group>"; };
 		E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareSDK.m; path = Core/DWZShareSDK.m; sourceTree = "<group>"; };
+		E9F55A7D19010FAB00A5E0E4 /* DWZShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareViewController.h; path = Core/DWZShareViewController.h; sourceTree = "<group>"; };
+		E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareViewController.m; path = Core/DWZShareViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +235,8 @@
 			children = (
 				E9F55A7918FFBF8600A5E0E4 /* DWZShareSDK.h */,
 				E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */,
+				E9F55A7D19010FAB00A5E0E4 /* DWZShareViewController.h */,
+				E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -340,6 +345,7 @@
 				E9F55A4018FFBE3500A5E0E4 /* DWZAppDelegate.m in Sources */,
 				E9F55A7B18FFBF8600A5E0E4 /* DWZShareSDK.m in Sources */,
 				E9F55A3C18FFBE3500A5E0E4 /* main.m in Sources */,
+				E9F55A7F19010FAB00A5E0E4 /* DWZShareViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +477,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DWZShareSDKDemo/DWZShareSDKDemo-Prefix.pch";
 				INFOPLIST_FILE = "DWZShareSDKDemo/DWZShareSDKDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/SinaWeiboSDK",
@@ -494,6 +501,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DWZShareSDKDemo/DWZShareSDKDemo-Prefix.pch";
 				INFOPLIST_FILE = "DWZShareSDKDemo/DWZShareSDKDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/SinaWeiboSDK",

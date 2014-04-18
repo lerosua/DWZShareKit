@@ -7,6 +7,7 @@
 //
 
 #import "DWZViewController.h"
+#import "DWZShareSDK.h"
 
 @interface DWZViewController ()
 
@@ -29,9 +30,7 @@
 #pragma mark -
 - (IBAction)ShareButtonAction:(id)sender
 {
-    
-    
-    
+    [DWZShareSDK showDefaultShareWithTitle:@"测试" serviceShareList:nil withViewController:self];
 }
 
 @end

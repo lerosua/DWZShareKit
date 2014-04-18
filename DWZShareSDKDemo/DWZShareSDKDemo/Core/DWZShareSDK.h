@@ -63,4 +63,27 @@
  */
 + (instancetype) shareInstance;
 
+/**
+ *  @brief 通过URL启动第三方应用时传递的数据
+ *
+ *  @param url       启动第三方应用的URL
+ *  @param pDelegate 用于接收SDK触发消息的委托
+ *
+ *  @return 返回布尔值
+ */
++ (BOOL) handleOpenURL:(NSURL *)url delegate:(id) pDelegate;
+
+/**
+ *  创建默认分享选项
+ *
+ *  @param title     分享视图标题
+ *  @param shareList 分享服务列表,sina,qqzone这些
+ *
+ *  @return <#return value description#>
+ */
++ (id) showDefaultShareWithTitle:(NSString *)title
+                serviceShareList:(NSArray *)shareList
+              withViewController:(UIViewController *)viewController;
+
+
 @end
