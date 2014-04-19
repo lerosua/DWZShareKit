@@ -7,6 +7,10 @@
 //
 
 #import "DWZShareViewController.h"
+#import "weiboSDK.h"
+#import "DWZShareSDK.h"
+
+
 #define is4Inch()               ([[UIScreen mainScreen] bounds].size.height == 568)
 #define DWZStatusBarOffet        ([[[UIDevice currentDevice] systemVersion] floatValue] >=7.0 ? 20 : 0)
 
@@ -99,7 +103,14 @@
 
 - (void) confirmButtonAction:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    //testing weibo share
+    WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
+    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
+    request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+    
+    [WeiboSDK sendRequest:request];
 
 }
 

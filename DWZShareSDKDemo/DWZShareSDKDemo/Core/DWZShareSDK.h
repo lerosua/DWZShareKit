@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class  WBMessageObject;
 
 @interface DWZShareSDK : NSObject
 /**
@@ -79,11 +80,18 @@
  *  @param title     分享视图标题
  *  @param shareList 分享服务列表,sina,qqzone这些
  *
- *  @return <#return value description#>
+ *  @return 暂未定义
  */
 + (id) showDefaultShareWithTitle:(NSString *)title
                 serviceShareList:(NSArray *)shareList
               withViewController:(UIViewController *)viewController;
 
-
+/**
+ *  转换文本消息为微博消息对象
+ *
+ *  @param text 文本消息
+ *
+ *  @return 微博消息对象
+ */
++ (WBMessageObject *)weiboMessageFrom:(NSString *)text;
 @end

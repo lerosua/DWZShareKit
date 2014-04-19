@@ -123,12 +123,40 @@
 //    }
     
 
-    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+//    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+//
+//    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+//    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+    
+    WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
+    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
+    request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+    [WeiboSDK sendRequest:request];
+}
 
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
-//    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:viewController animated:YES completion:nil];
-//    UIViewController *vc = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-//    [vc presentViewController:viewController animated:YES completion:nil];
++ (WBMessageObject *)weiboMessageFrom:(NSString *)text
+{
+    WBMessageObject *message = [WBMessageObject message];
+    message.text = text;
+    return message;
+}
+
+
+#pragma mark - weibo回调
++ (void)didReceiveWeiboRequest:(WBBaseRequest *)request
+{
+    NSLog(@"get weibo request");
+}
+
++ (void)didReceiveWeiboResponse:(WBBaseResponse *)response
+{
+    NSLog(@"get weibo response");
+}
+
++ (BOOL) handleOpenURL:(NSURL *)url delegate:(id) pDelegate
+{
+    NSLog(@"get url %@",[url absoluteString]);
+    
+    return YES;
 }
 @end

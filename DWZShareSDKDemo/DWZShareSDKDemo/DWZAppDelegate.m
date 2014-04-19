@@ -7,12 +7,15 @@
 //
 
 #import "DWZAppDelegate.h"
-
+#import "DWZShareSDK.h"
 @implementation DWZAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    [DWZShareSDK connectSinaWeiboWithAppKey:GESinaWeiboSDKAppKey appSecret:GESinaWeiboSDKAppSecret redirectUri:GESinaWeiboSDKAppUri];
+    
     return YES;
 }
 							
@@ -43,4 +46,9 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+#pragma mark -
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [DWZShareSDK handleOpenURL:url delegate:self];
+}
 @end
