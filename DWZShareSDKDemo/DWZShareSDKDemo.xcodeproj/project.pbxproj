@@ -23,12 +23,12 @@
 		E9F55A5B18FFBE3500A5E0E4 /* DWZShareSDKDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A5A18FFBE3500A5E0E4 /* DWZShareSDKDemoTests.m */; };
 		E9F55A7318FFBF5300A5E0E4 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A6618FFBF5300A5E0E4 /* TencentOpenAPI.framework */; };
 		E9F55A7418FFBF5300A5E0E4 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E9F55A6718FFBF5300A5E0E4 /* TencentOpenApi_IOS_Bundle.bundle */; };
-		E9F55A7518FFBF5300A5E0E4 /* libSinaWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A6918FFBF5300A5E0E4 /* libSinaWeiboSDK.a */; };
 		E9F55A7618FFBF5300A5E0E4 /* WeiboSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E9F55A6A18FFBF5300A5E0E4 /* WeiboSDK.bundle */; };
 		E9F55A7718FFBF5300A5E0E4 /* libTCWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A6D18FFBF5300A5E0E4 /* libTCWeiboSDK.a */; };
 		E9F55A7818FFBF5300A5E0E4 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A7018FFBF5300A5E0E4 /* libWeChatSDK.a */; };
 		E9F55A7B18FFBF8600A5E0E4 /* DWZShareSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */; };
 		E9F55A7F19010FAB00A5E0E4 /* DWZShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */; };
+		E9F55AC219022B3C00A5E0E4 /* libWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55AC119022B3C00A5E0E4 /* libWeiboSDK.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +63,6 @@
 		E9F55A5A18FFBE3500A5E0E4 /* DWZShareSDKDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DWZShareSDKDemoTests.m; sourceTree = "<group>"; };
 		E9F55A6618FFBF5300A5E0E4 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		E9F55A6718FFBF5300A5E0E4 /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
-		E9F55A6918FFBF5300A5E0E4 /* libSinaWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSinaWeiboSDK.a; sourceTree = "<group>"; };
 		E9F55A6A18FFBF5300A5E0E4 /* WeiboSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WeiboSDK.bundle; sourceTree = "<group>"; };
 		E9F55A6B18FFBF5300A5E0E4 /* WeiboSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboSDK.h; sourceTree = "<group>"; };
 		E9F55A6D18FFBF5300A5E0E4 /* libTCWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTCWeiboSDK.a; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareSDK.m; path = Core/DWZShareSDK.m; sourceTree = "<group>"; };
 		E9F55A7D19010FAB00A5E0E4 /* DWZShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareViewController.h; path = Core/DWZShareViewController.h; sourceTree = "<group>"; };
 		E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareViewController.m; path = Core/DWZShareViewController.m; sourceTree = "<group>"; };
+		E9F55AC119022B3C00A5E0E4 /* libWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeiboSDK.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,8 +85,8 @@
 				E9F55A7818FFBF5300A5E0E4 /* libWeChatSDK.a in Frameworks */,
 				E9F55A7718FFBF5300A5E0E4 /* libTCWeiboSDK.a in Frameworks */,
 				E9F55A3218FFBE3500A5E0E4 /* CoreGraphics.framework in Frameworks */,
+				E9F55AC219022B3C00A5E0E4 /* libWeiboSDK.a in Frameworks */,
 				E9F55A7318FFBF5300A5E0E4 /* TencentOpenAPI.framework in Frameworks */,
-				E9F55A7518FFBF5300A5E0E4 /* libSinaWeiboSDK.a in Frameworks */,
 				E9F55A3418FFBE3500A5E0E4 /* UIKit.framework in Frameworks */,
 				E9F55A3018FFBE3500A5E0E4 /* Foundation.framework in Frameworks */,
 			);
@@ -204,7 +204,7 @@
 		E9F55A6818FFBF5300A5E0E4 /* SinaWeiboSDK */ = {
 			isa = PBXGroup;
 			children = (
-				E9F55A6918FFBF5300A5E0E4 /* libSinaWeiboSDK.a */,
+				E9F55AC119022B3C00A5E0E4 /* libWeiboSDK.a */,
 				E9F55A6A18FFBF5300A5E0E4 /* WeiboSDK.bundle */,
 				E9F55A6B18FFBF5300A5E0E4 /* WeiboSDK.h */,
 			);

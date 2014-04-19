@@ -10,7 +10,9 @@
 #import "WeiboSDK.h"
 #import "DWZShareViewController.h"
 
-@interface DWZShareSDK()<WeiboSDKDelegate ,UIActionSheetDelegate>
+@interface DWZShareSDK()<WeiboSDKDelegate,
+                        WBHttpRequestDelegate,
+                        UIActionSheetDelegate>
 
 //新浪数据
 @property (nonatomic,strong) NSString *sinaWeiboAppKey;
