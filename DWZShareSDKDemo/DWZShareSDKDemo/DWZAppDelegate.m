@@ -15,9 +15,10 @@
     // Override point for customization after application launch.
     
     [DWZShareSDK connectSinaWeiboWithAppKey:GESinaWeiboSDKAppKey appSecret:GESinaWeiboSDKAppSecret redirectUri:GESinaWeiboSDKAppUri];
+//    [DWZShareSDK connectSinaWeiboWithAppKey:sinaAppKey appSecret:sinaAppSecret redirectUri:sinaAppRedirectURI];
     [DWZShareSDK connectTencentWeiboWithAppKey:GETencentWeiboSDKAppKey appSecret:GETencentWeiboSDKAppSecret redirectUri:GETencentWeiboSDKAppUr];
-    
-    
+    [DWZShareSDK connectWeChatWithAppId:GEWechatSDKAppKey wechatCls:nil];
+    [DWZShareSDK connectQZoneWithAppKey:GEQZoneSDKAppKey appSecret:GEQZoneSDKAppSecret];
     
     return YES;
 }

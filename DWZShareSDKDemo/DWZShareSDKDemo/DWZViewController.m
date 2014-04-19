@@ -11,7 +11,7 @@
 #import "DWZAppDelegate.h"
 #import "WeiboSDK.h"
 
-@interface DWZViewController ()
+@interface DWZViewController ()<WBHttpRequestDelegate>
 
 @end
 
@@ -32,18 +32,16 @@
 #pragma mark -
 - (IBAction)ShareButtonAction:(id)sender
 {
-    [DWZShareSDK showDefaultShareWithTitle:@"测试" serviceShareList:nil withViewController:self];
-    
-
-    
-//    WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-//    request.redirectURI = @"http://www.sina.com";
-//    request.scope = @"all";
-//    request.userInfo = @{@"SSO_From": @"SendMessageToWeiboViewController",
-//                         @"Other_Info_1": [NSNumber numberWithInt:123],
-//                         @"Other_Info_2": @[@"obj1", @"obj2"],
-//                         @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
-//    [WeiboSDK sendRequest:request];
+//    [DWZShareSDK showDefaultShareWithTitle:@"测试" serviceShareList:nil withViewController:self];
+    WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+    request.redirectURI = GESinaWeiboSDKAppUri;
+    request.scope = @"all";
+    request.userInfo = @{@"SSO_From": @"loginFromYinbaShare",
+                         @"Other_Info_1": [NSNumber numberWithInt:123],
+                         @"Other_Info_2": @[@"obj1", @"obj2"],
+                         @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
+    request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
+    [WeiboSDK sendRequest:request];
 }
 
 - (void)request:(WBHttpRequest *)request didFinishLoadingWithResult:(NSString *)result

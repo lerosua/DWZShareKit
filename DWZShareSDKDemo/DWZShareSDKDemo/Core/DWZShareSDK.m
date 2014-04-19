@@ -7,13 +7,18 @@
 //
 
 #import "DWZShareSDK.h"
-#import "WeiboSDK.h"
-#import "WeiboApi.h"
+#import "WeiboSDK.h"        //sina weibo
+#import "WeiboApi.h"        //tencent weibo
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#import "WXApi.h"           //wechat
 #import "DWZShareViewController.h"
 
 @interface DWZShareSDK()<WeiboSDKDelegate,
                         WBHttpRequestDelegate,
                         WeiboRequestDelegate,WeiboAuthDelegate,
+                        TencentSessionDelegate,
+                        WXApiDelegate,
                         UIActionSheetDelegate>
 
 //新浪数据
@@ -30,6 +35,7 @@
 //QQ空间数据
 @property (nonatomic,strong) NSString *qqZoneAppKey;
 @property (nonatomic,strong) NSString *qqZoneAppSecret;
+@property (nonatomic,strong) TencentOAuth *tencentOAuth;
 
 //微信数据
 @property (nonatomic,strong) NSString *weChatAppId;
@@ -86,12 +92,15 @@
 + (void)connectQZoneWithAppKey:(NSString *)appKey
                      appSecret:(NSString *)appSecret
 {
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    shareSDK.tencentOAuth = [[TencentOAuth alloc] initWithAppId:appKey andDelegate:(id<TencentSessionDelegate>)self];
     
 }
 
 + (void)connectWeChatWithAppId:(NSString *)appId
                      wechatCls:(Class)wechatCls
 {
+    [WXApi registerApp:appId];
     
 }
 
@@ -127,19 +136,13 @@
         case 0:     //sina weibo
         {
             if(![WeiboSDK isWeiboAppInstalled]){
-                //        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-                //        request.redirectURI = shareSDK.sinaWeiboAppUrl;
-                //        request.scope = @"all";
-                //        request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
-                //        [WeiboSDK sendRequest:request];
-                
                 WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-                request.redirectURI = shareSDK.sinaWeiboAppUrl;
-                request.scope = @"all";
-                request.userInfo = @{@"SSO_From": @"SendMessageToWeiboViewController",
-                                     @"Other_Info_1": [NSNumber numberWithInt:123],
-                                     @"Other_Info_2": @[@"obj1", @"obj2"],
-                                     @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
+//                request.redirectURI = shareSDK.sinaWeiboAppUrl;
+                request.redirectURI = @"http://baidu.com";
+                
+                request.scope = @"email,direct_messages_write";
+                request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+                request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
                 [WeiboSDK sendRequest:request];
                 
             }else{
@@ -156,6 +159,46 @@
         {
             [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
             
+        }
+        case 2: //QQZone
+        {
+//            if([QQApiInterface isQQInstalled]){
+                NSArray* permissions = [NSArray arrayWithObjects:
+                                        kOPEN_PERMISSION_GET_USER_INFO,
+                                        kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
+                                        kOPEN_PERMISSION_ADD_ALBUM,
+                                        kOPEN_PERMISSION_ADD_IDOL,
+                                        kOPEN_PERMISSION_ADD_ONE_BLOG,
+                                        kOPEN_PERMISSION_ADD_PIC_T,
+                                        kOPEN_PERMISSION_ADD_SHARE,
+                                        kOPEN_PERMISSION_ADD_TOPIC,
+                                        kOPEN_PERMISSION_CHECK_PAGE_FANS,
+                                        kOPEN_PERMISSION_DEL_IDOL,
+                                        kOPEN_PERMISSION_DEL_T,
+                                        kOPEN_PERMISSION_GET_FANSLIST,
+                                        kOPEN_PERMISSION_GET_IDOLLIST,
+                                        kOPEN_PERMISSION_GET_INFO,
+                                        kOPEN_PERMISSION_GET_OTHER_INFO,
+                                        kOPEN_PERMISSION_GET_REPOST_LIST,
+                                        kOPEN_PERMISSION_LIST_ALBUM,
+                                        kOPEN_PERMISSION_UPLOAD_PIC,
+                                        kOPEN_PERMISSION_GET_VIP_INFO,
+                                        kOPEN_PERMISSION_GET_VIP_RICH_INFO,
+                                        kOPEN_PERMISSION_GET_INTIMATE_FRIENDS_WEIBO,
+                                        kOPEN_PERMISSION_MATCH_NICK_TIPS_WEIBO,
+                                        nil];
+                [shareSDK.tencentOAuth authorize:permissions inSafari:YES];
+//            }else{
+//                
+//            }
+        }
+            break;
+        case 3: //weichat
+        {
+            SendMessageToWXReq *wechatReq = [[SendMessageToWXReq alloc] init];
+            wechatReq.bText = YES;
+            wechatReq.text = @"测试微信分享";
+            [WXApi sendReq:wechatReq];
         }
         default:
             break;
@@ -197,6 +240,11 @@
 + (BOOL) handleOpenURL:(NSURL *)url delegate:(id) pDelegate
 {
     NSLog(@"get url %@",[url absoluteString]);
+    if([[url absoluteString] hasSuffix:@"platformId=wechat"]){
+        return [WXApi handleOpenURL:url delegate:pDelegate];
+    }else if([[url absoluteString] hasPrefix:@"tencent"]){
+        return [TencentOAuth HandleOpenURL:url];
+    }
     
     return YES;
 }
@@ -299,4 +347,17 @@
 
 }
 
+
+#pragma mark - wechat delegate
++ (void) onReq:(BaseReq *)req
+{
+    NSLog(@"get req %@",req);
+
+    
+}
+
++ (void) onResp:(BaseResp *)resp
+{
+    NSLog(@"get resp %@",resp);
+}
 @end
