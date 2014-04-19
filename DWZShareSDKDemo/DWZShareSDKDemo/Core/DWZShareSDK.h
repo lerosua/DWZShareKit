@@ -10,6 +10,7 @@
 @class  WBMessageObject;
 
 @interface DWZShareSDK : NSObject
+
 /**
  *  @brief 连接新浪微博开放平台
  *

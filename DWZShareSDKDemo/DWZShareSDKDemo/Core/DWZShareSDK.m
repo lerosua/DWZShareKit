@@ -7,16 +7,16 @@
 //
 
 #import "DWZShareSDK.h"
-#import "weiboSDK.h"
+#import "WeiboSDK.h"
 #import "DWZShareViewController.h"
 
-@interface DWZShareSDK()<WeiboSDKDelegate,UIActionSheetDelegate>
+@interface DWZShareSDK()<WeiboSDKDelegate ,UIActionSheetDelegate>
 
 //新浪数据
 @property (nonatomic,strong) NSString *sinaWeiboAppKey;
 @property (nonatomic,strong) NSString *sinaWeiboAppSecret;
 @property (nonatomic,strong) NSString *sinaWeiboAppUrl;
-
+@property (nonatomic,strong) NSString *sinaWeiboToken;
 //腾讯微博数据
 @property (nonatomic,strong) NSString *tcWeiboAppKey;
 @property (nonatomic,strong) NSString *tcWeiboAppSecret;
@@ -128,10 +128,29 @@
 //    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
 //    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
     
-    WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
-    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
-    request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
-    [WeiboSDK sendRequest:request];
+    if(![WeiboSDK isWeiboAppInstalled]){
+        DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+//        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+//        request.redirectURI = shareSDK.sinaWeiboAppUrl;
+//        request.scope = @"all";
+//        request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+//        [WeiboSDK sendRequest:request];
+        
+        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+        request.redirectURI = shareSDK.sinaWeiboAppUrl;
+        request.scope = @"all";
+        request.userInfo = @{@"SSO_From": @"SendMessageToWeiboViewController",
+                             @"Other_Info_1": [NSNumber numberWithInt:123],
+                             @"Other_Info_2": @[@"obj1", @"obj2"],
+                             @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
+        [WeiboSDK sendRequest:request];
+        
+    }else{
+        WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
+        WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
+        request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+        [WeiboSDK sendRequest:request];
+    }
 }
 
 + (WBMessageObject *)weiboMessageFrom:(NSString *)text
@@ -151,6 +170,11 @@
 + (void)didReceiveWeiboResponse:(WBBaseResponse *)response
 {
     NSLog(@"get weibo response");
+    if([response isKindOfClass:WBAuthorizeResponse.class]){
+        DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+        shareSDK.sinaWeiboToken = [(WBAuthorizeResponse *)response accessToken];
+        NSLog(@"get weibo token %@",shareSDK.sinaWeiboToken);
+    }
 }
 
 + (BOOL) handleOpenURL:(NSURL *)url delegate:(id) pDelegate

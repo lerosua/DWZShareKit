@@ -8,6 +8,7 @@
 
 #import "DWZViewController.h"
 #import "DWZShareSDK.h"
+#import "DWZAppDelegate.h"
 
 @interface DWZViewController ()
 
@@ -31,6 +32,8 @@
 - (IBAction)ShareButtonAction:(id)sender
 {
     [DWZShareSDK showDefaultShareWithTitle:@"测试" serviceShareList:nil withViewController:self];
+    
+
 }
 
 @end
