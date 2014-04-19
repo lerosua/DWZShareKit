@@ -8,10 +8,12 @@
 
 #import "DWZShareSDK.h"
 #import "WeiboSDK.h"
+#import "WeiboApi.h"
 #import "DWZShareViewController.h"
 
 @interface DWZShareSDK()<WeiboSDKDelegate,
                         WBHttpRequestDelegate,
+                        WeiboRequestDelegate,WeiboAuthDelegate,
                         UIActionSheetDelegate>
 
 //新浪数据
@@ -24,6 +26,7 @@
 @property (nonatomic,strong) NSString *tcWeiboAppSecret;
 @property (nonatomic,strong) NSString *tcWeiboAppUrl;
 
+@property (nonatomic,strong) WeiboApi *tencentWeiboApi;
 //QQ空间数据
 @property (nonatomic,strong) NSString *qqZoneAppKey;
 @property (nonatomic,strong) NSString *qqZoneAppSecret;
@@ -73,6 +76,9 @@
                             appSecret:(NSString *)appSecret
                           redirectUri:(NSString *)redirectUri
 {
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    shareSDK.tencentWeiboApi = [[WeiboApi alloc] initWithAppKey:appKey andSecret:appSecret andRedirectUri:redirectUri];
+    
     
 }
 
@@ -115,14 +121,45 @@
 + (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSLog(@"click %d",buttonIndex);
-//    switch (buttonIndex) {
-//        case 0:
-//
-//            break;
-//        case 1:
-//        default:
-//            break;
-//    }
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+
+    switch (buttonIndex) {
+        case 0:     //sina weibo
+        {
+            if(![WeiboSDK isWeiboAppInstalled]){
+                //        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+                //        request.redirectURI = shareSDK.sinaWeiboAppUrl;
+                //        request.scope = @"all";
+                //        request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+                //        [WeiboSDK sendRequest:request];
+                
+                WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+                request.redirectURI = shareSDK.sinaWeiboAppUrl;
+                request.scope = @"all";
+                request.userInfo = @{@"SSO_From": @"SendMessageToWeiboViewController",
+                                     @"Other_Info_1": [NSNumber numberWithInt:123],
+                                     @"Other_Info_2": @[@"obj1", @"obj2"],
+                                     @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
+                [WeiboSDK sendRequest:request];
+                
+            }else{
+                WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
+                WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
+                request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+                [WeiboSDK sendRequest:request];
+            }
+            
+        }
+
+            break;
+        case 1: //tencent weibo
+        {
+            [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
+            
+        }
+        default:
+            break;
+    }
     
 
 //    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
@@ -130,29 +167,7 @@
 //    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
 //    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
     
-    if(![WeiboSDK isWeiboAppInstalled]){
-        DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-//        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-//        request.redirectURI = shareSDK.sinaWeiboAppUrl;
-//        request.scope = @"all";
-//        request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
-//        [WeiboSDK sendRequest:request];
-        
-        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-        request.redirectURI = shareSDK.sinaWeiboAppUrl;
-        request.scope = @"all";
-        request.userInfo = @{@"SSO_From": @"SendMessageToWeiboViewController",
-                             @"Other_Info_1": [NSNumber numberWithInt:123],
-                             @"Other_Info_2": @[@"obj1", @"obj2"],
-                             @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
-        [WeiboSDK sendRequest:request];
-        
-    }else{
-        WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
-        WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
-        request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
-        [WeiboSDK sendRequest:request];
-    }
+
 }
 
 + (WBMessageObject *)weiboMessageFrom:(NSString *)text
@@ -185,4 +200,103 @@
     
     return YES;
 }
+
+
+#pragma mark -
+#pragma mark WeiboRequestDelegate
+
+/**
+ * @brief   接口调用成功后的回调
+ * @param   INPUT   data    接口返回的数据
+ * @param   INPUT   request 发起请求时的请求对象，可以用来管理异步请求
+ * @return  无返回
+ */
++ (void)didReceiveRawData:(NSData *)data reqNo:(int)reqno
+{
+    NSString *strResult = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
+    //[NSString stringWithCharacters:[data bytes] length:[data length]];
+    NSLog(@"result = %@",strResult);
+    
+}
+/**
+ * @brief   接口调用失败后的回调
+ * @param   INPUT   error   接口返回的错误信息
+ * @param   INPUT   request 发起请求时的请求对象，可以用来管理异步请求
+ * @return  无返回
+ */
++ (void)didFailWithError:(NSError *)error reqNo:(int)reqno
+{
+    NSString *str = [[NSString alloc] initWithFormat:@"refresh token error, errcode = %@",error.userInfo];
+    
+    NSLog(@"result = %@",str);
+
+}
+
+
+
+#pragma mark WeiboAuthDelegate
+
+/**
+ * @brief   重刷授权成功后的回调
+ * @param   INPUT   wbapi 成功后返回的WeiboApi对象，accesstoken,openid,refreshtoken,expires 等授权信息都在此处返回
+ * @return  无返回
+ */
++ (void)DidAuthRefreshed:(WeiboApi *)wbapi_
+{
+    
+    NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
+    
+    NSLog(@"result = %@",str);
+
+    
+}
+
+/**
+ * @brief   重刷授权失败后的回调
+ * @param   INPUT   error   标准出错信息
+ * @return  无返回
+ */
++ (void)DidAuthRefreshFail:(NSError *)error
+{
+    NSString *str = [[NSString alloc] initWithFormat:@"refresh token error, errcode = %@",error.userInfo];
+ 
+    NSLog(@"result = %@",str);
+
+}
+
+/**
+ * @brief   授权成功后的回调
+ * @param   INPUT   wbapi 成功后返回的WeiboApi对象，accesstoken,openid,refreshtoken,expires 等授权信息都在此处返回
+ * @return  无返回
+ */
++ (void)DidAuthFinished:(WeiboApi *)wbapi_
+{
+    NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
+    
+    NSLog(@"result = %@",str);
+
+}
+
+/**
+ * @brief   授权成功后的回调
+ * @param   INPUT   wbapi   weiboapi 对象，取消授权后，授权信息会被清空
+ * @return  无返回
+ */
++ (void)DidAuthCanceled:(WeiboApi *)wbapi_
+{
+    
+}
+
+/**
+ * @brief   授权成功后的回调
+ * @param   INPUT   error   标准出错信息
+ * @return  无返回
+ */
++ (void)DidAuthFailWithError:(NSError *)error
+{
+    NSString *str = [[NSString alloc] initWithFormat:@"refresh token error, errcode = %@",error.userInfo];
+    NSLog(@"result = %@",str);
+
+}
+
 @end

@@ -17,7 +17,7 @@
 #define GEQZoneSDKAppSecret                @"9ed02b5f1e56c99b40114a81318b479f"
 
 #define GESinaWeiboSDKAppUri            @"https://openapi.baidu.com/social/oauth/2.0/receiver"
-#define GETencentWeiboSDKAppUr          @"http://app.5253.com/"
+#define GETencentWeiboSDKAppUr          @"http://sns.whalecloud.com/app/TOA5iO"
 #define GEQZoneSDKAppUr                 @"http://app.5253.com/"
 
 @interface DWZAppDelegate : UIResponder <UIApplicationDelegate>
