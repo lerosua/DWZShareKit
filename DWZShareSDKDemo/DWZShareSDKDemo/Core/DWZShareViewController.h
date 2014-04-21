@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DWZShareSDK.h"
 
 @interface DWZShareViewController : UIViewController
 
 @property (nonatomic,strong) UITextView *contentTextView;
 @property (nonatomic,strong) UILabel *titleLabel;
+@property (nonatomic) SocialDWZTag socialTag;
 @end

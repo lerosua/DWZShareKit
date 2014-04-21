@@ -9,11 +9,12 @@
 #import "DWZShareViewController.h"
 #import "weiboSDK.h"
 #import "DWZShareSDK.h"
+#import "Base64.h"
 
-
-#define is4Inch()               ([[UIScreen mainScreen] bounds].size.height == 568)
-#define DWZStatusBarOffet        ([[[UIDevice currentDevice] systemVersion] floatValue] >=7.0 ? 20 : 0)
-
+#define is4Inch()                   ([[UIScreen mainScreen] bounds].size.height == 568)
+#define DWZStatusBarOffet           ([[[UIDevice currentDevice] systemVersion] floatValue] >=7.0 ? 20 : 0)
+#define DWZSinaOpenApiUpdateURL     @"https://api.weibo.com/2/statuses/update.json"
+#define DWZTencentOpenApiUpdateURL  @"https://graph.qq.com/t/add_t"
 @interface DWZShareViewController ()
 
 @end
@@ -67,7 +68,7 @@
     [rightButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [rightButton addTarget:self action:@selector(confirmButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, DWZStatusBarOffet+10, 160, 40)];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, DWZStatusBarOffet+2, 160, 40)];
     self.titleLabel.backgroundColor = [UIColor clearColor];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     self.titleLabel.textColor = [UIColor grayColor];
@@ -104,14 +105,80 @@
 - (void) confirmButtonAction:(id)sender
 {
 //    [self dismissViewControllerAnimated:YES completion:nil];
+    NSString *contentText = self.contentTextView.text;
     
-    //testing weibo share
-    WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
-    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
-    request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+    NSLog(@"get share content %@",contentText);
     
-    [WeiboSDK sendRequest:request];
-
+    if(self.socialTag == SinaWeiboDWZTag){
+        [self sendSinaWeiboMessage:contentText];
+    }else if (self.socialTag == TencentWeiboDWZTag){
+        [self sendTencentWeiboMessage:contentText];
+    }else if (self.socialTag == QQZoneDWZTag){
+        
+    }
 }
 
+#pragma mark -
+- (void) sendSinaWeiboMessage:(NSString *)text
+{
+    NSString *urlEncodeText =  [text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //post the sina
+    NSURL *url = [NSURL URLWithString:DWZSinaOpenApiUpdateURL];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    [request setHTTPMethod:@"POST"];
+    
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [request addValue:[DWZShareSDK sinaWeiboToken] forHTTPHeaderField:@"access_token"];
+    [request addValue:urlEncodeText forHTTPHeaderField:@"status"];
+    
+    
+    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSString *retString = [[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding];
+    NSLog(@"get reback %@",retString);
+}
+
+- (void) sendTencentWeiboMessage:(NSString *)text
+{
+    
+    [DWZShareSDK tencentWeiboSendMessage:text];
+    
+    
+//    NSString *urlEncodeText =  text;
+//    //post the tencent weibo
+//    NSURL *url = [NSURL URLWithString:DWZTencentOpenApiUpdateURL];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+//    [request setHTTPMethod:@"POST"];
+//    
+//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    
+//    [request addValue:[DWZShareSDK sinaWeiboToken] forHTTPHeaderField:@"access_token"];
+//    [request addValue:urlEncodeText forHTTPHeaderField:@"content"];
+//    
+//    
+//    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+//    
+//    NSString *retString = [[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding];
+//    NSLog(@"get reback %@",retString);
+}
+- (void) sendQQZoneMessage:(NSString *)text
+{
+    NSString *urlEncodeText =  [text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //post the sina
+    NSURL *url = [NSURL URLWithString:DWZSinaOpenApiUpdateURL];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    [request setHTTPMethod:@"POST"];
+    
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [request addValue:[DWZShareSDK sinaWeiboToken] forHTTPHeaderField:@"access_token"];
+    [request addValue:urlEncodeText forHTTPHeaderField:@"status"];
+    
+    
+    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSString *retString = [[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding];
+    NSLog(@"get reback %@",retString);
+}
 @end

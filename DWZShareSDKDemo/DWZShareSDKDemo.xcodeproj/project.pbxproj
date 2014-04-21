@@ -33,6 +33,7 @@
 		E9F55AC61902603100A5E0E4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55AC51902603100A5E0E4 /* libz.dylib */; };
 		E9F55AC81902604600A5E0E4 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55AC71902604600A5E0E4 /* CoreTelephony.framework */; };
 		E9F55ACA1902609600A5E0E4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55AC91902609600A5E0E4 /* SystemConfiguration.framework */; };
+		E9F55B301904C27E00A5E0E4 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55B2F1904C27E00A5E0E4 /* Base64.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,8 @@
 		E9F55AC51902603100A5E0E4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		E9F55AC71902604600A5E0E4 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		E9F55AC91902609600A5E0E4 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		E9F55B2E1904C27E00A5E0E4 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
+		E9F55B2F1904C27E00A5E0E4 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +202,7 @@
 		E9F55A6418FFBF5300A5E0E4 /* Extend */ = {
 			isa = PBXGroup;
 			children = (
+				E9F55B2D1904C27E00A5E0E4 /* Base64 */,
 				E9F55A6518FFBF5300A5E0E4 /* QQConnectSDK */,
 				E9F55A6818FFBF5300A5E0E4 /* SinaWeiboSDK */,
 				E9F55A6C18FFBF5300A5E0E4 /* TencentWeiboSDK */,
@@ -255,6 +259,15 @@
 				E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */,
 			);
 			name = Core;
+			sourceTree = "<group>";
+		};
+		E9F55B2D1904C27E00A5E0E4 /* Base64 */ = {
+			isa = PBXGroup;
+			children = (
+				E9F55B2E1904C27E00A5E0E4 /* Base64.h */,
+				E9F55B2F1904C27E00A5E0E4 /* Base64.m */,
+			);
+			path = Base64;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -361,6 +374,7 @@
 				E9F55A4018FFBE3500A5E0E4 /* DWZAppDelegate.m in Sources */,
 				E9F55A7B18FFBF8600A5E0E4 /* DWZShareSDK.m in Sources */,
 				E9F55A3C18FFBE3500A5E0E4 /* main.M in Sources */,
+				E9F55B301904C27E00A5E0E4 /* Base64.m in Sources */,
 				E9F55A7F19010FAB00A5E0E4 /* DWZShareViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

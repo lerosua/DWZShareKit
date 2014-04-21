@@ -32,6 +32,8 @@
 @property (nonatomic,strong) NSString *tcWeiboAppUrl;
 
 @property (nonatomic,strong) WeiboApi *tencentWeiboApi;
+@property (nonatomic,strong) NSString *tencentWeiboToken;
+@property (nonatomic,strong) NSString *tencentWeiboOpenId;
 //QQ空间数据
 @property (nonatomic,strong) NSString *qqZoneAppKey;
 @property (nonatomic,strong) NSString *qqZoneAppSecret;
@@ -59,7 +61,7 @@
     });
     return _currentShareSDK;
 }
-#pragma mark -
+#pragma mark - conecnt method
 + (void)connectSinaWeiboWithAppKey:(NSString *)appKey
                          appSecret:(NSString *)appSecret
                        redirectUri:(NSString *)redirectUri
@@ -103,7 +105,7 @@
     [WXApi registerApp:appId];
     
 }
-
+#pragma mark -
 + (id) showDefaultShareWithTitle:(NSString *)title
                 serviceShareList:(NSArray *)shareList
               withViewController:(UIViewController *)viewController;
@@ -126,6 +128,8 @@
     return nil;
     
 }
+
+#pragma mark -
 + (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     NSLog(@"click %d",buttonIndex);
@@ -135,13 +139,21 @@
         case 0:     //sina weibo
         {
             if(![WeiboSDK isWeiboAppInstalled]){
+                
+                if(shareSDK.sinaWeiboToken){
+                    NSLog(@"sina has logined");
+                    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+                    viewController.socialTag = SinaWeiboDWZTag;
+                    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+                    return;
+                }
+                
                 WBAuthorizeRequest *request = [WBAuthorizeRequest request];
                 request.redirectURI = shareSDK.sinaWeiboAppUrl;
                 request.scope = @"email,direct_messages_write";
                 request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
                 request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
                 [WeiboSDK sendRequest:request];
-
                 
             }else{
                 WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
@@ -155,7 +167,15 @@
             break;
         case 1: //tencent weibo
         {
-            [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
+            if(shareSDK.tencentWeiboToken){
+                NSLog(@"tencent has logined");
+                DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+                viewController.socialTag = TencentWeiboDWZTag;
+                [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+                return;
+            }else{
+                [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
+            }
             
         }
             break;
@@ -205,13 +225,11 @@
     }
     
 
-//    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-//    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-//    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
     
 
 }
 
+#pragma mark - sina weibo
 + (WBMessageObject *)weiboMessageFrom:(NSString *)text
 {
     WBMessageObject *message = [WBMessageObject message];
@@ -219,7 +237,39 @@
     return message;
 }
 
++ (NSString *) sinaWeiboForHandleURLPrefix
+{
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    return [NSString stringWithFormat:@"wb%@",shareSDK.sinaWeiboAppKey];
+}
 
++ (NSString *) sinaWeiboToken
+{
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    return shareSDK.sinaWeiboToken;
+}
+
++ (NSString *) tencentWeiboToken
+{
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    return shareSDK.tencentWeiboToken;
+}
++ (NSString *) tencentWeiboOpenId
+{
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    return shareSDK.tencentWeiboOpenId;
+}
+#pragma mark - tencent weibo
++ (void) tencentWeiboSendMessage:(NSString *)text
+{
+    NSDictionary *dict = @{@"content":text
+                           };
+    
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    [shareSDK.tencentWeiboApi requestWithParams:[dict mutableCopy] apiName:@"t/add" httpMethod:@"POST" delegate:(id<WeiboRequestDelegate>)self];
+
+    
+}
 #pragma mark - weibo回调
 + (void)didReceiveWeiboRequest:(WBBaseRequest *)request
 {
@@ -232,17 +282,24 @@
     if([response isKindOfClass:WBAuthorizeResponse.class]){
         DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
         shareSDK.sinaWeiboToken = [(WBAuthorizeResponse *)response accessToken];
-        NSLog(@"get weibo token %@",shareSDK.sinaWeiboToken);
+        NSLog(@"get weibo token %@ and expire data %@",shareSDK.sinaWeiboToken,[(WBAuthorizeResponse *)response expirationDate]);
+        
+        DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+        viewController.socialTag = SinaWeiboDWZTag;
+        [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
     }
 }
 
 + (BOOL) handleOpenURL:(NSURL *)url delegate:(id) pDelegate
 {
     NSLog(@"get url %@",[url absoluteString]);
+    NSString *weiboURLPrefix = [DWZShareSDK sinaWeiboForHandleURLPrefix];
     if([[url absoluteString] hasSuffix:@"platformId=wechat"]){
         return [WXApi handleOpenURL:url delegate:pDelegate];
     }else if([[url absoluteString] hasPrefix:@"tencent"]){
         return [TencentOAuth HandleOpenURL:url];
+    }else if([[url absoluteString] hasPrefix:weiboURLPrefix]){
+        return [WeiboSDK handleOpenURL:url delegate:(id<WeiboSDKDelegate>)self];
     }
     
     return YES;
@@ -250,7 +307,7 @@
 
 
 #pragma mark -
-#pragma mark WeiboRequestDelegate
+#pragma mark  WeiboRequestDelegate
 
 /**
  * @brief   接口调用成功后的回调
@@ -260,10 +317,10 @@
  */
 + (void)didReceiveRawData:(NSData *)data reqNo:(int)reqno
 {
-    NSString *strResult = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
-    //[NSString stringWithCharacters:[data bytes] length:[data length]];
-    NSLog(@"result = %@",strResult);
-    
+    NSError *error;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    NSLog(@"get all %@   -- %s",dict,__func__);
+
 }
 /**
  * @brief   接口调用失败后的回调
@@ -275,7 +332,7 @@
 {
     NSString *str = [[NSString alloc] initWithFormat:@"refresh token error, errcode = %@",error.userInfo];
     
-    NSLog(@"result = %@",str);
+    NSLog(@"result = %@ , %s",str,__func__);
 
 }
 
@@ -293,7 +350,10 @@
     
     NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
     
-    NSLog(@"result = %@",str);
+    NSLog(@"result = %@ , %s",str,__func__);
+
+    
+    
 
     
 }
@@ -307,7 +367,8 @@
 {
     NSString *str = [[NSString alloc] initWithFormat:@"refresh token error, errcode = %@",error.userInfo];
  
-    NSLog(@"result = %@",str);
+    NSLog(@"result = %@ , %s",str,__func__);
+
 
 }
 
@@ -320,7 +381,15 @@
 {
     NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
     
-    NSLog(@"result = %@",str);
+    NSLog(@"result = %@ , %s",str,__func__);
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    shareSDK.tencentWeiboApi = wbapi_;
+    
+    
+    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+    viewController.socialTag = TencentWeiboDWZTag;
+    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+
 
 }
 
@@ -331,7 +400,9 @@
  */
 + (void)DidAuthCanceled:(WeiboApi *)wbapi_
 {
-    
+    NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
+    NSLog(@"result = %@ , %s",str,__func__);
+
 }
 
 /**
@@ -342,7 +413,8 @@
 + (void)DidAuthFailWithError:(NSError *)error
 {
     NSString *str = [[NSString alloc] initWithFormat:@"refresh token error, errcode = %@",error.userInfo];
-    NSLog(@"result = %@",str);
+    NSLog(@"result = %@ , %s",str,__func__);
+
 
 }
 

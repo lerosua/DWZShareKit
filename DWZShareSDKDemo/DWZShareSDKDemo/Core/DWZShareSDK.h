@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 @class  WBMessageObject;
 
+typedef NS_ENUM(NSInteger, SocialDWZTag) {
+    SinaWeiboDWZTag = 0,
+    TencentWeiboDWZTag,
+    QQZoneDWZTag,
+    WechatDWZTag
+};
 
 @interface DWZShareSDK : NSObject
 
@@ -96,4 +102,14 @@
  *  @return 微博消息对象
  */
 + (WBMessageObject *)weiboMessageFrom:(NSString *)text;
+
+/**
+ *  返回handleURL需要的sina weibo的url的前缀
+ *
+ *  @return 返回wbxxxx的前缀
+ */
++ (NSString *) sinaWeiboForHandleURLPrefix;
++ (NSString *) sinaWeiboToken;
+
++ (void) tencentWeiboSendMessage:(NSString *)text;
 @end
