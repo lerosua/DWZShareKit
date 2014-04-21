@@ -11,7 +11,7 @@
 #import "DWZAppDelegate.h"
 #import "WeiboSDK.h"
 
-@interface DWZViewController ()<WBHttpRequestDelegate>
+@interface DWZViewController ()
 
 @end
 
@@ -32,7 +32,11 @@
 #pragma mark -
 - (IBAction)ShareButtonAction:(id)sender
 {
-//    [DWZShareSDK showDefaultShareWithTitle:@"测试" serviceShareList:nil withViewController:self];
+    [DWZShareSDK showDefaultShareWithTitle:@"测试" serviceShareList:nil withViewController:self];
+}
+
++ (void) showWeiboAuth
+{
     WBAuthorizeRequest *request = [WBAuthorizeRequest request];
     request.redirectURI = GESinaWeiboSDKAppUri;
     request.scope = @"all";

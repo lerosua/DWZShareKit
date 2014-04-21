@@ -126,8 +126,7 @@
     return nil;
     
 }
-
-+ (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
++ (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     NSLog(@"click %d",buttonIndex);
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
@@ -137,13 +136,13 @@
         {
             if(![WeiboSDK isWeiboAppInstalled]){
                 WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-//                request.redirectURI = shareSDK.sinaWeiboAppUrl;
-                request.redirectURI = @"http://baidu.com";
-                
+                request.redirectURI = shareSDK.sinaWeiboAppUrl;
                 request.scope = @"email,direct_messages_write";
                 request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
                 request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
                 [WeiboSDK sendRequest:request];
+                [shareSDK.baseViewController showSinaWeiboAuthView:shareSDK.sinaWeiboAppUrl];
+
                 
             }else{
                 WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
@@ -160,6 +159,7 @@
             [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
             
         }
+            break;
         case 2: //QQZone
         {
 //            if([QQApiInterface isQQInstalled]){
@@ -200,13 +200,13 @@
             wechatReq.text = @"测试微信分享";
             [WXApi sendReq:wechatReq];
         }
+            break;
         default:
             break;
     }
     
 
 //    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-//
 //    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
 //    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
     

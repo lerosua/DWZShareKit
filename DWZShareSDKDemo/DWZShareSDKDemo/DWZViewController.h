@@ -11,4 +11,5 @@
 @interface DWZViewController : UIViewController
 
 - (IBAction)ShareButtonAction:(id)sender;
++ (void) showWeiboAuth;
 @end
