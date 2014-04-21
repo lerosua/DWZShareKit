@@ -141,7 +141,6 @@
                 request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
                 request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
                 [WeiboSDK sendRequest:request];
-                [shareSDK.baseViewController showSinaWeiboAuthView:shareSDK.sinaWeiboAppUrl];
 
                 
             }else{
