@@ -14,7 +14,7 @@
 #define is4Inch()                   ([[UIScreen mainScreen] bounds].size.height == 568)
 #define DWZStatusBarOffet           ([[[UIDevice currentDevice] systemVersion] floatValue] >=7.0 ? 20 : 0)
 #define DWZSinaOpenApiUpdateURL     @"https://api.weibo.com/2/statuses/update.json"
-#define DWZTencentOpenApiUpdateURL  @"https://graph.qq.com/t/add_t"
+
 @interface DWZShareViewController ()
 
 @end
@@ -113,8 +113,6 @@
         [self sendSinaWeiboMessage:contentText];
     }else if (self.socialTag == TencentWeiboDWZTag){
         [self sendTencentWeiboMessage:contentText];
-    }else if (self.socialTag == QQZoneDWZTag){
-        
     }
 }
 
@@ -127,16 +125,18 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     [request setHTTPMethod:@"POST"];
     
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    NSString *paramsString = [NSString stringWithFormat:@"status=%@&access_token=%@", urlEncodeText, [DWZShareSDK sinaWeiboToken]];
+    NSData *data = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:data];
+
     
-    [request addValue:[DWZShareSDK sinaWeiboToken] forHTTPHeaderField:@"access_token"];
-    [request addValue:urlEncodeText forHTTPHeaderField:@"status"];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response,NSData *data, NSError *error){
+
+        NSString *retString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"get %s -- %@",__func__, retString);
+    }];
     
-    
-    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    
-    NSString *retString = [[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding];
-    NSLog(@"get reback %@",retString);
+
 }
 
 - (void) sendTencentWeiboMessage:(NSString *)text
@@ -144,41 +144,6 @@
     
     [DWZShareSDK tencentWeiboSendMessage:text];
     
-    
-//    NSString *urlEncodeText =  text;
-//    //post the tencent weibo
-//    NSURL *url = [NSURL URLWithString:DWZTencentOpenApiUpdateURL];
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-//    [request setHTTPMethod:@"POST"];
-//    
-//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-//    
-//    [request addValue:[DWZShareSDK sinaWeiboToken] forHTTPHeaderField:@"access_token"];
-//    [request addValue:urlEncodeText forHTTPHeaderField:@"content"];
-//    
-//    
-//    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-//    
-//    NSString *retString = [[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding];
-//    NSLog(@"get reback %@",retString);
 }
-- (void) sendQQZoneMessage:(NSString *)text
-{
-    NSString *urlEncodeText =  [text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    //post the sina
-    NSURL *url = [NSURL URLWithString:DWZSinaOpenApiUpdateURL];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-    [request setHTTPMethod:@"POST"];
-    
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    
-    [request addValue:[DWZShareSDK sinaWeiboToken] forHTTPHeaderField:@"access_token"];
-    [request addValue:urlEncodeText forHTTPHeaderField:@"status"];
-    
-    
-    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    
-    NSString *retString = [[NSString alloc] initWithData:received encoding:NSUTF8StringEncoding];
-    NSLog(@"get reback %@",retString);
-}
+
 @end
