@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E9B65F5519066BD30040DD08 /* libTencentOpenAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9B65F4A19066BD30040DD08 /* libTencentOpenAPI.a */; };
 		E9F55A3018FFBE3500A5E0E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A2F18FFBE3500A5E0E4 /* Foundation.framework */; };
 		E9F55A3218FFBE3500A5E0E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A3118FFBE3500A5E0E4 /* CoreGraphics.framework */; };
 		E9F55A3418FFBE3500A5E0E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A3318FFBE3500A5E0E4 /* UIKit.framework */; };
@@ -21,7 +22,6 @@
 		E9F55A5118FFBE3500A5E0E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A3318FFBE3500A5E0E4 /* UIKit.framework */; };
 		E9F55A5918FFBE3500A5E0E4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9F55A5718FFBE3500A5E0E4 /* InfoPlist.strings */; };
 		E9F55A5B18FFBE3500A5E0E4 /* DWZShareSDKDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A5A18FFBE3500A5E0E4 /* DWZShareSDKDemoTests.m */; };
-		E9F55A7318FFBF5300A5E0E4 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A6618FFBF5300A5E0E4 /* TencentOpenAPI.framework */; };
 		E9F55A7418FFBF5300A5E0E4 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E9F55A6718FFBF5300A5E0E4 /* TencentOpenApi_IOS_Bundle.bundle */; };
 		E9F55A7618FFBF5300A5E0E4 /* WeiboSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E9F55A6A18FFBF5300A5E0E4 /* WeiboSDK.bundle */; };
 		E9F55A7718FFBF5300A5E0E4 /* libTCWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A6D18FFBF5300A5E0E4 /* libTCWeiboSDK.a */; };
@@ -50,6 +50,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E9B65F4A19066BD30040DD08 /* libTencentOpenAPI.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTencentOpenAPI.a; sourceTree = "<group>"; };
+		E9B65F4B19066BD30040DD08 /* QQApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQApi.h; sourceTree = "<group>"; };
+		E9B65F4C19066BD30040DD08 /* QQApiInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQApiInterface.h; sourceTree = "<group>"; };
+		E9B65F4D19066BD30040DD08 /* QQApiInterfaceObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQApiInterfaceObject.h; sourceTree = "<group>"; };
+		E9B65F4E19066BD30040DD08 /* sdkdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdkdef.h; sourceTree = "<group>"; };
+		E9B65F4F19066BD30040DD08 /* TencentApiInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TencentApiInterface.h; sourceTree = "<group>"; };
+		E9B65F5019066BD30040DD08 /* TencentMessageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TencentMessageObject.h; sourceTree = "<group>"; };
+		E9B65F5119066BD30040DD08 /* TencentOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TencentOAuth.h; sourceTree = "<group>"; };
+		E9B65F5219066BD30040DD08 /* TencentOAuthObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TencentOAuthObject.h; sourceTree = "<group>"; };
+		E9B65F5319066BD30040DD08 /* QQWeiBoAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQWeiBoAPI.h; sourceTree = "<group>"; };
+		E9B65F5419066BD30040DD08 /* WeiyunAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiyunAPI.h; sourceTree = "<group>"; };
 		E9F55A2C18FFBE3500A5E0E4 /* DWZShareSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DWZShareSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9F55A2F18FFBE3500A5E0E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E9F55A3118FFBE3500A5E0E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -69,7 +80,6 @@
 		E9F55A5618FFBE3500A5E0E4 /* DWZShareSDKDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DWZShareSDKDemoTests-Info.plist"; sourceTree = "<group>"; };
 		E9F55A5818FFBE3500A5E0E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E9F55A5A18FFBE3500A5E0E4 /* DWZShareSDKDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DWZShareSDKDemoTests.m; sourceTree = "<group>"; };
-		E9F55A6618FFBF5300A5E0E4 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		E9F55A6718FFBF5300A5E0E4 /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
 		E9F55A6A18FFBF5300A5E0E4 /* WeiboSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WeiboSDK.bundle; sourceTree = "<group>"; };
 		E9F55A6B18FFBF5300A5E0E4 /* WeiboSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboSDK.h; sourceTree = "<group>"; };
@@ -104,13 +114,13 @@
 			files = (
 				E9F55ACA1902609600A5E0E4 /* SystemConfiguration.framework in Frameworks */,
 				E9F55AC81902604600A5E0E4 /* CoreTelephony.framework in Frameworks */,
+				E9B65F5519066BD30040DD08 /* libTencentOpenAPI.a in Frameworks */,
 				E9F55AC61902603100A5E0E4 /* libz.dylib in Frameworks */,
 				E9F55AC41902601E00A5E0E4 /* libsqlite3.dylib in Frameworks */,
 				E9F55A7818FFBF5300A5E0E4 /* libWeChatSDK.a in Frameworks */,
 				E9F55A7718FFBF5300A5E0E4 /* libTCWeiboSDK.a in Frameworks */,
 				E9F55A3218FFBE3500A5E0E4 /* CoreGraphics.framework in Frameworks */,
 				E9F55AC219022B3C00A5E0E4 /* libWeiboSDK.a in Frameworks */,
-				E9F55A7318FFBF5300A5E0E4 /* TencentOpenAPI.framework in Frameworks */,
 				E9F55A3418FFBE3500A5E0E4 /* UIKit.framework in Frameworks */,
 				E9F55A3018FFBE3500A5E0E4 /* Foundation.framework in Frameworks */,
 			);
@@ -224,7 +234,17 @@
 		E9F55A6518FFBF5300A5E0E4 /* QQConnectSDK */ = {
 			isa = PBXGroup;
 			children = (
-				E9F55A6618FFBF5300A5E0E4 /* TencentOpenAPI.framework */,
+				E9B65F4A19066BD30040DD08 /* libTencentOpenAPI.a */,
+				E9B65F4B19066BD30040DD08 /* QQApi.h */,
+				E9B65F4C19066BD30040DD08 /* QQApiInterface.h */,
+				E9B65F4D19066BD30040DD08 /* QQApiInterfaceObject.h */,
+				E9B65F4E19066BD30040DD08 /* sdkdef.h */,
+				E9B65F4F19066BD30040DD08 /* TencentApiInterface.h */,
+				E9B65F5019066BD30040DD08 /* TencentMessageObject.h */,
+				E9B65F5119066BD30040DD08 /* TencentOAuth.h */,
+				E9B65F5219066BD30040DD08 /* TencentOAuthObject.h */,
+				E9B65F5319066BD30040DD08 /* QQWeiBoAPI.h */,
+				E9B65F5419066BD30040DD08 /* WeiyunAPI.h */,
 				E9F55A6718FFBF5300A5E0E4 /* TencentOpenApi_IOS_Bundle.bundle */,
 			);
 			path = QQConnectSDK;
@@ -526,6 +546,7 @@
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/SinaWeiboSDK",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/TencentWeiboSDK",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/WeChatSDK",
+					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/QQConnectSDK",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -551,6 +572,7 @@
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/SinaWeiboSDK",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/TencentWeiboSDK",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/WeChatSDK",
+					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/QQConnectSDK",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

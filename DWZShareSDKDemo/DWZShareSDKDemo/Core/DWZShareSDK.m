@@ -9,9 +9,9 @@
 #import "DWZShareSDK.h"
 #import "WeiboSDK.h"        //sina weibo
 #import "WeiboApi.h"        //tencent weibo
-#import <TencentOpenAPI/TencentOAuth.h>
-#import <TencentOpenAPI/QQApiInterface.h>
-#import <TencentOpenAPI/TencentApiInterface.h>
+#import "TencentOAuth.h"
+#import "QQApiInterface.h"
+#import "TencentApiInterface.h"
 #import "WXApi.h"           //wechat
 #import "DWZShareViewController.h"
 
