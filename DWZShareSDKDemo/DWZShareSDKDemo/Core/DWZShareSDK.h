@@ -112,4 +112,6 @@ typedef NS_ENUM(NSInteger, SocialDWZTag) {
 + (NSString *) sinaWeiboToken;
 
 + (void) tencentWeiboSendMessage:(NSString *)text;
+
++ (BOOL) isTencentWeiboInstalled;
 @end

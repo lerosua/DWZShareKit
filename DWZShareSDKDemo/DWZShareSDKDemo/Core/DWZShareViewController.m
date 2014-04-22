@@ -9,7 +9,7 @@
 #import "DWZShareViewController.h"
 #import "weiboSDK.h"
 #import "DWZShareSDK.h"
-#import "Base64.h"
+
 
 #define is4Inch()                   ([[UIScreen mainScreen] bounds].size.height == 568)
 #define DWZStatusBarOffet           ([[[UIDevice currentDevice] systemVersion] floatValue] >=7.0 ? 20 : 0)

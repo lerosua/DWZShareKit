@@ -11,8 +11,11 @@
 #import "WeiboApi.h"        //tencent weibo
 #import <TencentOpenAPI/TencentOAuth.h>
 #import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentApiInterface.h>
 #import "WXApi.h"           //wechat
 #import "DWZShareViewController.h"
+
+#import "DWZSocialView.h"
 
 @interface DWZShareSDK()<WeiboSDKDelegate,
                         WBHttpRequestDelegate,
@@ -116,15 +119,21 @@
     
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:(id<UIActionSheetDelegate>)self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil,nil];
 
+
     [sheet addButtonWithTitle:@"新浪微博"];
     [sheet addButtonWithTitle:@"腾讯微博"];
     [sheet addButtonWithTitle:@"QQ空间"];
     [sheet addButtonWithTitle:@"微信"];
+    
+//    DWZSocialView *view = [[DWZSocialView alloc] initWithFrame:CGRectMake(10, 0, 300, 160)];
+//    [sheet addSubview:view];
+//    [sheet setFrame:CGRectMake(0, 110, 320, 210)];
+    
     [sheet addButtonWithTitle:@"取消"];
     sheet.cancelButtonIndex = sheet.numberOfButtons - 1;
 
     [sheet showInView:[UIApplication sharedApplication].keyWindow];
-    
+
     return nil;
     
 }
@@ -140,20 +149,20 @@
         {
             if(![WeiboSDK isWeiboAppInstalled]){
                 
-                if(shareSDK.sinaWeiboToken){
-                    NSLog(@"sina has logined");
-                    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-                    viewController.socialTag = SinaWeiboDWZTag;
-                    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
-                    return;
-                }
-                
-                WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-                request.redirectURI = shareSDK.sinaWeiboAppUrl;
-                request.scope = @"email,direct_messages_write";
-                request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
-                request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
-                [WeiboSDK sendRequest:request];
+//                if(shareSDK.sinaWeiboToken){
+//                    NSLog(@"sina has logined");
+//                    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+//                    viewController.socialTag = SinaWeiboDWZTag;
+//                    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+//                    return;
+//                }
+//                
+//                WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+//                request.redirectURI = shareSDK.sinaWeiboAppUrl;
+//                request.scope = @"email,direct_messages_write";
+//                request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+//                request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
+//                [WeiboSDK sendRequest:request];
                 
             }else{
                 WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
@@ -167,21 +176,28 @@
             break;
         case 1: //tencent weibo
         {
-            if(shareSDK.tencentWeiboToken){
-                NSLog(@"tencent has logined");
-                DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-                viewController.socialTag = TencentWeiboDWZTag;
-                [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
-                return;
-            }else{
+            if([DWZShareSDK isTencentWeiboInstalled]){
                 [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
+                NSLog(@"qq weibo installed");
+            }else{
+                NSLog(@"qq weibo nonononono");
             }
+//            if(shareSDK.tencentWeiboToken){
+//                NSLog(@"tencent has logined");
+//                DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+//                viewController.socialTag = TencentWeiboDWZTag;
+//                [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+//                return;
+//            }else{
+//                [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
+//            }
+
             
         }
             break;
         case 2: //QQZone
         {
-//            if([QQApiInterface isQQInstalled]){
+            if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
                 NSArray* permissions = [NSArray arrayWithObjects:
                                         kOPEN_PERMISSION_GET_USER_INFO,
                                         kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
@@ -207,17 +223,19 @@
                                         kOPEN_PERMISSION_MATCH_NICK_TIPS_WEIBO,
                                         nil];
                 [shareSDK.tencentOAuth authorize:permissions inSafari:YES];
-//            }else{
-//                
-//            }
+            }else{
+                
+            }
         }
             break;
         case 3: //weichat
         {
-            SendMessageToWXReq *wechatReq = [[SendMessageToWXReq alloc] init];
-            wechatReq.bText = YES;
-            wechatReq.text = @"测试微信分享";
-            [WXApi sendReq:wechatReq];
+            if([WXApi isWXAppInstalled]){
+                SendMessageToWXReq *wechatReq = [[SendMessageToWXReq alloc] init];
+                wechatReq.bText = YES;
+                wechatReq.text = @"测试微信分享";
+                [WXApi sendReq:wechatReq];
+            }
         }
             break;
         default:
@@ -430,5 +448,12 @@
 + (void) onResp:(BaseResp *)resp
 {
     NSLog(@"get resp %@",resp);
+}
+
+#pragma mark -
++ (BOOL) isTencentWeiboInstalled
+{
+    NSURL *tencentWeiboURL = [NSURL URLWithString:@"tencentweibo://xx"];
+    return [[UIApplication sharedApplication] canOpenURL:tencentWeiboURL];
 }
 @end
