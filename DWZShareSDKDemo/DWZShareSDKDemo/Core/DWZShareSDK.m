@@ -178,7 +178,7 @@
         case 1: //tencent weibo
         {
             if([DWZShareSDK isTencentWeiboInstalled]){
-                [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
+//                [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
 //                [DWZShareSDK tencentWeiboSendMessage:shareSDK.shareContent];
                 
             }else{
@@ -199,43 +199,27 @@
             break;
         case 2: //QQZone
         {
-            if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
-                NSArray* permissions = [NSArray arrayWithObjects:
-                                        kOPEN_PERMISSION_GET_USER_INFO,
-                                        kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
-                                        kOPEN_PERMISSION_ADD_ALBUM,
-                                        kOPEN_PERMISSION_ADD_IDOL,
-                                        kOPEN_PERMISSION_ADD_ONE_BLOG,
-                                        kOPEN_PERMISSION_ADD_PIC_T,
-                                        kOPEN_PERMISSION_ADD_SHARE,
-                                        kOPEN_PERMISSION_ADD_TOPIC,
-                                        kOPEN_PERMISSION_CHECK_PAGE_FANS,
-                                        kOPEN_PERMISSION_DEL_IDOL,
-                                        kOPEN_PERMISSION_DEL_T,
-                                        kOPEN_PERMISSION_GET_FANSLIST,
-                                        kOPEN_PERMISSION_GET_IDOLLIST,
-                                        kOPEN_PERMISSION_GET_INFO,
-                                        kOPEN_PERMISSION_GET_OTHER_INFO,
-                                        kOPEN_PERMISSION_GET_REPOST_LIST,
-                                        kOPEN_PERMISSION_LIST_ALBUM,
-                                        kOPEN_PERMISSION_UPLOAD_PIC,
-                                        kOPEN_PERMISSION_GET_VIP_INFO,
-                                        kOPEN_PERMISSION_GET_VIP_RICH_INFO,
-                                        kOPEN_PERMISSION_GET_INTIMATE_FRIENDS_WEIBO,
-                                        kOPEN_PERMISSION_MATCH_NICK_TIPS_WEIBO,
-                                        nil];
-                [shareSDK.tencentOAuth authorize:permissions inSafari:YES];
-            }else{
+//            if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
+
+                QQApiNewsObject *newsObject = [DWZShareSDK qqMessageFrom:shareSDK.shareContent];
+                SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObject];
+                QQApiSendResultCode sent = [QQApiInterface SendReqToQZone:req];
+                NSLog(@"sent %d",sent);
+
                 
-            }
+//            }else{
+//                
+//            }
         }
             break;
         case 3: //weichat
         {
             if([WXApi isWXAppInstalled]){
                 SendMessageToWXReq *wechatReq = [[SendMessageToWXReq alloc] init];
-                wechatReq.bText = YES;
-                wechatReq.text = @"测试微信分享";
+                WXMediaMessage *message = [DWZShareSDK wechatMessageFrom:shareSDK.shareContent];
+                wechatReq.message = message;
+                wechatReq.bText = NO;
+                wechatReq.scene = WXSceneSession;
                 [WXApi sendReq:wechatReq];
             }
         }
@@ -262,6 +246,34 @@
     return message;
 }
 
++ (WXMediaMessage *)wechatMessageFrom:(DWZShareContent *)pContent
+{
+    WXMediaMessage *message = [WXMediaMessage message];
+    message.title = @"分享自Game5253";
+    message.description = [NSString stringWithFormat:@"%@, %@ %@",pContent.title, pContent.content,pContent.url];
+    WXWebpageObject *webpageObject = [WXWebpageObject object];
+    webpageObject.webpageUrl = pContent.url;
+    if(pContent.image){
+        NSData *imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
+        [message setThumbData:imageData];
+    }
+    message.mediaObject = webpageObject;
+    return message;
+}
+
++ (QQApiNewsObject *)qqMessageFrom:(DWZShareContent *)pContent
+{
+    NSData *imageData;
+    if(pContent.image){
+        imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
+    }
+
+    QQApiNewsObject *newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:[NSString stringWithFormat:@"%@ %@",pContent.content,pContent.url] previewImageData:imageData];
+    
+    return newsObj;
+}
+
+#pragma mark -
 + (NSString *) sinaWeiboForHandleURLPrefix
 {
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
