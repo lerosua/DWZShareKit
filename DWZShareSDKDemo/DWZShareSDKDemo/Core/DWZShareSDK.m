@@ -16,6 +16,7 @@
 #import "DWZShareViewController.h"
 
 #import "DWZSocialView.h"
+#import "DWZShareContent.h"
 
 @interface DWZShareSDK()<WeiboSDKDelegate,
                         WBHttpRequestDelegate,
@@ -48,6 +49,7 @@
 
 @property (nonatomic,weak) UIViewController *baseViewController;
 
+@property (nonatomic,strong) DWZShareContent *shareContent;
 
 
 @end
@@ -109,14 +111,14 @@
     
 }
 #pragma mark -
-+ (id) showDefaultShareWithTitle:(NSString *)title
++ (id) showDefaultShareWith:(DWZShareContent *)content
                 serviceShareList:(NSArray *)shareList
               withViewController:(UIViewController *)viewController;
 
 {
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
     shareSDK.baseViewController = viewController;
-    
+    shareSDK.shareContent = content;
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:(id<UIActionSheetDelegate>)self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil,nil];
 
 
@@ -147,28 +149,27 @@
     switch (buttonIndex) {
         case 0:     //sina weibo
         {
-            if(![WeiboSDK isWeiboAppInstalled]){
-                
-//                if(shareSDK.sinaWeiboToken){
-//                    NSLog(@"sina has logined");
-//                    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-//                    viewController.socialTag = SinaWeiboDWZTag;
-//                    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
-//                    return;
-//                }
-//                
-//                WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-//                request.redirectURI = shareSDK.sinaWeiboAppUrl;
-//                request.scope = @"email,direct_messages_write";
-//                request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
-//                request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
-//                [WeiboSDK sendRequest:request];
-                
-            }else{
-                WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:@"测试数据"];
+            if([WeiboSDK isWeiboAppInstalled]){
+                WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:shareSDK.shareContent];
                 WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
                 request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
                 [WeiboSDK sendRequest:request];
+                
+            }else{
+                //                if(shareSDK.sinaWeiboToken){
+                //                    NSLog(@"sina has logined");
+                //                    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+                //                    viewController.socialTag = SinaWeiboDWZTag;
+                //                    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+                //                    return;
+                //                }
+                //
+                //                WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+                //                request.redirectURI = shareSDK.sinaWeiboAppUrl;
+                //                request.scope = @"email,direct_messages_write";
+                //                request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
+                //                request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
+                //                [WeiboSDK sendRequest:request];
             }
             
         }
@@ -178,7 +179,8 @@
         {
             if([DWZShareSDK isTencentWeiboInstalled]){
                 [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
-                NSLog(@"qq weibo installed");
+//                [DWZShareSDK tencentWeiboSendMessage:shareSDK.shareContent];
+                
             }else{
                 NSLog(@"qq weibo nonononono");
             }
@@ -248,10 +250,15 @@
 }
 
 #pragma mark - sina weibo
-+ (WBMessageObject *)weiboMessageFrom:(NSString *)text
++ (WBMessageObject *)weiboMessageFrom:(DWZShareContent *)pContent
 {
     WBMessageObject *message = [WBMessageObject message];
-    message.text = text;
+    message.text = [NSString stringWithFormat:@"%@ %@ %@",pContent.title,pContent.content,pContent.url];
+    if(pContent.image){
+        WBImageObject *imageObject = [WBImageObject object];
+        imageObject.imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
+        message.imageObject = imageObject;
+    }
     return message;
 }
 
@@ -278,13 +285,19 @@
     return shareSDK.tencentWeiboOpenId;
 }
 #pragma mark - tencent weibo
-+ (void) tencentWeiboSendMessage:(NSString *)text
++ (void) tencentWeiboSendMessage:(DWZShareContent *)pContent
 {
-    NSDictionary *dict = @{@"content":text
-                           };
-    
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-    [shareSDK.tencentWeiboApi requestWithParams:[dict mutableCopy] apiName:@"t/add" httpMethod:@"POST" delegate:(id<WeiboRequestDelegate>)self];
+    NSString *text = [NSString stringWithFormat:@"%@ %@ %@",pContent.title,pContent.content,pContent.url];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:text forKey:@"content"];
+    if(pContent.image){
+        NSData *imageData =  UIImageJPEGRepresentation(pContent.image, 0.7);
+        [params setObject:imageData forKey:@"pic"];
+    }
+    
+    [shareSDK.tencentWeiboApi requestWithParams:params apiName:@"t/add" httpMethod:@"POST" delegate:(id<WeiboRequestDelegate>)self];
 
     
 }
@@ -455,5 +468,26 @@
 {
     NSURL *tencentWeiboURL = [NSURL URLWithString:@"tencentweibo://xx"];
     return [[UIApplication sharedApplication] canOpenURL:tencentWeiboURL];
+}
+
++ (NSArray *)getShareListWithType:(ShareType)shareType, ... NS_REQUIRES_NIL_TERMINATION
+{
+    NSMutableArray *array = [NSMutableArray array];
+    ShareType eachObject;
+    va_list argmentList;
+    if(shareType){
+        [array addObject:@(shareType)];
+        va_start(argmentList, shareType);
+        while( (eachObject = va_arg(argmentList, ShareType))){
+            [array addObject:@(eachObject)];
+        }
+        va_end(argmentList);
+    }
+    return [array copy];
+}
++ (DWZShareContent *)content:(NSString *)pConent image:(UIImage *)pImage title:(NSString *)pTitle url:(NSString *)pUrl
+{
+    DWZShareContent *shareContent = [[DWZShareContent alloc] initWitContent:pConent title:pTitle image:pImage url:pUrl];
+    return shareContent;
 }
 @end

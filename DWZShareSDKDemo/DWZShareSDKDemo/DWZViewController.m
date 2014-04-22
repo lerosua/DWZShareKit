@@ -32,7 +32,12 @@
 #pragma mark -
 - (IBAction)ShareButtonAction:(id)sender
 {
-    [DWZShareSDK showDefaultShareWithTitle:@"测试" serviceShareList:nil withViewController:self];
+    NSArray *shareArray = [DWZShareSDK getShareListWithType:ShareTypeSinaWeibo,ShareTypeTencentWeibo,ShareTypeQQSpace,ShareTypeWeChatSession,nil];
+
+    UIImage *image = [UIImage imageNamed:@"QQIcon"];
+    DWZShareContent *content = [DWZShareSDK content:@"视频描述" image:image title:@"视频标题" url:@"http://baidu.com"];
+    
+    [DWZShareSDK showDefaultShareWith:content serviceShareList:shareArray withViewController:self];
 }
 
 

@@ -36,6 +36,7 @@
 		E9F55B351905199000A5E0E4 /* DWZSocialView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55B341905199000A5E0E4 /* DWZSocialView.m */; };
 		E9F55B3719051E8C00A5E0E4 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9F55B3619051E8C00A5E0E4 /* Media.xcassets */; };
 		E9F55B3A19051FEF00A5E0E4 /* DWZShareButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55B3919051FEF00A5E0E4 /* DWZShareButton.m */; };
+		E9F55B3F19060AF300A5E0E4 /* DWZShareContent.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55B3E19060AF300A5E0E4 /* DWZShareContent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,9 @@
 		E9F55B3619051E8C00A5E0E4 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		E9F55B3819051FEF00A5E0E4 /* DWZShareButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareButton.h; path = Core/DWZShareButton.h; sourceTree = "<group>"; };
 		E9F55B3919051FEF00A5E0E4 /* DWZShareButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareButton.m; path = Core/DWZShareButton.m; sourceTree = "<group>"; };
+		E9F55B3C190605C200A5E0E4 /* DWZShareSDKTypeDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareSDKTypeDef.h; path = Core/DWZShareSDKTypeDef.h; sourceTree = "<group>"; };
+		E9F55B3D19060AF300A5E0E4 /* DWZShareContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareContent.h; path = Core/DWZShareContent.h; sourceTree = "<group>"; };
+		E9F55B3E19060AF300A5E0E4 /* DWZShareContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareContent.m; path = Core/DWZShareContent.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,8 +262,11 @@
 		E9F55A7C18FFBF8C00A5E0E4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E9F55B3C190605C200A5E0E4 /* DWZShareSDKTypeDef.h */,
 				E9F55A7918FFBF8600A5E0E4 /* DWZShareSDK.h */,
 				E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */,
+				E9F55B3D19060AF300A5E0E4 /* DWZShareContent.h */,
+				E9F55B3E19060AF300A5E0E4 /* DWZShareContent.m */,
 				E9F55B331905199000A5E0E4 /* DWZSocialView.h */,
 				E9F55B341905199000A5E0E4 /* DWZSocialView.m */,
 				E9F55B3819051FEF00A5E0E4 /* DWZShareButton.h */,
@@ -378,6 +385,7 @@
 				E9F55A3C18FFBE3500A5E0E4 /* main.M in Sources */,
 				E9F55A7F19010FAB00A5E0E4 /* DWZShareViewController.m in Sources */,
 				E9F55B351905199000A5E0E4 /* DWZSocialView.m in Sources */,
+				E9F55B3F19060AF300A5E0E4 /* DWZShareContent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

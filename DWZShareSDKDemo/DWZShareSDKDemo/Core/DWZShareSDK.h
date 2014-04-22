@@ -7,17 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-@class  WBMessageObject;
+#import "DWZShareSDKTypeDef.h"
 
-typedef NS_ENUM(NSInteger, SocialDWZTag) {
-    SinaWeiboDWZTag = 0,
-    TencentWeiboDWZTag,
-    QQZoneDWZTag,
-    WechatDWZTag
-};
+@class  WBMessageObject;
+@class DWZShareContent;
 
 @interface DWZShareSDK : NSObject
 
+#pragma mark - connect
 /**
  *  @brief 连接新浪微博开放平台
  *
@@ -65,6 +62,7 @@ typedef NS_ENUM(NSInteger, SocialDWZTag) {
 + (void)connectWeChatWithAppId:(NSString *)appId
                      wechatCls:(Class)wechatCls;
 
+#pragma mark - init
 /**
  *  单例对象
  *
@@ -72,6 +70,7 @@ typedef NS_ENUM(NSInteger, SocialDWZTag) {
  */
 + (instancetype) shareInstance;
 
+#pragma mark - handleOpenURL
 /**
  *  @brief 通过URL启动第三方应用时传递的数据
  *
@@ -82,6 +81,7 @@ typedef NS_ENUM(NSInteger, SocialDWZTag) {
  */
 + (BOOL) handleOpenURL:(NSURL *)url delegate:(id) pDelegate;
 
+#pragma mark - show ActionSheet
 /**
  *  创建默认分享选项
  *
@@ -90,10 +90,11 @@ typedef NS_ENUM(NSInteger, SocialDWZTag) {
  *
  *  @return 暂未定义
  */
-+ (id) showDefaultShareWithTitle:(NSString *)title
++ (id) showDefaultShareWith:(DWZShareContent *)content
                 serviceShareList:(NSArray *)shareList
               withViewController:(UIViewController *)viewController;
 
+#pragma mark - something social
 /**
  *  转换文本消息为微博消息对象
  *
@@ -101,7 +102,7 @@ typedef NS_ENUM(NSInteger, SocialDWZTag) {
  *
  *  @return 微博消息对象
  */
-+ (WBMessageObject *)weiboMessageFrom:(NSString *)text;
++ (WBMessageObject *)weiboMessageFrom:(DWZShareContent *)pContent;
 
 /**
  *  返回handleURL需要的sina weibo的url的前缀
@@ -111,7 +112,29 @@ typedef NS_ENUM(NSInteger, SocialDWZTag) {
 + (NSString *) sinaWeiboForHandleURLPrefix;
 + (NSString *) sinaWeiboToken;
 
-+ (void) tencentWeiboSendMessage:(NSString *)text;
++ (void) tencentWeiboSendMessage:(DWZShareContent *)pContent;
 
 + (BOOL) isTencentWeiboInstalled;
+
+#pragma mark -
+/**
+ *  获取要支持的分享列表
+ *
+ *  @param shareType 社会化平台类型
+ *
+ *  @return 分享列表
+ */
++ (NSArray *)getShareListWithType:(ShareType)shareType, ... NS_REQUIRES_NIL_TERMINATION;
+
+/**
+ *  创建分享的对象
+ *
+ *  @param pConent 分享的内容
+ *  @param pImage  分享的图片
+ *  @param pTitle  分享的标题
+ *  @param pUrl    分享的URL
+ *
+ *  @return 分享内容对象
+ */
++ (DWZShareContent *)content:(NSString *)pConent image:(UIImage *)pImage title:(NSString *)pTitle url:(NSString *)pUrl;
 @end
