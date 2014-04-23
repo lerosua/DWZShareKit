@@ -158,7 +158,12 @@
 {
     NSLog(@"click %d",buttonIndex);
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-
+    
+    if(buttonIndex >= [shareSDK.socialList count]){
+        NSLog(@"cancel action");
+        return;
+    }
+    
     NSInteger socialNo = [shareSDK.socialList[buttonIndex] integerValue];
     
     switch (socialNo) {
