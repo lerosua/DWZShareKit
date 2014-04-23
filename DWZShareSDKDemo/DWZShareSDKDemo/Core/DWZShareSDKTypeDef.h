@@ -13,10 +13,15 @@ typedef enum
 {
 	ShareTypeSinaWeibo = 1,         /**< 新浪微博 */
 	ShareTypeTencentWeibo = 2,      /**< 腾讯微博 */
-	ShareTypeSohuWeibo = 3,         /**< 搜狐微博 */
-    ShareType163Weibo = 4,          /**< 网易微博 */
-	ShareTypeDouBan = 5,            /**< 豆瓣社区 */
-	ShareTypeQQSpace = 6,           /**< QQ空间 */
+    ShareTypeQQ = 3,                /**< QQ好友 */
+    ShareTypeQQSpace = 4,           /**< QQ空间 */
+    ShareTypeWeChatSession = 5,     /**< 微信好友 */
+	ShareTypeWeChatTimeline = 6,    /**< 微信朋友圈 */
+
+	ShareTypeSohuWeibo = 24,         /**< 搜狐微博 */
+    ShareType163Weibo = 23,          /**< 网易微博 */
+	ShareTypeDouBan = 22,            /**< 豆瓣社区 */
+
 	ShareTypeRenren = 7,            /**< 人人网 */
 	ShareTypeKaixin = 8,            /**< 开心网 */
 	ShareTypePengyou = 9,           /**< 朋友网 */
@@ -32,9 +37,7 @@ typedef enum
 	ShareTypeSMS = 19,              /**< 短信分享 */
 	ShareTypeAirPrint = 20,         /**< 打印 */
 	ShareTypeCopy = 21,             /**< 拷贝 */
-    ShareTypeWeChatSession = 22,     /**< 微信好友 */
-	ShareTypeWeChatTimeline = 23,    /**< 微信朋友圈 */
-    ShareTypeQQ = 24,               /**< QQ */
+
     ShareTypeInstapaper = 25,       /**< Instapaper */
     ShareTypePocket = 26,           /**< Pocket */
     ShareTypeYouDaoNote = 27,       /**< 有道云笔记 */

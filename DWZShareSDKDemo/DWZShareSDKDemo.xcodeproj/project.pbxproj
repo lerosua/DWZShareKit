@@ -61,6 +61,8 @@
 		E9B65F5219066BD30040DD08 /* TencentOAuthObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TencentOAuthObject.h; sourceTree = "<group>"; };
 		E9B65F5319066BD30040DD08 /* QQWeiBoAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQWeiBoAPI.h; sourceTree = "<group>"; };
 		E9B65F5419066BD30040DD08 /* WeiyunAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiyunAPI.h; sourceTree = "<group>"; };
+		E9B65F591906A6220040DD08 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		E9B65F5A1906A6220040DD08 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		E9F55A2C18FFBE3500A5E0E4 /* DWZShareSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DWZShareSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9F55A2F18FFBE3500A5E0E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E9F55A3118FFBE3500A5E0E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -263,6 +265,8 @@
 		E9F55A6C18FFBF5300A5E0E4 /* TencentWeiboSDK */ = {
 			isa = PBXGroup;
 			children = (
+				E9B65F591906A6220040DD08 /* GTMBase64.h */,
+				E9B65F5A1906A6220040DD08 /* GTMDefines.h */,
 				E9F55A6D18FFBF5300A5E0E4 /* libTCWeiboSDK.a */,
 				E9F55A6E18FFBF5300A5E0E4 /* WeiboApi.h */,
 			);

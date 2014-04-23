@@ -50,11 +50,12 @@
 @property (nonatomic,weak) UIViewController *baseViewController;
 
 @property (nonatomic,strong) DWZShareContent *shareContent;
-
+@property (nonatomic,strong) NSArray *socialList;
 
 @end
 
 @implementation DWZShareSDK
+
 #pragma mark -
 + (instancetype) shareInstance
 {
@@ -116,17 +117,27 @@
               withViewController:(UIViewController *)viewController;
 
 {
+    if(!shareList){
+        NSLog(@"please at less get on social account");
+        return nil;
+    }
+
+    NSArray *socialNames = @[@"定义为空",@"新浪微博",@"腾讯微博",@"QQ好友",@"QQ空间",@"微信好友",@"微信朋友圈"];
+
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
     shareSDK.baseViewController = viewController;
     shareSDK.shareContent = content;
+    shareSDK.socialList = shareList;
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:(id<UIActionSheetDelegate>)self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil,nil];
-
-
-    [sheet addButtonWithTitle:@"新浪微博"];
-    [sheet addButtonWithTitle:@"腾讯微博"];
-    [sheet addButtonWithTitle:@"QQ空间"];
-    [sheet addButtonWithTitle:@"微信"];
     
+    for (NSNumber *number in shareList) {
+        int num = [number integerValue];
+        if(num < [socialNames count]){
+            [sheet addButtonWithTitle:socialNames[num]];
+        }
+    }
+    
+
 //    DWZSocialView *view = [[DWZSocialView alloc] initWithFrame:CGRectMake(10, 0, 300, 160)];
 //    [sheet addSubview:view];
 //    [sheet setFrame:CGRectMake(0, 110, 320, 210)];
@@ -140,14 +151,18 @@
     
 }
 
-#pragma mark -
-+ (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+#pragma mark - 
+//如果要跳出新浪的授权页面则要用dismiss的事件,因为可能会把将要弹出的actionsheet去掉
+//+ (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
++ (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSLog(@"click %d",buttonIndex);
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
 
-    switch (buttonIndex) {
-        case 0:     //sina weibo
+    NSInteger socialNo = [shareSDK.socialList[buttonIndex] integerValue];
+    
+    switch (socialNo) {
+        case ShareTypeSinaWeibo:     //sina weibo
         {
             if([WeiboSDK isWeiboAppInstalled]){
                 WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:shareSDK.shareContent];
@@ -175,7 +190,7 @@
         }
 
             break;
-        case 1: //tencent weibo
+        case ShareTypeTencentWeibo: //tencent weibo 暂不处理
         {
             if([DWZShareSDK isTencentWeiboInstalled]){
 //                [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
@@ -197,29 +212,38 @@
             
         }
             break;
-        case 2: //QQZone
+        case ShareTypeQQ:
+        case ShareTypeQQSpace://QQZone
         {
-//            if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
+            if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
 
                 QQApiNewsObject *newsObject = [DWZShareSDK qqMessageFrom:shareSDK.shareContent];
                 SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObject];
-                QQApiSendResultCode sent = [QQApiInterface SendReqToQZone:req];
+                QQApiSendResultCode sent;
+                if(socialNo == ShareTypeQQ){
+                    sent = [QQApiInterface sendReq:req];
+                }else if(socialNo == ShareTypeQQSpace){
+                    sent = [QQApiInterface SendReqToQZone:req];
+                }
                 NSLog(@"sent %d",sent);
 
                 
-//            }else{
-//                
-//            }
+            }
         }
             break;
-        case 3: //weichat
+        case ShareTypeWeChatSession:   //wechat好友
+        case ShareTypeWeChatTimeline:  //wechat 朋友圈
         {
             if([WXApi isWXAppInstalled]){
                 SendMessageToWXReq *wechatReq = [[SendMessageToWXReq alloc] init];
                 WXMediaMessage *message = [DWZShareSDK wechatMessageFrom:shareSDK.shareContent];
                 wechatReq.message = message;
                 wechatReq.bText = NO;
-                wechatReq.scene = WXSceneSession;
+                if(socialNo == ShareTypeWeChatSession){
+                    wechatReq.scene = WXSceneSession;
+                }else{
+                    wechatReq.scene = WXSceneTimeline;
+                }
                 [WXApi sendReq:wechatReq];
             }
         }
@@ -327,9 +351,9 @@
         shareSDK.sinaWeiboToken = [(WBAuthorizeResponse *)response accessToken];
         NSLog(@"get weibo token %@ and expire data %@",shareSDK.sinaWeiboToken,[(WBAuthorizeResponse *)response expirationDate]);
         
-        DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-        viewController.socialTag = SinaWeiboDWZTag;
-        [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+//        DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+//        viewController.socialTag = SinaWeiboDWZTag;
+//        [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
     }
 }
 
