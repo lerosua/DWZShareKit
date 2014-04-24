@@ -23,6 +23,7 @@
                         WeiboRequestDelegate,WeiboAuthDelegate,
                         TencentSessionDelegate,
                         WXApiDelegate,
+                        DWZSocialDelegate,
                         UIActionSheetDelegate>
 
 //新浪数据
@@ -121,50 +122,27 @@
         return nil;
     }
 
-    NSArray *socialNames = @[@"定义为空",@"新浪微博",@"腾讯微博",@"QQ好友",@"QQ空间",@"微信好友",@"微信朋友圈"];
-
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
     shareSDK.baseViewController = viewController;
     shareSDK.shareContent = content;
     shareSDK.socialList = shareList;
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:(id<UIActionSheetDelegate>)self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil,nil];
     
-    for (NSNumber *number in shareList) {
-        int num = [number integerValue];
-        if(num < [socialNames count]){
-            [sheet addButtonWithTitle:socialNames[num]];
-        }
-    }
     
-
-//    DWZSocialView *view = [[DWZSocialView alloc] initWithFrame:CGRectMake(10, 0, 300, 160)];
-//    [sheet addSubview:view];
-//    [sheet setFrame:CGRectMake(0, 110, 320, 210)];
+    DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList];
+    view.delegate = shareSDK;
+    [view show];
     
-    [sheet addButtonWithTitle:@"取消"];
-    sheet.cancelButtonIndex = sheet.numberOfButtons - 1;
-
-    [sheet showInView:[UIApplication sharedApplication].keyWindow];
 
     return nil;
     
 }
 
-#pragma mark - 
-//如果要跳出新浪的授权页面则要用dismiss的事件,因为可能会把将要弹出的actionsheet去掉
-//+ (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-+ (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+#pragma mark -
+- (void) socialButton:(UIButton *)sender clickedAtIndex:(NSInteger) index;
 {
-    NSLog(@"click %d",buttonIndex);
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-    
-    if(buttonIndex >= [shareSDK.socialList count]){
-        NSLog(@"cancel action");
-        return;
-    }
-    
-    NSInteger socialNo = [shareSDK.socialList[buttonIndex] integerValue];
-    
+
+    ShareType socialNo = index;
     switch (socialNo) {
         case ShareTypeSinaWeibo:     //sina weibo
         {
@@ -175,44 +153,21 @@
                 [WeiboSDK sendRequest:request];
                 
             }else{
-                //                if(shareSDK.sinaWeiboToken){
-                //                    NSLog(@"sina has logined");
-                //                    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-                //                    viewController.socialTag = SinaWeiboDWZTag;
-                //                    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
-                //                    return;
-                //                }
-                //
-                //                WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-                //                request.redirectURI = shareSDK.sinaWeiboAppUrl;
-                //                request.scope = @"email,direct_messages_write";
-                //                request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
-                //                request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
-                //                [WeiboSDK sendRequest:request];
+
             }
             
         }
-
+            
             break;
         case ShareTypeTencentWeibo: //tencent weibo 暂不处理
         {
             if([DWZShareSDK isTencentWeiboInstalled]){
-//                [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
-//                [DWZShareSDK tencentWeiboSendMessage:shareSDK.shareContent];
+
                 
             }else{
-                NSLog(@"qq weibo nonononono");
-            }
-//            if(shareSDK.tencentWeiboToken){
-//                NSLog(@"tencent has logined");
-//                DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-//                viewController.socialTag = TencentWeiboDWZTag;
-//                [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
-//                return;
-//            }else{
-//                [shareSDK.tencentWeiboApi loginWithDelegate:self andRootController:shareSDK.baseViewController];
-//            }
 
+            }
+            
             
         }
             break;
@@ -220,7 +175,7 @@
         case ShareTypeQQSpace://QQZone
         {
             if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
-
+                
                 QQApiNewsObject *newsObject = [DWZShareSDK qqMessageFrom:shareSDK.shareContent];
                 SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObject];
                 QQApiSendResultCode sent;
@@ -230,7 +185,7 @@
                     sent = [QQApiInterface SendReqToQZone:req];
                 }
                 NSLog(@"sent %d",sent);
-
+                
                 
             }
         }
@@ -255,10 +210,8 @@
         default:
             break;
     }
-    
 
     
-
 }
 
 #pragma mark - sina weibo
