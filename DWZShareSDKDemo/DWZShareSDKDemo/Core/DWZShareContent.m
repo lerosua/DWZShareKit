@@ -13,7 +13,8 @@
 {
     self = [super init];
     if(self){
-        self.content = pContent;
+        NSInteger length = pContent.length > 180 ? 180 :pContent.length;
+        self.content = [pContent substringToIndex:length];
         self.title = pTitle;
         self.image = pImage;
         self.url = pUrl;

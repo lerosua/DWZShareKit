@@ -8,8 +8,9 @@
 
 #import <XCTest/XCTest.h>
 
-@interface DWZShareSDKDemoTests : XCTestCase
-
+@interface DWZShareSDKDemoTests : XCTestCase{
+    NSArray *dataArray;
+}
 @end
 
 @implementation DWZShareSDKDemoTests
@@ -17,18 +18,22 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+
+
 }
 
 - (void)tearDown
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+    dataArray = nil;
 }
 
 - (void)testExample
 {
     XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    
+    XCTAssertNotNil(dataArray.firstObject, @"array firstobject must not nil");
 }
 
 @end

@@ -102,7 +102,6 @@
 {
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
     shareSDK.tencentOAuth = [[TencentOAuth alloc] initWithAppId:appKey andDelegate:(id<TencentSessionDelegate>)self];
-    
 }
 
 + (void)connectWeChatWithAppId:(NSString *)appId
