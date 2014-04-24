@@ -115,6 +115,9 @@
 + (void) tencentWeiboSendMessage:(DWZShareContent *)pContent;
 
 + (BOOL) isTencentWeiboInstalled;
++ (BOOL) isQQInstalled;
++ (BOOL) isWeiboInstalled;
++ (BOOL) isWeChatInstalled;
 
 #pragma mark -
 /**

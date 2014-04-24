@@ -18,7 +18,7 @@
 
 @property (nonatomic,weak) id<DWZSocialDelegate> delegate;
 
-- (instancetype) initWithArray:(NSArray *)array;
+- (instancetype) initWithArray:(NSArray *)array withDelegate:(id<DWZSocialDelegate>)pDelegate;
 - (void)show;
 - (void)dismiss;
 @end

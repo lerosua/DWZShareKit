@@ -45,7 +45,7 @@
 @property (nonatomic,strong) TencentOAuth *tencentOAuth;
 
 //微信数据
-@property (nonatomic,strong) NSString *weChatAppId;
+//@property (nonatomic,strong) NSString *weChatAppId;
 
 
 @property (nonatomic,weak) UIViewController *baseViewController;
@@ -56,6 +56,15 @@
 @end
 
 @implementation DWZShareSDK
+
+#pragma mark -
+- (TencentOAuth *)tencentOAuth
+{
+    if(!_tencentOAuth){
+        _tencentOAuth = [[TencentOAuth alloc] initWithAppId:self.qqZoneAppKey andDelegate:(id<TencentSessionDelegate>)self];
+    }
+    return _tencentOAuth;
+}
 
 #pragma mark -
 + (instancetype) shareInstance
@@ -102,7 +111,9 @@
                      appSecret:(NSString *)appSecret
 {
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-    shareSDK.tencentOAuth = [[TencentOAuth alloc] initWithAppId:appKey andDelegate:(id<TencentSessionDelegate>)self];
+    shareSDK.qqZoneAppKey = appKey;
+    shareSDK.qqZoneAppSecret = appSecret;
+
 }
 
 + (void)connectWeChatWithAppId:(NSString *)appId
@@ -127,9 +138,11 @@
     shareSDK.shareContent = content;
     shareSDK.socialList = shareList;
     
-    
-    DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList];
-    view.delegate = shareSDK;
+    //调用来初始化
+    id x = shareSDK.tencentOAuth;
+    NSLog(@"register tencentOAuth %@",x);
+
+    DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList withDelegate:shareSDK];
     [view show];
     
 
@@ -230,8 +243,11 @@
 + (WXMediaMessage *)wechatMessageFrom:(DWZShareContent *)pContent
 {
     WXMediaMessage *message = [WXMediaMessage message];
-    message.title = @"分享自Game5253";
-    message.description = [NSString stringWithFormat:@"%@, %@ %@",pContent.title, pContent.content,pContent.url];
+//    message.title = @"分享自Game5253";
+//    message.description = [NSString stringWithFormat:@"%@, %@ %@",pContent.title, pContent.content,pContent.url];
+    message.title = pContent.title;
+    message.description = [NSString stringWithFormat:@"%@ %@", pContent.content,pContent.url];
+
     WXWebpageObject *webpageObject = [WXWebpageObject object];
     webpageObject.webpageUrl = pContent.url;
     if(pContent.image){
@@ -463,6 +479,20 @@
     return [[UIApplication sharedApplication] canOpenURL:tencentWeiboURL];
 }
 
++ (BOOL) isQQInstalled
+{
+    return [QQApiInterface isQQInstalled] && [QQApiInterface isQQSupportApi];
+}
++ (BOOL) isWeiboInstalled
+{
+    return [WeiboSDK isWeiboAppInstalled];
+}
++ (BOOL) isWeChatInstalled
+{
+    return [WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi];
+}
+
+#pragma mark -
 + (NSArray *)getShareListWithType:(ShareType)shareType, ... NS_REQUIRES_NIL_TERMINATION
 {
     NSMutableArray *array = [NSMutableArray array];

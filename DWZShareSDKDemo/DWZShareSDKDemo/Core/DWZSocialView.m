@@ -7,7 +7,8 @@
 //
 
 #import "DWZSocialView.h"
-#import "DWZShareButton.h"
+#import "DWZShareSDK.h"
+
 
 #define SCREEN_HEIGHT   [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH    [UIScreen mainScreen].bounds.size.width
@@ -15,18 +16,17 @@
 @interface DWZSocialView(){
     UIControl *backgroundView;
 }
-@property (nonatomic, strong) UIImage *image;
-@property (nonatomic, strong) NSString *content;
 @property (nonatomic, strong,readonly) NSArray *array;
 @end
 
 @implementation DWZSocialView
 
-- (instancetype) initWithArray:(NSArray *)array
+- (instancetype) initWithArray:(NSArray *)array withDelegate:(id<DWZSocialDelegate>)pDelegate
 {
     self = [self initWithFrame:[UIScreen mainScreen].bounds];
     if(self){
         _array = array;
+        _delegate = pDelegate;
     }
     return self;
 }
@@ -79,29 +79,55 @@
     int i = 0;
     for (NSNumber *number in self.array) {
         int num = [number integerValue];
-            if ((i + 1) % 3) {
-                x = (i + 1) % 3;
-                y = (i + 1) / 3;
-            } else {
-                x = 3;
-                y = (i + 1) / 3 - 1;
-            }
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(90 * ( x - 1 ), 75 + 90 * y, 90, 30)];
-            label.text = socialNames[num];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.font = [UIFont systemFontOfSize:14.0f];
-            label.textColor = [UIColor colorWithRed:95/255.0
-                                              green:95/255.0
-                                               blue:95/255.0
-                                              alpha:1.0];
-            [containerView addSubview:label];
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(5 + 90 * ( x - 1 ), 10 + 90 * y, 80, 80);
-            [button setImage:[UIImage imageNamed:shareIconArray[num]] forState:UIControlStateNormal];
-            button.tag = num;
-            [button addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
-            [containerView addSubview:button];
-            ++i;
+        if ((i + 1) % 3) {
+            x = (i + 1) % 3;
+            y = (i + 1) / 3;
+        } else {
+            x = 3;
+            y = (i + 1) / 3 - 1;
+        }
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(90 * ( x - 1 ), 75 + 90 * y, 90, 30)];
+        label.text = socialNames[num];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [UIFont systemFontOfSize:14.0f];
+        label.textColor = [UIColor colorWithRed:95/255.0
+                                          green:95/255.0
+                                           blue:95/255.0
+                                          alpha:1.0];
+        [containerView addSubview:label];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(5 + 90 * ( x - 1 ), 10 + 90 * y, 80, 80);
+        [button setImage:[UIImage imageNamed:shareIconArray[num]] forState:UIControlStateNormal];
+        button.tag = num;
+        [button addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
+        [containerView addSubview:button];
+    
+        //check app valide
+        switch (num) {
+            case ShareTypeSinaWeibo:
+                if(![DWZShareSDK isWeiboInstalled]){
+                    button.enabled = NO;
+                }
+                break;
+                case ShareTypeQQ:
+                case ShareTypeQQSpace:
+                if(![DWZShareSDK isQQInstalled]){
+                    button.enabled = NO;
+                }
+                break;
+                case ShareTypeWeChatSession:
+                case ShareTypeWeChatTimeline:
+                if(![DWZShareSDK isWeChatInstalled]){
+                    button.enabled = NO;
+                }
+                break;
+            default:
+                break;
+        }
+
+        ++i;
+        
+        
     }
     
 }
