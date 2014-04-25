@@ -59,13 +59,13 @@
 @implementation DWZShareSDK
 
 #pragma mark -
-- (TencentOAuth *)tencentOAuth
-{
-    if(!_tencentOAuth){
-        _tencentOAuth = [[TencentOAuth alloc] initWithAppId:self.qqZoneAppKey andDelegate:(id<TencentSessionDelegate>)self];
-    }
-    return _tencentOAuth;
-}
+//- (TencentOAuth *)tencentOAuth
+//{
+//    if(!_tencentOAuth){
+//        _tencentOAuth = [[TencentOAuth alloc] initWithAppId:self.qqZoneAppKey andDelegate:(id<TencentSessionDelegate>)self];
+//    }
+//    return _tencentOAuth;
+//}
 
 #pragma mark -
 + (instancetype) shareInstance
@@ -114,6 +114,8 @@
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
     shareSDK.qqZoneAppKey = appKey;
     shareSDK.qqZoneAppSecret = appSecret;
+    shareSDK.tencentOAuth = [[TencentOAuth alloc] initWithAppId:appKey andDelegate:(id<TencentSessionDelegate>)self];
+
 
 }
 
@@ -139,10 +141,6 @@
     shareSDK.shareContent = content;
     shareSDK.socialList = shareList;
     shareSDK.delegate = pDelegate;
-    
-    //调用来初始化
-    id x = shareSDK.tencentOAuth;
-    NSLog(@"register tencentOAuth %@",x);
 
     DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList withDelegate:shareSDK];
     [view show];

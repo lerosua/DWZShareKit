@@ -35,7 +35,6 @@
 		E9F55ACA1902609600A5E0E4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55AC91902609600A5E0E4 /* SystemConfiguration.framework */; };
 		E9F55B351905199000A5E0E4 /* DWZSocialView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55B341905199000A5E0E4 /* DWZSocialView.m */; };
 		E9F55B3719051E8C00A5E0E4 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9F55B3619051E8C00A5E0E4 /* Media.xcassets */; };
-		E9F55B3A19051FEF00A5E0E4 /* DWZShareButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55B3919051FEF00A5E0E4 /* DWZShareButton.m */; };
 		E9F55B3F19060AF300A5E0E4 /* DWZShareContent.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55B3E19060AF300A5E0E4 /* DWZShareContent.m */; };
 /* End PBXBuildFile section */
 
@@ -102,8 +101,6 @@
 		E9F55B331905199000A5E0E4 /* DWZSocialView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZSocialView.h; path = Core/DWZSocialView.h; sourceTree = "<group>"; };
 		E9F55B341905199000A5E0E4 /* DWZSocialView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZSocialView.m; path = Core/DWZSocialView.m; sourceTree = "<group>"; };
 		E9F55B3619051E8C00A5E0E4 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		E9F55B3819051FEF00A5E0E4 /* DWZShareButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareButton.h; path = Core/DWZShareButton.h; sourceTree = "<group>"; };
-		E9F55B3919051FEF00A5E0E4 /* DWZShareButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareButton.m; path = Core/DWZShareButton.m; sourceTree = "<group>"; };
 		E9F55B3C190605C200A5E0E4 /* DWZShareSDKTypeDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareSDKTypeDef.h; path = Core/DWZShareSDKTypeDef.h; sourceTree = "<group>"; };
 		E9F55B3D19060AF300A5E0E4 /* DWZShareContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareContent.h; path = Core/DWZShareContent.h; sourceTree = "<group>"; };
 		E9F55B3E19060AF300A5E0E4 /* DWZShareContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareContent.m; path = Core/DWZShareContent.m; sourceTree = "<group>"; };
@@ -293,8 +290,6 @@
 				E9F55B3E19060AF300A5E0E4 /* DWZShareContent.m */,
 				E9F55B331905199000A5E0E4 /* DWZSocialView.h */,
 				E9F55B341905199000A5E0E4 /* DWZSocialView.m */,
-				E9F55B3819051FEF00A5E0E4 /* DWZShareButton.h */,
-				E9F55B3919051FEF00A5E0E4 /* DWZShareButton.m */,
 				E9F55A7D19010FAB00A5E0E4 /* DWZShareViewController.h */,
 				E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */,
 			);
@@ -405,7 +400,6 @@
 				E9F55A4618FFBE3500A5E0E4 /* DWZViewController.m in Sources */,
 				E9F55A4018FFBE3500A5E0E4 /* DWZAppDelegate.m in Sources */,
 				E9F55A7B18FFBF8600A5E0E4 /* DWZShareSDK.m in Sources */,
-				E9F55B3A19051FEF00A5E0E4 /* DWZShareButton.m in Sources */,
 				E9F55A3C18FFBE3500A5E0E4 /* main.M in Sources */,
 				E9F55A7F19010FAB00A5E0E4 /* DWZShareViewController.m in Sources */,
 				E9F55B351905199000A5E0E4 /* DWZSocialView.m in Sources */,
