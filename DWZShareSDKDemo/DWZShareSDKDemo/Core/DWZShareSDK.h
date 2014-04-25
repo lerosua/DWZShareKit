@@ -12,6 +12,17 @@
 @class  WBMessageObject;
 @class DWZShareContent;
 
+@protocol DWZShareSDKDelegate <NSObject>
+/**
+ *  shareSDK分享后的回调
+ *
+ *  @param socialType 所分享的社交类型
+ *  @param sucess     分享的结果，YES为成功，反之失败,暂不计算失败类型
+ */
+- (void) shareSDKResponse:(ShareType)socialType Success:(BOOL)sucess;
+
+@end
+
 @interface DWZShareSDK : NSObject
 
 #pragma mark - connect
@@ -92,7 +103,7 @@
  */
 + (id) showDefaultShareWith:(DWZShareContent *)content
                 serviceShareList:(NSArray *)shareList
-              withViewController:(UIViewController *)viewController;
+               withDelegate:(id<DWZShareSDKDelegate>)pDelegate;
 
 #pragma mark - something social
 /**

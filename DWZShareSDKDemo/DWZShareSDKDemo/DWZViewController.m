@@ -11,7 +11,7 @@
 #import "DWZAppDelegate.h"
 #import "WeiboSDK.h"
 
-@interface DWZViewController ()
+@interface DWZViewController ()<DWZShareSDKDelegate>
 
 @end
 
@@ -37,9 +37,12 @@
     UIImage *image = [UIImage imageNamed:@"QQIcon"];
     DWZShareContent *content = [DWZShareSDK content:@"视频描述" image:image title:@"视频标题" url:@"http://baidu.com"];
     
-    [DWZShareSDK showDefaultShareWith:content serviceShareList:shareArray withViewController:self];
+    [DWZShareSDK showDefaultShareWith:content serviceShareList:shareArray withDelegate:self];
 }
 
-
+- (void)shareSDKResponse:(ShareType)socialType Success:(BOOL)sucess
+{
+    NSLog(@"sharesdk response back %d",sucess);
+}
 
 @end

@@ -23,8 +23,8 @@
                         WeiboRequestDelegate,WeiboAuthDelegate,
                         TencentSessionDelegate,
                         WXApiDelegate,
-                        DWZSocialDelegate,
-                        UIActionSheetDelegate>
+                        DWZSocialDelegate
+                        >
 
 //新浪数据
 @property (nonatomic,strong) NSString *sinaWeiboAppKey;
@@ -48,7 +48,7 @@
 //@property (nonatomic,strong) NSString *weChatAppId;
 
 
-@property (nonatomic,weak) UIViewController *baseViewController;
+@property (nonatomic,weak) id<DWZShareSDKDelegate> delegate;
 
 @property (nonatomic,strong) DWZShareContent *shareContent;
 @property (nonatomic,strong) NSArray *socialList;
@@ -125,8 +125,7 @@
 #pragma mark -
 + (id) showDefaultShareWith:(DWZShareContent *)content
                 serviceShareList:(NSArray *)shareList
-              withViewController:(UIViewController *)viewController;
-
+               withDelegate:(id<DWZShareSDKDelegate>)pDelegate
 {
     if(!shareList){
         NSLog(@"please at less get on social account");
@@ -134,9 +133,9 @@
     }
 
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-    shareSDK.baseViewController = viewController;
     shareSDK.shareContent = content;
     shareSDK.socialList = shareList;
+    shareSDK.delegate = pDelegate;
     
     //调用来初始化
     id x = shareSDK.tencentOAuth;
@@ -314,15 +313,24 @@
 + (void)didReceiveWeiboRequest:(WBBaseRequest *)request
 {
     NSLog(@"get weibo request");
+
 }
 
 + (void)didReceiveWeiboResponse:(WBBaseResponse *)response
 {
     NSLog(@"get weibo response");
     if([response isKindOfClass:WBAuthorizeResponse.class]){
+
         DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
-        shareSDK.sinaWeiboToken = [(WBAuthorizeResponse *)response accessToken];
-        NSLog(@"get weibo token %@ and expire data %@",shareSDK.sinaWeiboToken,[(WBAuthorizeResponse *)response expirationDate]);
+        if(response.statusCode == WeiboSDKResponseStatusCodeSuccess){
+            //新浪分享成功
+            NSLog(@"sina share success");
+            [shareSDK.delegate shareSDKResponse:ShareTypeSinaWeibo Success:YES];
+            
+        }else{
+            [shareSDK.delegate shareSDKResponse:ShareTypeSinaWeibo Success:NO];
+            NSLog(@"sina share cancel");
+        }
         
     }
 }
@@ -423,9 +431,9 @@
     shareSDK.tencentWeiboApi = wbapi_;
     
     
-    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-    viewController.socialTag = TencentWeiboDWZTag;
-    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
+//    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
+//    viewController.socialTag = TencentWeiboDWZTag;
+//    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
 
 
 }
@@ -467,6 +475,28 @@
 + (void) onResp:(BaseResp *)resp
 {
     NSLog(@"get resp %@",resp);
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+
+    if([resp isKindOfClass:[SendMessageToWXReq class]]){
+        if(resp.errCode == 0){
+            NSLog(@"wechat share success");
+            [shareSDK.delegate shareSDKResponse:ShareTypeWeChatSession Success:YES];
+            
+        }else{
+            NSLog(@"wechat share cancel");
+            [shareSDK.delegate shareSDKResponse:ShareTypeWeChatSession Success:NO];
+
+        }
+    }else if ([resp isKindOfClass:[QQBaseResp class]]){
+        SendMessageToQQResp *sendResp = (SendMessageToQQResp *)resp;
+        if(sendResp.errorDescription == nil){
+            NSLog(@"qq share sucess");
+            [shareSDK.delegate shareSDKResponse:ShareTypeQQ Success:YES];
+        }else{
+            NSLog(@"qq share cancel");
+            [shareSDK.delegate shareSDKResponse:ShareTypeQQ Success:NO];
+        }
+    }
 }
 
 #pragma mark -
