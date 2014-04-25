@@ -8,7 +8,7 @@
 
 #import "DWZSocialView.h"
 #import "DWZShareSDK.h"
-
+#import "UIImage+ShareSDKTMOImage.h"
 
 #define SCREEN_HEIGHT   [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH    [UIScreen mainScreen].bounds.size.width
@@ -97,34 +97,38 @@
         [containerView addSubview:label];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(5 + 90 * ( x - 1 ), 10 + 90 * y, 80, 80);
-        [button setImage:[UIImage imageNamed:shareIconArray[num]] forState:UIControlStateNormal];
         button.tag = num;
-        [button addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
-        [containerView addSubview:button];
-    
+        UIImage *image = [UIImage imageNamed:shareIconArray[num]];
         //check app valide
         switch (num) {
             case ShareTypeSinaWeibo:
                 if(![DWZShareSDK isWeiboInstalled]){
                     button.enabled = NO;
+                    image = [image coverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
                 }
                 break;
                 case ShareTypeQQ:
                 case ShareTypeQQSpace:
                 if(![DWZShareSDK isQQInstalled]){
                     button.enabled = NO;
+                    image = [image coverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
+
                 }
                 break;
                 case ShareTypeWeChatSession:
                 case ShareTypeWeChatTimeline:
                 if(![DWZShareSDK isWeChatInstalled]){
+                    image = [image coverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
                     button.enabled = NO;
                 }
                 break;
             default:
                 break;
         }
-
+        [button setImage:image forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
+        [containerView addSubview:button];
+        
         ++i;
         
         
@@ -171,4 +175,6 @@
         }];
     });
 }
+
+
 @end

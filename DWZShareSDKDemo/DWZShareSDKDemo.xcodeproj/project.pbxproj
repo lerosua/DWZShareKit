@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E93FA8CF190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E93FA8CE190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.m */; };
 		E9B65F5519066BD30040DD08 /* libTencentOpenAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9B65F4A19066BD30040DD08 /* libTencentOpenAPI.a */; };
 		E9F55A3018FFBE3500A5E0E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A2F18FFBE3500A5E0E4 /* Foundation.framework */; };
 		E9F55A3218FFBE3500A5E0E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A3118FFBE3500A5E0E4 /* CoreGraphics.framework */; };
@@ -49,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E93FA8CD190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ShareSDKTMOImage.h"; path = "Core/UIImage+ShareSDKTMOImage.h"; sourceTree = "<group>"; };
+		E93FA8CE190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ShareSDKTMOImage.m"; path = "Core/UIImage+ShareSDKTMOImage.m"; sourceTree = "<group>"; };
 		E9B65F4A19066BD30040DD08 /* libTencentOpenAPI.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTencentOpenAPI.a; sourceTree = "<group>"; };
 		E9B65F4B19066BD30040DD08 /* QQApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQApi.h; sourceTree = "<group>"; };
 		E9B65F4C19066BD30040DD08 /* QQApiInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QQApiInterface.h; sourceTree = "<group>"; };
@@ -283,6 +286,8 @@
 		E9F55A7C18FFBF8C00A5E0E4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E93FA8CD190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.h */,
+				E93FA8CE190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.m */,
 				E9F55B3C190605C200A5E0E4 /* DWZShareSDKTypeDef.h */,
 				E9F55A7918FFBF8600A5E0E4 /* DWZShareSDK.h */,
 				E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */,
@@ -398,6 +403,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9F55A4618FFBE3500A5E0E4 /* DWZViewController.m in Sources */,
+				E93FA8CF190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.m in Sources */,
 				E9F55A4018FFBE3500A5E0E4 /* DWZAppDelegate.m in Sources */,
 				E9F55A7B18FFBF8600A5E0E4 /* DWZShareSDK.m in Sources */,
 				E9F55A3C18FFBE3500A5E0E4 /* main.M in Sources */,
