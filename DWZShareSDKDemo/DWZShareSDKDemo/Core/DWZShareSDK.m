@@ -324,9 +324,6 @@
         shareSDK.sinaWeiboToken = [(WBAuthorizeResponse *)response accessToken];
         NSLog(@"get weibo token %@ and expire data %@",shareSDK.sinaWeiboToken,[(WBAuthorizeResponse *)response expirationDate]);
         
-//        DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-//        viewController.socialTag = SinaWeiboDWZTag;
-//        [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
     }
 }
 

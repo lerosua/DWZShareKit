@@ -74,7 +74,7 @@
     int y;
     
     NSArray *socialNames = @[@"定义为空",@"新浪微博",@"腾讯微博",@"QQ好友",@"QQ空间",@"微信好友",@"微信朋友圈"];
-    NSArray *shareIconArray = @[@"SinaWeiboIcon",@"SinaWeiboIcon",@"SinaWeiboIcon",@"QQIcon",@"qqZoneIcon",@"wechatIcon",@"wechatTimelineIcon"];
+    NSArray *shareIconArray = @[@"dwzsharesdk_sinaweibo",@"dwzsharesdk_sinaweibo",@"dwzsharesdk_sinaweibo",@"dwzsharesdk_qq",@"dwzsharesdk_qqzone",@"dwzsharesdk_wechat",@"dwzsharesdk_wechattimeline"];
     
     int i = 0;
     for (NSNumber *number in self.array) {
