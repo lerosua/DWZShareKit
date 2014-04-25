@@ -19,10 +19,11 @@
 #import "DWZShareContent.h"
 
 @interface DWZShareSDK()<WeiboSDKDelegate,
-                        WBHttpRequestDelegate,
-                        WeiboRequestDelegate,WeiboAuthDelegate,
+//                        WBHttpRequestDelegate,
+//                        WeiboRequestDelegate,WeiboAuthDelegate,
                         TencentSessionDelegate,
                         WXApiDelegate,
+                        QQApiInterfaceDelegate,
                         DWZSocialDelegate
                         >
 
@@ -45,7 +46,7 @@
 @property (nonatomic,strong) TencentOAuth *tencentOAuth;
 
 //微信数据
-//@property (nonatomic,strong) NSString *weChatAppId;
+@property (nonatomic,strong) NSString *weChatAppId;
 
 
 @property (nonatomic,weak) id<DWZShareSDKDelegate> delegate;
@@ -120,6 +121,8 @@
                      wechatCls:(Class)wechatCls
 {
     [WXApi registerApp:appId];
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    shareSDK.weChatAppId = appId;
     
 }
 #pragma mark -
@@ -275,6 +278,11 @@
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
     return [NSString stringWithFormat:@"wb%@",shareSDK.sinaWeiboAppKey];
 }
++ (NSString *) wechatForHandleURLPrefx
+{
+    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    return [NSString stringWithFormat:@"%@://",shareSDK.weChatAppId];
+}
 
 + (NSString *) sinaWeiboToken
 {
@@ -319,7 +327,7 @@
 + (void)didReceiveWeiboResponse:(WBBaseResponse *)response
 {
     NSLog(@"get weibo response");
-    if([response isKindOfClass:WBAuthorizeResponse.class]){
+    if([response isKindOfClass:WBSendMessageToWeiboResponse.class]){
 
         DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
         if(response.statusCode == WeiboSDKResponseStatusCodeSuccess){
@@ -335,14 +343,16 @@
     }
 }
 
+#pragma mark - 系统回调
 + (BOOL) handleOpenURL:(NSURL *)url delegate:(id) pDelegate
 {
-    NSLog(@"get url %@",[url absoluteString]);
+    NSLog(@"get ---url %@",[url absoluteString]);
     NSString *weiboURLPrefix = [DWZShareSDK sinaWeiboForHandleURLPrefix];
-    if([[url absoluteString] hasSuffix:@"platformId=wechat"]){
-        return [WXApi handleOpenURL:url delegate:pDelegate];
+    NSString *wechatURLPrefix = [DWZShareSDK wechatForHandleURLPrefx];
+    if([[url absoluteString] hasPrefix:wechatURLPrefix]){
+        return [WXApi handleOpenURL:url delegate:(id<WXApiDelegate>)self];
     }else if([[url absoluteString] hasPrefix:@"tencent"]){
-        return [TencentOAuth HandleOpenURL:url];
+        return [QQApiInterface handleOpenURL:url delegate:(id<QQApiInterfaceDelegate>)self];
     }else if([[url absoluteString] hasPrefix:weiboURLPrefix]){
         return [WeiboSDK handleOpenURL:url delegate:(id<WeiboSDKDelegate>)self];
     }
@@ -477,7 +487,7 @@
     NSLog(@"get resp %@",resp);
     DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
 
-    if([resp isKindOfClass:[SendMessageToWXReq class]]){
+    if([resp isKindOfClass:[SendMessageToWXResp class]]){
         if(resp.errCode == 0){
             NSLog(@"wechat share success");
             [shareSDK.delegate shareSDKResponse:ShareTypeWeChatSession Success:YES];
