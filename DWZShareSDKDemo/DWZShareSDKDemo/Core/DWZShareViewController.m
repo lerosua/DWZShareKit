@@ -142,7 +142,7 @@
 - (void) sendTencentWeiboMessage:(NSString *)text
 {
     
-    [DWZShareSDK tencentWeiboSendMessage:text];
+//    [DWZShareSDK tencentWeiboSendMessage:text];
     
 }
 

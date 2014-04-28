@@ -18,6 +18,7 @@
 - (void)setUp
 {
     [super setUp];
+    dataArray = [NSArray arrayWithObject:@"id"];
 
 
 }
