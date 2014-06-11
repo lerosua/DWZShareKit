@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "1.0.0"
   s.summary      = "DWZShareKit"
 
-  s.homepage     = "https://github.com/lerosua/DWZShareKit.git""
+  s.homepage     = "https://github.com/lerosua/DWZShareKit.git"
   s.license      = {
        :type => 'Copyright', 
        :text => 'LICENSE  ©2014 cyclone, Inc. All rights reserved.' 
