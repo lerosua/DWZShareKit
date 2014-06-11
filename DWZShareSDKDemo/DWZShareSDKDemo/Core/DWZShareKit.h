@@ -23,7 +23,7 @@
 
 @end
 
-@interface DWZShareSDK : NSObject
+@interface DWZShareKit : NSObject
 
 #pragma mark - connect
 /**

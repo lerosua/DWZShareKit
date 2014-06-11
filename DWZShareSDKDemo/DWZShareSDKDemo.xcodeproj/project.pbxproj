@@ -27,7 +27,7 @@
 		E9F55A7618FFBF5300A5E0E4 /* WeiboSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E9F55A6A18FFBF5300A5E0E4 /* WeiboSDK.bundle */; };
 		E9F55A7718FFBF5300A5E0E4 /* libTCWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A6D18FFBF5300A5E0E4 /* libTCWeiboSDK.a */; };
 		E9F55A7818FFBF5300A5E0E4 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55A7018FFBF5300A5E0E4 /* libWeChatSDK.a */; };
-		E9F55A7B18FFBF8600A5E0E4 /* DWZShareSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */; };
+		E9F55A7B18FFBF8600A5E0E4 /* DWZShareKit.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A7A18FFBF8600A5E0E4 /* DWZShareKit.m */; };
 		E9F55A7F19010FAB00A5E0E4 /* DWZShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */; };
 		E9F55AC219022B3C00A5E0E4 /* libWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55AC119022B3C00A5E0E4 /* libWeiboSDK.a */; };
 		E9F55AC41902601E00A5E0E4 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F55AC31902601E00A5E0E4 /* libsqlite3.dylib */; };
@@ -92,8 +92,8 @@
 		E9F55A7018FFBF5300A5E0E4 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		E9F55A7118FFBF5300A5E0E4 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		E9F55A7218FFBF5300A5E0E4 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
-		E9F55A7918FFBF8600A5E0E4 /* DWZShareSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareSDK.h; path = Core/DWZShareSDK.h; sourceTree = "<group>"; };
-		E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareSDK.m; path = Core/DWZShareSDK.m; sourceTree = "<group>"; };
+		E9F55A7918FFBF8600A5E0E4 /* DWZShareKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareKit.h; path = Core/DWZShareKit.h; sourceTree = "<group>"; };
+		E9F55A7A18FFBF8600A5E0E4 /* DWZShareKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareKit.m; path = Core/DWZShareKit.m; sourceTree = "<group>"; };
 		E9F55A7D19010FAB00A5E0E4 /* DWZShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWZShareViewController.h; path = Core/DWZShareViewController.h; sourceTree = "<group>"; };
 		E9F55A7E19010FAB00A5E0E4 /* DWZShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWZShareViewController.m; path = Core/DWZShareViewController.m; sourceTree = "<group>"; };
 		E9F55AC119022B3C00A5E0E4 /* libWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeiboSDK.a; sourceTree = "<group>"; };
@@ -289,8 +289,8 @@
 				E93FA8CD190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.h */,
 				E93FA8CE190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.m */,
 				E9F55B3C190605C200A5E0E4 /* DWZShareSDKTypeDef.h */,
-				E9F55A7918FFBF8600A5E0E4 /* DWZShareSDK.h */,
-				E9F55A7A18FFBF8600A5E0E4 /* DWZShareSDK.m */,
+				E9F55A7918FFBF8600A5E0E4 /* DWZShareKit.h */,
+				E9F55A7A18FFBF8600A5E0E4 /* DWZShareKit.m */,
 				E9F55B3D19060AF300A5E0E4 /* DWZShareContent.h */,
 				E9F55B3E19060AF300A5E0E4 /* DWZShareContent.m */,
 				E9F55B331905199000A5E0E4 /* DWZSocialView.h */,
@@ -405,7 +405,7 @@
 				E9F55A4618FFBE3500A5E0E4 /* DWZViewController.m in Sources */,
 				E93FA8CF190A3B4E00D509AF /* UIImage+ShareSDKTMOImage.m in Sources */,
 				E9F55A4018FFBE3500A5E0E4 /* DWZAppDelegate.m in Sources */,
-				E9F55A7B18FFBF8600A5E0E4 /* DWZShareSDK.m in Sources */,
+				E9F55A7B18FFBF8600A5E0E4 /* DWZShareKit.m in Sources */,
 				E9F55A3C18FFBE3500A5E0E4 /* main.M in Sources */,
 				E9F55A7F19010FAB00A5E0E4 /* DWZShareViewController.m in Sources */,
 				E9F55B351905199000A5E0E4 /* DWZSocialView.m in Sources */,

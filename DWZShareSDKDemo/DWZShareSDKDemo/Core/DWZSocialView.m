@@ -7,7 +7,7 @@
 //
 
 #import "DWZSocialView.h"
-#import "DWZShareSDK.h"
+#import "DWZShareKit.h"
 #import "UIImage+ShareSDKTMOImage.h"
 
 #define SCREEN_HEIGHT   [UIScreen mainScreen].bounds.size.height
@@ -102,14 +102,14 @@
         //check app valide
         switch (num) {
             case ShareTypeSinaWeibo:
-                if(![DWZShareSDK isWeiboInstalled]){
+                if(![DWZShareKit isWeiboInstalled]){
                     button.enabled = NO;
                     image = [image coverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
                 }
                 break;
                 case ShareTypeQQ:
                 case ShareTypeQQSpace:
-                if(![DWZShareSDK isQQInstalled]){
+                if(![DWZShareKit isQQInstalled]){
                     button.enabled = NO;
                     image = [image coverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
 
@@ -117,7 +117,7 @@
                 break;
                 case ShareTypeWeChatSession:
                 case ShareTypeWeChatTimeline:
-                if(![DWZShareSDK isWeChatInstalled]){
+                if(![DWZShareKit isWeChatInstalled]){
                     image = [image coverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
                     button.enabled = NO;
                 }

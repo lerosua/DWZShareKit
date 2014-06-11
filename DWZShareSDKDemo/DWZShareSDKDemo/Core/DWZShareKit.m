@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 lerosua. All rights reserved.
 //
 
-#import "DWZShareSDK.h"
+#import "DWZShareKit.h"
 #import "WeiboSDK.h"        //sina weibo
 #import "WeiboApi.h"        //tencent weibo
 #import "TencentOAuth.h"
@@ -18,7 +18,7 @@
 #import "DWZSocialView.h"
 #import "DWZShareContent.h"
 
-@interface DWZShareSDK()<WeiboSDKDelegate,
+@interface DWZShareKit()<WeiboSDKDelegate,
 //                        WBHttpRequestDelegate,
 //                        WeiboRequestDelegate,WeiboAuthDelegate,
                         TencentSessionDelegate,
@@ -56,7 +56,7 @@
 
 @end
 
-@implementation DWZShareSDK
+@implementation DWZShareKit
 
 #pragma mark -
 //- (TencentOAuth *)tencentOAuth
@@ -70,11 +70,11 @@
 #pragma mark -
 + (instancetype) shareInstance
 {
-    static DWZShareSDK *_currentShareSDK;
+    static DWZShareKit *_currentShareSDK;
     static dispatch_once_t oncePredicate;
     
     dispatch_once(&oncePredicate, ^{
-        _currentShareSDK = [[DWZShareSDK alloc] init];
+        _currentShareSDK = [[DWZShareKit alloc] init];
     });
     return _currentShareSDK;
 }
@@ -84,7 +84,7 @@
                        redirectUri:(NSString *)redirectUri
 {
     
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:appKey];
@@ -101,7 +101,7 @@
                             appSecret:(NSString *)appSecret
                           redirectUri:(NSString *)redirectUri
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     shareSDK.tencentWeiboApi = [[WeiboApi alloc] initWithAppKey:appKey andSecret:appSecret andRedirectUri:redirectUri];
     
     
@@ -111,7 +111,7 @@
 + (void)connectQZoneWithAppKey:(NSString *)appKey
                      appSecret:(NSString *)appSecret
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     shareSDK.qqZoneAppKey = appKey;
     shareSDK.qqZoneAppSecret = appSecret;
     shareSDK.tencentOAuth = [[TencentOAuth alloc] initWithAppId:appKey andDelegate:(id<TencentSessionDelegate>)self];
@@ -123,7 +123,7 @@
                      wechatCls:(Class)wechatCls
 {
     [WXApi registerApp:appId];
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     shareSDK.weChatAppId = appId;
     
 }
@@ -137,7 +137,7 @@
         return nil;
     }
 
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     shareSDK.shareContent = content;
     shareSDK.socialList = shareList;
     shareSDK.delegate = pDelegate;
@@ -153,14 +153,14 @@
 #pragma mark -
 - (void) socialButton:(UIButton *)sender clickedAtIndex:(NSInteger) index;
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
 
     ShareType socialNo = index;
     switch (socialNo) {
         case ShareTypeSinaWeibo:     //sina weibo
         {
             if([WeiboSDK isWeiboAppInstalled]){
-                WBMessageObject *obj = [DWZShareSDK weiboMessageFrom:shareSDK.shareContent];
+                WBMessageObject *obj = [DWZShareKit weiboMessageFrom:shareSDK.shareContent];
                 WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
                 request.userInfo = @{@"shareMessageFrom":@"DWZShareSDKDemo"};
                 [WeiboSDK sendRequest:request];
@@ -174,7 +174,7 @@
             break;
         case ShareTypeTencentWeibo: //tencent weibo 暂不处理
         {
-            if([DWZShareSDK isTencentWeiboInstalled]){
+            if([DWZShareKit isTencentWeiboInstalled]){
 
                 
             }else{
@@ -189,7 +189,7 @@
         {
             if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
                 
-                QQApiNewsObject *newsObject = [DWZShareSDK qqMessageFrom:shareSDK.shareContent];
+                QQApiNewsObject *newsObject = [DWZShareKit qqMessageFrom:shareSDK.shareContent];
                 SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObject];
                 QQApiSendResultCode sent;
                 if(socialNo == ShareTypeQQ){
@@ -208,7 +208,7 @@
         {
             if([WXApi isWXAppInstalled]){
                 SendMessageToWXReq *wechatReq = [[SendMessageToWXReq alloc] init];
-                WXMediaMessage *message = [DWZShareSDK wechatMessageFrom:shareSDK.shareContent];
+                WXMediaMessage *message = [DWZShareKit wechatMessageFrom:shareSDK.shareContent];
                 wechatReq.message = message;
                 wechatReq.bText = NO;
                 if(socialNo == ShareTypeWeChatSession){
@@ -273,35 +273,35 @@
 #pragma mark -
 + (NSString *) sinaWeiboForHandleURLPrefix
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     return [NSString stringWithFormat:@"wb%@",shareSDK.sinaWeiboAppKey];
 }
 + (NSString *) wechatForHandleURLPrefx
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     return [NSString stringWithFormat:@"%@://",shareSDK.weChatAppId];
 }
 
 + (NSString *) sinaWeiboToken
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     return shareSDK.sinaWeiboToken;
 }
 
 + (NSString *) tencentWeiboToken
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     return shareSDK.tencentWeiboToken;
 }
 + (NSString *) tencentWeiboOpenId
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     return shareSDK.tencentWeiboOpenId;
 }
 #pragma mark - tencent weibo
 + (void) tencentWeiboSendMessage:(DWZShareContent *)pContent
 {
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     NSString *text = [NSString stringWithFormat:@"%@ %@ %@",pContent.title,pContent.content,pContent.url];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -327,7 +327,7 @@
     NSLog(@"get weibo response");
     if([response isKindOfClass:WBSendMessageToWeiboResponse.class]){
 
-        DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+        DWZShareKit *shareSDK = [DWZShareKit shareInstance];
         if(response.statusCode == WeiboSDKResponseStatusCodeSuccess){
             //新浪分享成功
             NSLog(@"sina share success");
@@ -345,8 +345,8 @@
 + (BOOL) handleOpenURL:(NSURL *)url delegate:(id) pDelegate
 {
     NSLog(@"get ---url %@",[url absoluteString]);
-    NSString *weiboURLPrefix = [DWZShareSDK sinaWeiboForHandleURLPrefix];
-    NSString *wechatURLPrefix = [DWZShareSDK wechatForHandleURLPrefx];
+    NSString *weiboURLPrefix = [DWZShareKit sinaWeiboForHandleURLPrefix];
+    NSString *wechatURLPrefix = [DWZShareKit wechatForHandleURLPrefx];
     if([[url absoluteString] hasPrefix:wechatURLPrefix]){
         return [WXApi handleOpenURL:url delegate:(id<WXApiDelegate>)self];
     }else if([[url absoluteString] hasPrefix:@"tencent"]){
@@ -435,7 +435,7 @@
     NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
     
     NSLog(@"result = %@ , %s",str,__func__);
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     shareSDK.tencentWeiboApi = wbapi_;
     
     
@@ -483,7 +483,7 @@
 + (void) onResp:(BaseResp *)resp
 {
     NSLog(@"get resp %@",resp);
-    DWZShareSDK *shareSDK = [DWZShareSDK shareInstance];
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
 
     if([resp isKindOfClass:[SendMessageToWXResp class]]){
         if(resp.errCode == 0){

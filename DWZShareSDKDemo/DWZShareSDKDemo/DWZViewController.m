@@ -7,7 +7,7 @@
 //
 
 #import "DWZViewController.h"
-#import "DWZShareSDK.h"
+#import "DWZShareKit.h"
 #import "DWZAppDelegate.h"
 #import "WeiboSDK.h"
 
@@ -32,12 +32,12 @@
 #pragma mark -
 - (IBAction)ShareButtonAction:(id)sender
 {
-    NSArray *shareArray = [DWZShareSDK getShareListWithType:ShareTypeSinaWeibo,ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatSession,ShareTypeWeChatTimeline,nil];
+    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeSinaWeibo,ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatSession,ShareTypeWeChatTimeline,nil];
 
     UIImage *image = [UIImage imageNamed:@"QQIcon"];
-    DWZShareContent *content = [DWZShareSDK content:@"视频描述" image:image title:@"视频标题" url:@"http://baidu.com"];
+    DWZShareContent *content = [DWZShareKit content:@"视频描述" image:image title:@"视频标题" url:@"http://baidu.com"];
     
-    [DWZShareSDK showDefaultShareWith:content serviceShareList:shareArray withDelegate:self];
+    [DWZShareKit showDefaultShareWith:content serviceShareList:shareArray withDelegate:self];
 }
 
 - (void)shareSDKResponse:(ShareType)socialType Success:(BOOL)sucess

@@ -8,7 +8,7 @@
 
 #import "DWZShareViewController.h"
 #import "weiboSDK.h"
-#import "DWZShareSDK.h"
+#import "DWZShareKit.h"
 
 
 #define is4Inch()                   ([[UIScreen mainScreen] bounds].size.height == 568)
@@ -125,7 +125,7 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     [request setHTTPMethod:@"POST"];
     
-    NSString *paramsString = [NSString stringWithFormat:@"status=%@&access_token=%@", urlEncodeText, [DWZShareSDK sinaWeiboToken]];
+    NSString *paramsString = [NSString stringWithFormat:@"status=%@&access_token=%@", urlEncodeText, [DWZShareKit sinaWeiboToken]];
     NSData *data = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:data];
 

@@ -7,17 +7,17 @@
 //
 
 #import "DWZAppDelegate.h"
-#import "DWZShareSDK.h"
+#import "DWZShareKit.h"
 @implementation DWZAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
     
-    [DWZShareSDK connectSinaWeiboWithAppKey:GESinaWeiboSDKAppKey appSecret:GESinaWeiboSDKAppSecret redirectUri:GESinaWeiboSDKAppUri];
-    [DWZShareSDK connectTencentWeiboWithAppKey:GETencentWeiboSDKAppKey appSecret:GETencentWeiboSDKAppSecret redirectUri:GETencentWeiboSDKAppUr];
-    [DWZShareSDK connectWeChatWithAppId:GEWechatSDKAppKey wechatCls:nil];
-    [DWZShareSDK connectQZoneWithAppKey:GEQZoneSDKAppKey appSecret:GEQZoneSDKAppSecret];
+    [DWZShareKit connectSinaWeiboWithAppKey:GESinaWeiboSDKAppKey appSecret:GESinaWeiboSDKAppSecret redirectUri:GESinaWeiboSDKAppUri];
+    [DWZShareKit connectTencentWeiboWithAppKey:GETencentWeiboSDKAppKey appSecret:GETencentWeiboSDKAppSecret redirectUri:GETencentWeiboSDKAppUr];
+    [DWZShareKit connectWeChatWithAppId:GEWechatSDKAppKey wechatCls:nil];
+    [DWZShareKit connectQZoneWithAppKey:GEQZoneSDKAppKey appSecret:GEQZoneSDKAppSecret];
     
     return YES;
 }
@@ -52,6 +52,6 @@
 #pragma mark -
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return [DWZShareSDK handleOpenURL:url delegate:self];
+    return [DWZShareKit handleOpenURL:url delegate:self];
 }
 @end

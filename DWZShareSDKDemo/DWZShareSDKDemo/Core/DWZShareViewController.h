@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DWZShareSDK.h"
+#import "DWZShareKit.h"
 
 @interface DWZShareViewController : UIViewController
 
