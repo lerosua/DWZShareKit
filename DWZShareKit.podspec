@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/lerosua/DWZShareKit.git" }
 
-  s.source_files  = "Core","Core/*.{h,m}","Extend/**/*.{h,m}"
+  s.source_files  = "DWZShareSDKDemo/DWZShareSDKDemo/Core","DWZShareSDKDemo/DWZShareSDKDemo/Core/*.{h,m}","DWZShareSDKDemo/DWZShareSDKDemo/Extend/**/*.{h,m}"
   s.libraries = "z", "sqlite3"
   s.frameworks = "CoreTelephony", "CoreGraphics"
   s.vendored_libraries = 'Extend/**/*.{a}';
