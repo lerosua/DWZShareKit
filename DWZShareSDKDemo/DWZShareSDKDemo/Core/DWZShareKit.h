@@ -151,4 +151,8 @@
  *  @return 分享内容对象
  */
 + (DWZShareContent *)content:(NSString *)pConent image:(UIImage *)pImage title:(NSString *)pTitle url:(NSString *)pUrl;
+
+
++ (void) loginWithSina;
++ (void) loginWithQQ;
 @end

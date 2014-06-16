@@ -12,7 +12,9 @@
 #import "WeiboSDK.h"
 
 @interface DWZViewController ()<DWZShareSDKDelegate>
+- (IBAction)SinaLoginAction:(id)sender;
 
+- (IBAction)QQLoginAction:(id)sender;
 @end
 
 @implementation DWZViewController
@@ -45,4 +47,13 @@
     NSLog(@"sharesdk response back %d",sucess);
 }
 
+
+
+- (IBAction)SinaLoginAction:(id)sender {
+    [DWZShareKit loginWithSina];
+}
+
+- (IBAction)QQLoginAction:(id)sender {
+    [DWZShareKit loginWithQQ];
+}
 @end

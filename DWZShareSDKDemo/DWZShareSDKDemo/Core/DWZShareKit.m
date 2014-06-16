@@ -548,4 +548,88 @@
     DWZShareContent *shareContent = [[DWZShareContent alloc] initWitContent:pConent title:pTitle image:pImage url:pUrl];
     return shareContent;
 }
+
+#pragma mark - login
++ (void) loginWithSina
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    
+    WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+    request.redirectURI = kit.sinaWeiboAppUrl;
+    request.scope = @"email,direct_messages_write";
+    request.userInfo = @{@"SSO_From": @"yinbaLogin",
+                         @"Other_Info_1": [NSNumber numberWithInt:123],
+                         @"Other_Info_2": @[@"obj1", @"obj2"],
+                         @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
+    request.shouldOpenWeiboAppInstallPageIfNotInstalled=NO;
+    [WeiboSDK sendRequest:request];
+}
+
++ (void) loginWithQQ
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    if([QQApiInterface isQQInstalled]){
+//        kit.tencentOAuth = nil;
+        NSArray* permissions = [NSArray arrayWithObjects:
+                                kOPEN_PERMISSION_GET_USER_INFO,
+                                kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
+                                kOPEN_PERMISSION_ADD_ALBUM,
+                                kOPEN_PERMISSION_ADD_IDOL,
+                                kOPEN_PERMISSION_ADD_ONE_BLOG,
+                                kOPEN_PERMISSION_ADD_PIC_T,
+                                kOPEN_PERMISSION_ADD_SHARE,
+                                kOPEN_PERMISSION_ADD_TOPIC,
+                                kOPEN_PERMISSION_CHECK_PAGE_FANS,
+                                kOPEN_PERMISSION_DEL_IDOL,
+                                kOPEN_PERMISSION_DEL_T,
+                                kOPEN_PERMISSION_GET_FANSLIST,
+                                kOPEN_PERMISSION_GET_IDOLLIST,
+                                kOPEN_PERMISSION_GET_INFO,
+                                kOPEN_PERMISSION_GET_OTHER_INFO,
+                                kOPEN_PERMISSION_GET_REPOST_LIST,
+                                kOPEN_PERMISSION_LIST_ALBUM,
+                                kOPEN_PERMISSION_UPLOAD_PIC,
+                                kOPEN_PERMISSION_GET_VIP_INFO,
+                                kOPEN_PERMISSION_GET_VIP_RICH_INFO,
+                                kOPEN_PERMISSION_GET_INTIMATE_FRIENDS_WEIBO,
+                                kOPEN_PERMISSION_MATCH_NICK_TIPS_WEIBO,
+                                nil];
+        
+        [kit.tencentOAuth authorize:permissions inSafari:NO];
+        
+    }else{
+        NSLog(@"use webview login QQ");
+    }
+}
+
+
+#pragma mark - tencent qq login delegate
+- (void)tencentDidLogin
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+
+    NSLog(@"qq login success token %@",kit.tencentOAuth.accessToken);
+
+}
+
+- (void)tencentDidNotLogin:(BOOL)cancelled
+{
+    NSLog(@"qq login cancel");
+}
+
+- (void)tencentDidNotNetWork
+{
+    NSLog(@"qq login cancel 2 ");
+    
+}
+
+- (NSArray *)getAuthorizedPermissions:(NSArray *)permissions withExtraParams:(NSDictionary *)extraParams
+{
+    return nil;
+}
+
+- (void)tencentDidLogout
+{
+    
+}
 @end
