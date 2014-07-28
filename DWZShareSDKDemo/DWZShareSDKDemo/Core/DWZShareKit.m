@@ -52,7 +52,6 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 //微信数据
 @property (nonatomic,strong) NSString *weChatAppId;
 
-
 @property (nonatomic,weak) id<DWZShareSDKDelegate> delegate;
 @property (nonatomic,weak) id<DWZShareKitAuthDelegate> authDelegate;
 
@@ -150,10 +149,30 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList withDelegate:shareSDK];
     [view show];
     
-
     return nil;
-    
 }
+
++ (id) showDefaultShareWith:(DWZShareContent *)content
+           serviceShareList:(NSArray *)shareList
+            withCustomShare:(DWZCustomShareObject *)shareObject
+               withDelegate:(id<DWZShareSDKDelegate>)pDelegate
+{
+    if(!shareList){
+        NSLog(@"please at less get on social account");
+        return nil;
+    }
+    
+    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+    shareSDK.shareContent = content;
+    shareSDK.socialList = shareList;
+    shareSDK.delegate = pDelegate;
+    DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList withDelegate:shareSDK];
+    view.customShareObject = shareObject;
+    [view show];
+    
+    return nil;
+}
+
 
 #pragma mark -
 - (void) socialButton:(UIButton *)sender clickedAtIndex:(NSInteger) index;
@@ -162,6 +181,12 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 
     ShareType socialNo = index;
     switch (socialNo) {
+        case ShareTypeCustom:
+        {
+            [shareSDK.delegate shareSDKResponse:ShareTypeCustom Success:YES];
+
+        }
+            break;
         case ShareTypeSinaWeibo:     //sina weibo
         {
             if([WeiboSDK isWeiboAppInstalled]){

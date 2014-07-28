@@ -11,6 +11,7 @@
 
 typedef enum
 {
+    ShareTypeCustom = 98,           /**< 自定义平台 */
 	ShareTypeSinaWeibo = 1,         /**< 新浪微博 */
 	ShareTypeTencentWeibo = 2,      /**< 腾讯微博 */
     ShareTypeQQ = 3,                /**< QQ好友 */
@@ -51,6 +52,7 @@ typedef enum
     ShareTypeYiXinTimeline = 39,    /**< 易信朋友圈 */
     ShareTypeYiXinFav = 40,         /**< 易信收藏 */
     ShareTypeAny = 99               /**< 任意平台 */
+
 }
 ShareType;
 

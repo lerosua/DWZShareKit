@@ -34,12 +34,19 @@
 #pragma mark -
 - (IBAction)ShareButtonAction:(id)sender
 {
-    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeSinaWeibo,ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatSession,ShareTypeWeChatTimeline,nil];
+    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeCustom,ShareTypeSinaWeibo,ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatSession,ShareTypeWeChatTimeline,nil];
+//    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeSinaWeibo,ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatSession,ShareTypeWeChatTimeline,nil];
 
-    UIImage *image = [UIImage imageNamed:@"QQIcon"];
+
+    UIImage *image = [UIImage imageNamed:@"dwzsharesdk_qq"];
     DWZShareContent *content = [DWZShareKit content:@"视频描述" image:image title:@"视频标题" url:@"http://baidu.com"];
     
-    [DWZShareKit showDefaultShareWith:content serviceShareList:shareArray withDelegate:self];
+    DWZCustomShareObject *shareObject = [[DWZCustomShareObject alloc] init];
+    shareObject.icons = image;
+    shareObject.name = @"LOL盒子";
+    
+//    [DWZShareKit showDefaultShareWith:content serviceShareList:shareArray withDelegate:self];
+    [DWZShareKit showDefaultShareWith:content  serviceShareList:shareArray withCustomShare:shareObject withDelegate:self];
 }
 
 - (void)shareSDKResponse:(ShareType)socialType Success:(BOOL)sucess

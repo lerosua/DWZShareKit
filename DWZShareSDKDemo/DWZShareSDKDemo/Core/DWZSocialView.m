@@ -9,6 +9,7 @@
 #import "DWZSocialView.h"
 #import "DWZShareKit.h"
 #import "UIImage+ShareKitTMOImage.h"
+#import "DWZCustomShareObject.h"
 
 #define SCREEN_HEIGHT   [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH    [UIScreen mainScreen].bounds.size.width
@@ -73,8 +74,8 @@
     int x;
     int y;
     
-    NSArray *socialNames = @[@"定义为空",@"新浪微博",@"腾讯微博",@"QQ好友",@"QQ空间",@"微信好友",@"微信朋友圈"];
-    NSArray *shareIconArray = @[@"dwzsharesdk_sinaweibo",@"dwzsharesdk_sinaweibo",@"dwzsharesdk_sinaweibo",@"dwzsharesdk_qq",@"dwzsharesdk_qqzone",@"dwzsharesdk_wechat",@"dwzsharesdk_wechattimeline"];
+//    NSArray *socialNames = @[@"定义为空",@"新浪微博",@"QQ好友",@"QQ空间",@"微信好友",@"微信朋友圈"];
+//    NSArray *shareIconArray = @[@"dwzsharesdk_sinaweibo",@"dwzsharesdk_sinaweibo",@"dwzsharesdk_qq",@"dwzsharesdk_qqzone",@"dwzsharesdk_wechat",@"dwzsharesdk_wechattimeline"];
     
     int i = 0;
     for (NSNumber *number in self.array) {
@@ -86,8 +87,9 @@
             x = 3;
             y = (i + 1) / 3 - 1;
         }
+
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(90 * ( x - 1 ), 75 + 90 * y, 90, 30)];
-        label.text = socialNames[num];
+        label.text = [self shareTypeNameWith: [self.array[i] integerValue]];
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:14.0f];
         label.textColor = [UIColor colorWithRed:95/255.0
@@ -98,7 +100,7 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(5 + 90 * ( x - 1 ), 10 + 90 * y, 80, 80);
         button.tag = num;
-        UIImage *image = [UIImage imageNamed:shareIconArray[num]];
+        UIImage *image = [UIImage imageNamed:[self shareIconNameWith:[self.array[i] integerValue]]];
         //check app valide
         switch (num) {
             case ShareTypeSinaWeibo:
@@ -120,6 +122,15 @@
                 if(![DWZShareKit isWeChatInstalled]){
                     image = [image kitCoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
                     button.enabled = NO;
+                }
+                break;
+                case ShareTypeCustom:
+                {
+                    if(self.customShareObject){
+                        label.text = self.customShareObject.name;
+                        image = self.customShareObject.icons;
+                    }
+
                 }
                 break;
             default:
@@ -174,6 +185,57 @@
             backgroundView.alpha = 0.5;
         }];
     });
+}
+
+#pragma mark -
+- (NSString *) shareTypeNameWith:(ShareType )type
+{
+    switch (type) {
+        case ShareTypeSinaWeibo:
+            return  @"新浪微博";
+            break;
+        case ShareTypeQQ:
+            return  @"QQ好友";
+            break;
+        case ShareTypeQQSpace:
+            return  @"QQ空间";
+            break;
+        case ShareTypeWeChatSession:
+            return  @"微信好友";
+            break;
+        case ShareTypeWeChatTimeline:
+            return  @"微信朋友圈";
+            break;
+            
+        default:
+            break;
+    }
+    return nil;
+}
+
+- (NSString *) shareIconNameWith:(ShareType)type
+{
+    switch (type) {
+        case ShareTypeSinaWeibo:
+            return  @"dwzsharesdk_sinaweibo";
+            break;
+        case ShareTypeQQ:
+            return  @"dwzsharesdk_qq";
+            break;
+        case ShareTypeQQSpace:
+            return  @"dwzsharesdk_qqzone";
+            break;
+        case ShareTypeWeChatSession:
+            return  @"dwzsharesdk_wechat";
+            break;
+        case ShareTypeWeChatTimeline:
+            return  @"dwzsharesdk_wechattimeline";
+            break;
+            
+        default:
+            break;
+    }
+    return nil;
 }
 
 

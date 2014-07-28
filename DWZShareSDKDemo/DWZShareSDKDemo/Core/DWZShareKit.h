@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DWZShareSDKTypeDef.h"
+#import "DWZCustomShareObject.h"
 
 @class  WBMessageObject;
 @class DWZShareContent;
@@ -110,6 +111,11 @@
                 serviceShareList:(NSArray *)shareList
                withDelegate:(id<DWZShareSDKDelegate>)pDelegate;
 
++ (id) showDefaultShareWith:(DWZShareContent *)content
+           serviceShareList:(NSArray *)shareList
+            withCustomShare:(DWZCustomShareObject *)shareObject
+               withDelegate:(id<DWZShareSDKDelegate>)pDelegate;
+
 #pragma mark - something social
 /**
  *  转换文本消息为微博消息对象
@@ -156,7 +162,6 @@
  *  @return 分享内容对象
  */
 + (DWZShareContent *)content:(NSString *)pConent image:(UIImage *)pImage title:(NSString *)pTitle url:(NSString *)pUrl;
-
 
 + (void) loginWithSinaWithDelegate:(id<DWZShareKitAuthDelegate>)pDelegate;
 + (void) loginWithQQWithDelegate:(id<DWZShareKitAuthDelegate>)pDelegate;
