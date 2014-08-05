@@ -165,4 +165,11 @@
 
 + (void) loginWithSinaWithDelegate:(id<DWZShareKitAuthDelegate>)pDelegate;
 + (void) loginWithQQWithDelegate:(id<DWZShareKitAuthDelegate>)pDelegate;
+
+/**
+ *  解决企业应用构建后bundleID变化后与新浪设置的bundleID不一致造成的不能返回的问题
+ *
+ *  @param sinaBundleID 新浪应用里设置的bundleID
+ */
+- (void) fixSinaBundleID:(NSString *)sinaBundleID;
 @end

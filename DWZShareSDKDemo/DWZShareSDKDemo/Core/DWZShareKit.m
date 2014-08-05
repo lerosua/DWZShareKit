@@ -14,6 +14,7 @@
 #import "TencentApiInterface.h"
 #import "WXApi.h"           //wechat
 #import "DWZShareViewController.h"
+#import <objc/runtime.h>
 
 #import "DWZSocialView.h"
 #import "DWZShareContent.h"
@@ -715,4 +716,25 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     NSLog(@"qq DidLogout");
 }
 
+
+#pragma mark -
+- (void) fixSinaBundleID:(NSString *)sinaBundleID
+{
+    Class c = objc_getClass("WeiboSDK3rdApp");
+    id block = ^NSString*()
+    {
+        return sinaBundleID;
+    };
+    
+    SEL selctor = NSSelectorFromString(@"bundleID");
+    IMP test = imp_implementationWithBlock(block);
+    Method origMethod = class_getInstanceMethod(c,
+                                                selctor);
+    
+    if(!class_addMethod(c, selctor, test,
+                        method_getTypeEncoding(origMethod)))
+    {
+        method_setImplementation(origMethod, test);
+    }
+}
 @end
