@@ -43,7 +43,7 @@
     
     DWZCustomShareObject *shareObject = [[DWZCustomShareObject alloc] init];
     shareObject.icons = image;
-    shareObject.name = @"LOL盒子";
+    shareObject.name = @"自定义盒子";
     
 //    [DWZShareKit showDefaultShareWith:content serviceShareList:shareArray withDelegate:self];
     [DWZShareKit showDefaultShareWith:content  serviceShareList:shareArray withCustomShare:shareObject withDelegate:self];
