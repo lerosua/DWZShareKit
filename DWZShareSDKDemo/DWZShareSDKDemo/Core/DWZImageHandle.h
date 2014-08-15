@@ -1,9 +1,9 @@
 //
-//  UIImage+TMOImage.h
-//  TeemoV2
+//  DWZImageHandle.h
+//  DWZShareSDKDemo
 //
-//  Created by 崔明辉 on 14-3-31.
-//  Copyright (c) 2014年 com.duowan.zpc. All rights reserved.
+//  Created by lerosua on 14-8-15.
+//  Copyright (c) 2014年 lerosua. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -12,15 +12,15 @@
 #define TMO_UIKIT_DEVICE_HEIGHT [UIScreen mainScreen].currentMode.size.height
 #define TMO_UIKIT_DEVICE_IS_RETINA (TMO_UIKIT_DEVICE_WIDTH == 640.0 || TMO_UIKIT_DEVICE_WIDTH == 1536.0)
 
-@interface UIImage (ShareKitTMOImage)
+@interface DWZImageHandle : NSObject
 
 /**
-*  返回一张纯色的图片，大小为1px*1px
-*
-*  @param color 指定颜色UIColor对象
-*
-*  @return 返回UIImage对象
-*/
+ *  返回一张纯色的图片，大小为1px*1px
+ *
+ *  @param color 指定颜色UIColor对象
+ *
+ *  @return 返回UIImage对象
+ */
 + (UIImage*)imageWithPureColor:(UIColor*)color;
 
 /**
@@ -30,6 +30,6 @@
  *
  *  @return 处理后的UIImage对象
  */
-- (UIImage *)kitCoverWithColor:(UIColor *)color;
++ (UIImage *)hanleImage:(UIImage *)image CoverWithColor:(UIColor *)color;
 
 @end

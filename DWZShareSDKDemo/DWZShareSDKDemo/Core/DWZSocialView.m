@@ -8,8 +8,8 @@
 
 #import "DWZSocialView.h"
 #import "DWZShareKit.h"
-#import "UIImage+ShareKitTMOImage.h"
 #import "DWZCustomShareObject.h"
+#import "DWZImageHandle.h"
 
 #define SCREEN_HEIGHT   [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH    [UIScreen mainScreen].bounds.size.width
@@ -67,15 +67,19 @@
 {
     // Drawing code
     
-    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH - 270) / 2, (SCREEN_HEIGHT - 210) / 2, 270, 210)];
+    CGFloat width = 270;
+    CGFloat height = 210;
+    
+    if([self.array count]<=3){
+        height = height/2 + 20;
+    }
+    
+    UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH - width) / 2, (SCREEN_HEIGHT - height) / 2, width, height)];
     containerView.backgroundColor = [UIColor whiteColor];
     containerView.layer.cornerRadius = 5;
     [self addSubview:containerView];
     int x;
     int y;
-    
-//    NSArray *socialNames = @[@"定义为空",@"新浪微博",@"QQ好友",@"QQ空间",@"微信好友",@"微信朋友圈"];
-//    NSArray *shareIconArray = @[@"dwzsharesdk_sinaweibo",@"dwzsharesdk_sinaweibo",@"dwzsharesdk_qq",@"dwzsharesdk_qqzone",@"dwzsharesdk_wechat",@"dwzsharesdk_wechattimeline"];
     
     int i = 0;
     for (NSNumber *number in self.array) {
@@ -100,27 +104,35 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(5 + 90 * ( x - 1 ), 10 + 90 * y, 80, 80);
         button.tag = num;
-        UIImage *image = [UIImage imageNamed:[self shareIconNameWith:[self.array[i] integerValue]]];
+        NSString *imageName =[self shareIconNameWith:[self.array[i] integerValue]];
+
+        UIImage *image;
+        if(imageName){
+            image = [UIImage imageNamed:[self shareIconNameWith:[self.array[i] integerValue]]];
+        }
+        
         //check app valide
         switch (num) {
             case ShareTypeSinaWeibo:
                 if(![DWZShareKit isWeiboInstalled]){
                     button.enabled = NO;
-                    image = [image kitCoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
+                    image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
+
                 }
                 break;
                 case ShareTypeQQ:
                 case ShareTypeQQSpace:
                 if(![DWZShareKit isQQInstalled]){
                     button.enabled = NO;
-                    image = [image kitCoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
+                    image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
+
 
                 }
                 break;
                 case ShareTypeWeChatSession:
                 case ShareTypeWeChatTimeline:
                 if(![DWZShareKit isWeChatInstalled]){
-                    image = [image kitCoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
+                    image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
                     button.enabled = NO;
                 }
                 break;

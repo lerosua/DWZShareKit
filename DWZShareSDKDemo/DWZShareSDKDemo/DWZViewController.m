@@ -34,8 +34,9 @@
 #pragma mark -
 - (IBAction)ShareButtonAction:(id)sender
 {
-    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeCustom,ShareTypeSinaWeibo,ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatSession,ShareTypeWeChatTimeline,nil];
-//    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeSinaWeibo,ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatSession,ShareTypeWeChatTimeline,nil];
+//    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeCustom,ShareTypeSinaWeibo,ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatSession,ShareTypeWeChatTimeline,nil];
+
+    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeQQ,ShareTypeQQSpace,ShareTypeWeChatTimeline,ShareTypeCustom,nil];
 
 
     UIImage *image = [UIImage imageNamed:@"dwzsharesdk_qq"];

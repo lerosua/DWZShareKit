@@ -1,14 +1,14 @@
 //
-//  UIImage+TMOImage.m
-//  TeemoV2
+//  DWZImageHandle.m
+//  DWZShareSDKDemo
 //
-//  Created by 崔明辉 on 14-3-31.
-//  Copyright (c) 2014年 com.duowan.zpc. All rights reserved.
+//  Created by lerosua on 14-8-15.
+//  Copyright (c) 2014年 lerosua. All rights reserved.
 //
 
-#import "UIImage+ShareKitTMOImage.h"
+#import "DWZImageHandle.h"
 
-@implementation UIImage (ShareKitTMOImage)
+@implementation DWZImageHandle
 
 + (UIImage*)imageWithPureColor:(UIColor*)color{
     CGRect rect = CGRectMake(0, 0, 1, 1);
@@ -21,15 +21,11 @@
     return img;
 }
 
-- (UIImage *)kitCoverWithColor:(UIColor *)color{
++ (UIImage *)hanleImage:(UIImage *)image CoverWithColor:(UIColor *)color
+{
     CGSize originSize;
-//    if (TMO_UIKIT_DEVICE_IS_RETINA) {
-//        originSize = CGSizeMake(self.size.width*2, self.size.height*2);
-//    }
-//    else {
-//        originSize = self.size;
-//    }
-    originSize = self.size;
+
+    originSize = image.size;
     UIGraphicsBeginImageContext(originSize);
     
     CGRect contextRect;
@@ -49,7 +45,7 @@
     // Setup transparency layer and clip to mask
     CGContextBeginTransparencyLayer(c, NULL);
     CGContextScaleCTM(c, 1.0, -1.0);
-    CGContextClipToMask(c, CGRectMake(itemImagePosition.x, -itemImagePosition.y, itemImageSize.width, -itemImageSize.height), [self CGImage]);
+    CGContextClipToMask(c, CGRectMake(itemImagePosition.x, -itemImagePosition.y, itemImageSize.width, -itemImageSize.height), [image CGImage]);
     // Fill and end the transparency layer
     
     
@@ -65,6 +61,6 @@
     UIGraphicsEndImageContext();
     
     return img;
-}
 
+}
 @end
