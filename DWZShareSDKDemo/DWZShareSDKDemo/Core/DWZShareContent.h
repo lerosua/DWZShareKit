@@ -13,6 +13,8 @@
 @property (nonatomic,copy) NSString *content;
 @property (nonatomic,copy) NSString *url;
 @property (nonatomic,strong) UIImage *image;
+//要分享的大图 不要超过10M
+@property (nonatomic,strong) UIImage *shareImage;
 
 - (instancetype) initWitContent:(NSString *)pContent title:(NSString *)pTitle image:(UIImage *)pImage url:(NSString *)pUrl;
 @end

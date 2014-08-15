@@ -157,13 +157,28 @@
  *  创建分享的对象
  *
  *  @param pConent 分享的内容
- *  @param pImage  分享的图片
+ *  @param pImage  分享的图标
  *  @param pTitle  分享的标题
  *  @param pUrl    分享的URL
  *
  *  @return 分享内容对象
  */
 + (DWZShareContent *)content:(NSString *)pConent image:(UIImage *)pImage title:(NSString *)pTitle url:(NSString *)pUrl;
+
+/**
+ *  创建分享的对象
+ *
+ *  @param pConent 分享的内容
+ *  @param pImage  分享的图标
+ *  @param pTitle  分享的标题
+ *  @param pUrl    分享的URL
+
+ *  @param shareImage 分享的大图
+ *
+ *  @return 分享内容对象
+ */
++ (DWZShareContent *)content:(NSString *)pConent image:(UIImage *)pImage title:(NSString *)pTitle url:(NSString *)pUrl withShareImage:(UIImage *)shareImage;
+
 
 + (void) loginWithSinaWithDelegate:(id<DWZShareKitAuthDelegate>)pDelegate;
 + (void) loginWithQQWithDelegate:(id<DWZShareKitAuthDelegate>)pDelegate;

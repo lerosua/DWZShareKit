@@ -273,7 +273,16 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
             message.text = [message.text substringToIndex:139];
         }
     }
-    if(pContent.image){
+//    if(pContent.image){
+//        WBImageObject *imageObject = [WBImageObject object];
+//        imageObject.imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
+//        message.imageObject = imageObject;
+//    }
+    if(pContent.shareImage){
+        WBImageObject *imageObject = [WBImageObject object];
+        imageObject.imageData = UIImageJPEGRepresentation(pContent.shareImage, 0.7);
+        message.imageObject = imageObject;
+    }else if (pContent.image){
         WBImageObject *imageObject = [WBImageObject object];
         imageObject.imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
         message.imageObject = imageObject;
@@ -287,13 +296,26 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     message.title = pContent.title;
     message.description = [NSString stringWithFormat:@"%@ %@", pContent.content,pContent.url];
 
-    WXWebpageObject *webpageObject = [WXWebpageObject object];
-    webpageObject.webpageUrl = pContent.url;
-    if(pContent.image){
-        NSData *imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
-        [message setThumbData:imageData];
+
+
+    if(pContent.shareImage){
+        NSData *imageData = UIImageJPEGRepresentation(pContent.shareImage, 0.7);
+        WXImageObject *imageObject = [WXImageObject object];
+        imageObject.imageData = imageData;
+        imageObject.imageUrl = pContent.url;
+        message.mediaObject = imageObject;
+    }else{
+        WXWebpageObject *webpageObject = [WXWebpageObject object];
+        webpageObject.webpageUrl = pContent.url;
+        
+        if(pContent.image){
+            NSData *imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
+            [message setThumbData:imageData];
+        }
+        message.mediaObject = webpageObject;
+
     }
-    message.mediaObject = webpageObject;
+    
     return message;
 }
 
@@ -304,8 +326,14 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
         imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
     }
 
-    QQApiNewsObject *newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:[NSString stringWithFormat:@"%@ %@",pContent.content,pContent.url] previewImageData:imageData];
-    
+    QQApiNewsObject *newsObj;
+    if(pContent.shareImage){
+        NSData *shareData = UIImageJPEGRepresentation(pContent.shareImage, 0.7);
+        NSArray *shareArray = @[shareData];
+        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:[NSString stringWithFormat:@"%@ %@",pContent.content,pContent.url] previewImageData:imageData imageDataArray:shareArray];
+    }else{
+        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:[NSString stringWithFormat:@"%@ %@",pContent.content,pContent.url] previewImageData:imageData];
+    }
     return newsObj;
 }
 
@@ -618,6 +646,13 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 + (DWZShareContent *)content:(NSString *)pConent image:(UIImage *)pImage title:(NSString *)pTitle url:(NSString *)pUrl
 {
     DWZShareContent *shareContent = [[DWZShareContent alloc] initWitContent:pConent title:pTitle image:pImage url:pUrl];
+    return shareContent;
+}
+
++ (DWZShareContent *)content:(NSString *)pConent image:(UIImage *)pImage title:(NSString *)pTitle url:(NSString *)pUrl withShareImage:(UIImage *)shareImage;
+{
+    DWZShareContent *shareContent = [[DWZShareContent alloc] initWitContent:pConent title:pTitle image:pImage url:pUrl];
+    shareContent.shareImage = shareImage;
     return shareContent;
 }
 
