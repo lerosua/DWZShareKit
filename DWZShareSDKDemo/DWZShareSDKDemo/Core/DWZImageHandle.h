@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #define TMO_UIKIT_DEVICE_WIDTH [UIScreen mainScreen].currentMode.size.width
 #define TMO_UIKIT_DEVICE_HEIGHT [UIScreen mainScreen].currentMode.size.height
