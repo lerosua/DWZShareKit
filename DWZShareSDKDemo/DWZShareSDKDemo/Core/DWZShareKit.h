@@ -141,6 +141,8 @@
 + (BOOL) isWeiboInstalled;
 + (BOOL) isWeChatInstalled;
 
++ (BOOL) canClickWhenNoInstalled;
+
 #pragma mark -
 /**
  *  获取要支持的分享列表
@@ -171,5 +173,5 @@
  *
  *  @param sinaBundleID 新浪应用里设置的bundleID
  */
-- (void) fixSinaBundleID:(NSString *)sinaBundleID;
++ (void) fixSinaBundleID:(NSString *)sinaBundleID;
 @end

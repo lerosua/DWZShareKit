@@ -59,18 +59,11 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 @property (nonatomic,strong) DWZShareContent *shareContent;
 @property (nonatomic,strong) NSArray *socialList;
 
+@property (nonatomic,assign) BOOL clickWhenNoInstalled;
+
 @end
 
 @implementation DWZShareKit
-
-#pragma mark -
-//- (TencentOAuth *)tencentOAuth
-//{
-//    if(!_tencentOAuth){
-//        _tencentOAuth = [[TencentOAuth alloc] initWithAppId:self.qqZoneAppKey andDelegate:(id<TencentSessionDelegate>)self];
-//    }
-//    return _tencentOAuth;
-//}
 
 #pragma mark -
 + (instancetype) shareInstance
@@ -197,7 +190,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
                 [WeiboSDK sendRequest:request];
                 
             }else{
-
+                NSLog(@"not install sina");
             }
             
         }
@@ -234,6 +227,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
                 NSLog(@"sent %d",sent);
                 
                 
+            }else{
+                NSLog(@"not install QQ");
+
             }
         }
             break;
@@ -251,6 +247,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
                     wechatReq.scene = WXSceneTimeline;
                 }
                 [WXApi sendReq:wechatReq];
+            }else{
+                NSLog(@"not install wechat");
+
             }
         }
             break;
@@ -595,6 +594,11 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     return [WXApi isWXAppInstalled] && [WXApi isWXAppSupportApi];
 }
 
++ (BOOL) canClickWhenNoInstalled
+{
+    DWZShareKit *kit =  [DWZShareKit shareInstance];
+    return kit.clickWhenNoInstalled;
+}
 #pragma mark -
 + (NSArray *)getShareListWithType:(ShareType)shareType, ... NS_REQUIRES_NIL_TERMINATION
 {
@@ -718,7 +722,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 
 
 #pragma mark -
-- (void) fixSinaBundleID:(NSString *)sinaBundleID
++ (void) fixSinaBundleID:(NSString *)sinaBundleID
 {
     Class c = objc_getClass("WeiboSDK3rdApp");
     id block = ^NSString*()

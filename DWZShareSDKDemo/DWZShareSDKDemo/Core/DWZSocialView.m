@@ -115,7 +115,9 @@
         switch (num) {
             case ShareTypeSinaWeibo:
                 if(![DWZShareKit isWeiboInstalled]){
-                    button.enabled = NO;
+                    if(![DWZShareKit canClickWhenNoInstalled]){
+                        button.enabled = NO;
+                    }
                     image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
 
                 }
@@ -123,8 +125,10 @@
                 case ShareTypeQQ:
                 case ShareTypeQQSpace:
                 if(![DWZShareKit isQQInstalled]){
-                    button.enabled = NO;
-                    image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
+                    if(![DWZShareKit canClickWhenNoInstalled]){
+                        button.enabled = NO;
+                    }
+                    image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:140/255 green:140/255 blue:140/255 alpha:1.0]];
 
 
                 }
@@ -133,7 +137,9 @@
                 case ShareTypeWeChatTimeline:
                 if(![DWZShareKit isWeChatInstalled]){
                     image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
-                    button.enabled = NO;
+                    if(![DWZShareKit canClickWhenNoInstalled]){
+                        button.enabled = NO;
+                    }
                 }
                 break;
                 case ShareTypeCustom:
