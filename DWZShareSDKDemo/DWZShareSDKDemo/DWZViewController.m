@@ -60,6 +60,15 @@
     
 }
 
+- (void) shareKit:(DWZShareKit *)kit willAction:(ShareType)socialType
+{
+    NSLog(@"get shareKit action %d",socialType);
+    DWZShareContent *content = [DWZShareKit content:@"视频xxxxx" image:nil title:@"视频xxxx" url:@"http://xxxx.com"];
+
+    [kit resetShareContent:content];
+    
+}
+
 - (IBAction)SinaLoginAction:(id)sender {
     [DWZShareKit loginWithSinaWithDelegate:(id<DWZShareKitAuthDelegate>)self];
 }

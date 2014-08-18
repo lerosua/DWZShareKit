@@ -174,6 +174,11 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     DWZShareKit *shareSDK = [DWZShareKit shareInstance];
 
     ShareType socialNo = index;
+
+    if([shareSDK.delegate respondsToSelector:@selector(shareKit:willAction:)]){
+        [shareSDK.delegate shareKit:shareSDK willAction:socialNo];
+    }
+    
     switch (socialNo) {
         case ShareTypeCustom:
         {
@@ -400,9 +405,11 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
             //新浪分享成功
             NSLog(@"sina share success");
             [shareSDK.delegate shareSDKResponse:ShareTypeSinaWeibo Success:YES];
+//            [shareSDK.delegate shareKitResponse:ShareTypeSinaWeibo Success:YES];
             
         }else{
             [shareSDK.delegate shareSDKResponse:ShareTypeSinaWeibo Success:NO];
+//            [shareSDK.delegate shareKitResponse:ShareTypeSinaWeibo Success:NO];
             NSLog(@"sina share cancel");
         }
         
@@ -755,6 +762,11 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     NSLog(@"qq DidLogout");
 }
 
+#pragma mark -
+- (void) resetShareContent:(DWZShareContent *)content
+{
+    self.shareContent = content;
+}
 
 #pragma mark -
 + (void) fixSinaBundleID:(NSString *)sinaBundleID

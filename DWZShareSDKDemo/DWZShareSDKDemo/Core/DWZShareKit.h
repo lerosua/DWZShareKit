@@ -12,6 +12,7 @@
 
 @class  WBMessageObject;
 @class DWZShareContent;
+@class DWZShareKit;
 
 @protocol DWZShareSDKDelegate <NSObject>
 /**
@@ -22,6 +23,9 @@
  */
 - (void) shareSDKResponse:(ShareType)socialType Success:(BOOL)success;
 
+@optional
+- (void) shareKit:(DWZShareKit *)kit willAction:(ShareType)socialType;
+- (void) shareKitResponse:(ShareType)socialType Success:(BOOL)success;
 
 @end
 
@@ -87,6 +91,7 @@
  */
 + (instancetype) shareInstance;
 
+- (void) resetShareContent:(DWZShareContent *)content;
 #pragma mark - handleOpenURL
 /**
  *  @brief 通过URL启动第三方应用时传递的数据
