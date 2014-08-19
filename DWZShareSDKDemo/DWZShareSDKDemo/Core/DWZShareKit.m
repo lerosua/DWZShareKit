@@ -269,20 +269,17 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 + (WBMessageObject *)weiboMessageFrom:(DWZShareContent *)pContent
 {
     WBMessageObject *message = [WBMessageObject message];
-    message.text = [NSString stringWithFormat:@"%@ %@ %@",pContent.title,pContent.content,pContent.url];
+    message.text = pContent.content;
     if(message.text.length >140){
-        NSString *str = [NSString stringWithFormat:@"%@ %@",pContent.title,pContent.content];
-        if(str.length > 140-pContent.url.length){
-            message.text = [NSString stringWithFormat:@"%@ %@",[str substringToIndex:140-pContent.url.length],pContent.url];
+//        NSString *str = [NSString stringWithFormat:@"%@ %@",pContent.title,pContent.content];
+        NSString *str = pContent.content;
+        if(str.length > 140){
+            message.text = [NSString stringWithFormat:@"%@",[str substringToIndex:140]];
         }else{
             message.text = [message.text substringToIndex:139];
         }
     }
-//    if(pContent.image){
-//        WBImageObject *imageObject = [WBImageObject object];
-//        imageObject.imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
-//        message.imageObject = imageObject;
-//    }
+
     if(pContent.shareImage){
         WBImageObject *imageObject = [WBImageObject object];
         imageObject.imageData = UIImageJPEGRepresentation(pContent.shareImage, 0.7);
@@ -292,6 +289,11 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
         imageObject.imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
         message.imageObject = imageObject;
     }
+    if(pContent.url){
+        WBWebpageObject *webPageObject = [WBWebpageObject object];
+        webPageObject.webpageUrl = pContent.url;
+        message.mediaObject = webPageObject;
+    }
     return message;
 }
 
@@ -299,7 +301,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 {
     WXMediaMessage *message = [WXMediaMessage message];
     message.title = pContent.title;
-    message.description = [NSString stringWithFormat:@"%@ %@", pContent.content,pContent.url];
+    message.description = pContent.content;
 
 
 
@@ -318,7 +320,6 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
             [message setThumbData:imageData];
         }
         message.mediaObject = webpageObject;
-
     }
     
     return message;
@@ -335,9 +336,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     if(pContent.shareImage){
         NSData *shareData = UIImageJPEGRepresentation(pContent.shareImage, 0.7);
         NSArray *shareArray = @[shareData];
-        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:[NSString stringWithFormat:@"%@ %@",pContent.content,pContent.url] previewImageData:imageData imageDataArray:shareArray];
+        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:pContent.content previewImageData:imageData imageDataArray:shareArray];
     }else{
-        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:[NSString stringWithFormat:@"%@ %@",pContent.content,pContent.url] previewImageData:imageData];
+        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:pContent.content previewImageData:imageData];
     }
     return newsObj;
 }
@@ -374,7 +375,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 + (void) tencentWeiboSendMessage:(DWZShareContent *)pContent
 {
     DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    NSString *text = [NSString stringWithFormat:@"%@ %@ %@",pContent.title,pContent.content,pContent.url];
+    NSString *text = pContent.content;
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:text forKey:@"content"];
