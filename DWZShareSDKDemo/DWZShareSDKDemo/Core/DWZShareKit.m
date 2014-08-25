@@ -265,20 +265,35 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     
 }
 
++ (int)countTheStrLength:(NSString*)aString {
+    
+    int strlength = 0;
+    char* p = (char*)[aString cStringUsingEncoding:NSUnicodeStringEncoding];
+    for (int i=0 ; i<[aString lengthOfBytesUsingEncoding:NSUnicodeStringEncoding] ;i++) {
+        if (*p) {
+            p++;
+            strlength++;
+        }
+        else {
+            p++;
+        }
+    }
+    return (strlength + 1) / 2;
+}
 #pragma mark - sina weibo
 + (WBMessageObject *)weiboMessageFrom:(DWZShareContent *)pContent
 {
     WBMessageObject *message = [WBMessageObject message];
-    message.text = [NSString stringWithFormat:@"%@ %@ %@",pContent.title,pContent.content,pContent.url];
-    if(message.text.length >140){
-        NSString *str = [NSString stringWithFormat:@"%@ %@",pContent.title,pContent.content];
-        if(str.length > 140-pContent.url.length){
-            message.text = [NSString stringWithFormat:@"%@ %@",[str substringToIndex:140-pContent.url.length],pContent.url];
-        }else{
-            message.text = [message.text substringToIndex:139];
-        }
-    }
+    NSString *body = [NSString stringWithFormat:@"%@ %@",pContent.title,pContent.content];
+    NSInteger urlLength = [self countTheStrLength:pContent.url];
+    NSInteger contentLength = [self countTheStrLength:body];
 
+    if(contentLength + urlLength > 140){
+        message.text = [NSString stringWithFormat:@"%@ %@",[body substringToIndex:139-urlLength],pContent.url];
+    }else{
+        message.text = [NSString stringWithFormat:@"%@ %@",body,pContent.url];
+        
+    }
 
     if(pContent.shareImage){
         WBImageObject *imageObject = [WBImageObject object];

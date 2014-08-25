@@ -21,7 +21,8 @@ static int MaxLength = 100;
     if(self){
         NSInteger length = pContent.length > MaxLength ? MaxLength :pContent.length;
         self.content = [pContent substringToIndex:length];
-        self.title = pTitle;
+        NSInteger titleLength = pTitle.length > MaxLength ? MaxLength : pTitle.length;
+        self.title = [pTitle substringToIndex:titleLength];
         self.image = pImage;
         self.url = pUrl;
     }
