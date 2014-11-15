@@ -21,7 +21,8 @@ QQ互联仍然是2.2, 不支持64位编译
 [CocosPods](http://cocosPods.org) is the recommended method to install DWZShareKit, just add the following line to `Podfile`
 
 ```
-pod 'DWZShareKit'
+pod 'DWZShareKit', '~> 1.2.4'
+
 ```
 
 ## How to Use
@@ -29,7 +30,6 @@ pod 'DWZShareKit'
 比如以下,填入你应用相关信息
 ```objc
 #define GESinaWeiboSDKAppKey            @"2xxxxxxx"
-#define GETencentWeiboSDKAppKey         @"8xxxxxxxx"
 #define GEQZoneSDKAppKey                @"1xxxxxx"
 #define GEWechatSDKAppKey               @"wxa769xxxxx"
 
@@ -39,7 +39,6 @@ pod 'DWZShareKit'
 #define GEWechatSDKAppSecret               @"5xxxxxxxf552bxxxxxxx024xxxxxxx83f41b"
 
 #define GESinaWeiboSDKAppUri            @"https://api.weibo.com/oauth2/default.html"
-#define GETencentWeiboSDKAppUr          @"http://xxx.xxx.xxx"
 ````
 在AppDelegate注册
 ```objc
@@ -48,7 +47,6 @@ pod 'DWZShareKit'
     // Override point for customization after application launch.
         
 	[DWZShareKit connectSinaWeiboWithAppKey:GESinaWeiboSDKAppKey appSecret:GESinaWeiboSDKAppSecret redirectUri:GESinaWeiboSDKAppUri];
-	[DWZShareKit connectTencentWeiboWithAppKey:GETencentWeiboSDKAppKey appSecret:GETencentWeiboSDKAppSecret redirectUri:GETencentWeiboSDKAppUr];
 	[DWZShareKit connectWeChatWithAppId:GEWechatSDKAppKey wechatCls:nil];
 	[DWZShareKit connectQZoneWithAppKey:GEQZoneSDKAppKey appSecret:GEQZoneSDKAppSecret];
     
