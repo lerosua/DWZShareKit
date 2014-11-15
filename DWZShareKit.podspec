@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "DWZShareKit"
   s.version      = "1.2.5"
-  s.summary      = "DWZShareKit"
+  s.summary      = "DWZShareKit, gather wechat,qq,sina weibo sdk"
 
   s.homepage     = "https://github.com/lerosua/DWZShareKit.git"
   s.license      = "MIT"
