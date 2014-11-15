@@ -8,7 +8,7 @@
 
 #import "DWZShareKit.h"
 #import "WeiboSDK.h"        //sina weibo
-#import "WeiboApi.h"        //tencent weibo
+//#import "WeiboApi.h"        //tencent weibo
 #import "TencentOAuth.h"
 #import "QQApiInterface.h"
 #import "TencentApiInterface.h"
@@ -42,7 +42,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 @property (nonatomic,strong) NSString *tcWeiboAppSecret;
 @property (nonatomic,strong) NSString *tcWeiboAppUrl;
 
-@property (nonatomic,strong) WeiboApi *tencentWeiboApi;
+//@property (nonatomic,strong) WeiboApi *tencentWeiboApi;
 @property (nonatomic,strong) NSString *tencentWeiboToken;
 @property (nonatomic,strong) NSString *tencentWeiboOpenId;
 //QQ空间数据
@@ -100,7 +100,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
                           redirectUri:(NSString *)redirectUri
 {
     DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    shareSDK.tencentWeiboApi = [[WeiboApi alloc] initWithAppKey:appKey andSecret:appSecret andRedirectUri:redirectUri];
+    //shareSDK.tencentWeiboApi = [[WeiboApi alloc] initWithAppKey:appKey andSecret:appSecret andRedirectUri:redirectUri];
     
     
 }
@@ -382,23 +382,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     DWZShareKit *shareSDK = [DWZShareKit shareInstance];
     return shareSDK.tencentWeiboOpenId;
 }
-#pragma mark - tencent weibo
-+ (void) tencentWeiboSendMessage:(DWZShareContent *)pContent
-{
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    NSString *text = pContent.content;
-    
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:text forKey:@"content"];
-    if(pContent.image){
-        NSData *imageData =  UIImageJPEGRepresentation(pContent.image, 0.7);
-        [params setObject:imageData forKey:@"pic"];
-    }
-    
-    [shareSDK.tencentWeiboApi requestWithParams:params apiName:@"t/add" httpMethod:@"POST" delegate:(id<WeiboRequestDelegate>)self];
 
-    
-}
 #pragma mark - weibo回调
 + (void)didReceiveWeiboRequest:(WBBaseRequest *)request
 {
@@ -497,85 +481,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 
 
 
-#pragma mark WeiboAuthDelegate
 
-/**
- * @brief   重刷授权成功后的回调
- * @param   INPUT   wbapi 成功后返回的WeiboApi对象，accesstoken,openid,refreshtoken,expires 等授权信息都在此处返回
- * @return  无返回
- */
-+ (void)DidAuthRefreshed:(WeiboApi *)wbapi_
-{
-    
-    NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
-    
-    NSLog(@"result = %@ , %s",str,__func__);
-
-    
-    
-
-    
-}
-
-/**
- * @brief   重刷授权失败后的回调
- * @param   INPUT   error   标准出错信息
- * @return  无返回
- */
-+ (void)DidAuthRefreshFail:(NSError *)error
-{
-    NSString *str = [[NSString alloc] initWithFormat:@"refresh token error, errcode = %@",error.userInfo];
- 
-    NSLog(@"result = %@ , %s",str,__func__);
-
-
-}
-
-/**
- * @brief   授权成功后的回调
- * @param   INPUT   wbapi 成功后返回的WeiboApi对象，accesstoken,openid,refreshtoken,expires 等授权信息都在此处返回
- * @return  无返回
- */
-+ (void)DidAuthFinished:(WeiboApi *)wbapi_
-{
-    NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
-    
-    NSLog(@"result = %@ , %s",str,__func__);
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    shareSDK.tencentWeiboApi = wbapi_;
-    
-    
-//    DWZShareViewController *viewController = [[DWZShareViewController alloc] init];
-//    viewController.socialTag = TencentWeiboDWZTag;
-//    [shareSDK.baseViewController presentViewController:viewController animated:YES completion:nil];
-
-
-}
-
-/**
- * @brief   授权成功后的回调
- * @param   INPUT   wbapi   weiboapi 对象，取消授权后，授权信息会被清空
- * @return  无返回
- */
-+ (void)DidAuthCanceled:(WeiboApi *)wbapi_
-{
-    NSString *str = [[NSString alloc]initWithFormat:@"accesstoken = %@\r openid = %@\r appkey=%@ \r appsecret=%@\r", wbapi_.accessToken, wbapi_.openid, wbapi_.appKey, wbapi_.appSecret];
-    NSLog(@"result = %@ , %s",str,__func__);
-
-}
-
-/**
- * @brief   授权成功后的回调
- * @param   INPUT   error   标准出错信息
- * @return  无返回
- */
-+ (void)DidAuthFailWithError:(NSError *)error
-{
-    NSString *str = [[NSString alloc] initWithFormat:@"refresh token error, errcode = %@",error.userInfo];
-    NSLog(@"result = %@ , %s",str,__func__);
-
-
-}
 
 
 #pragma mark - wechat delegate

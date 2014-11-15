@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "sdkdef.h"
 #import "TencentOAuthObject.h"
-#import "WeiBoAPI.h"
+//#import "WeiBoAPI.h"
 #import "WeiyunAPI.h"
 
 @protocol TencentSessionDelegate;
