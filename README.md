@@ -5,13 +5,17 @@ DWZShareKit是一个简单的分享项目，目前支持新浪，QQ，QQ空间�
 ![image](https://raw.githubusercontent.com/lerosua/DWZShareKit/master/dwzsharekit-demo.png)
 
 ## 编译注意事项。
-微信等SDK不支持64位编译，因此引入后要把 Target Build Setting中的Architectures改为 $(ARCHS\_STANDARD\_32\_BIT)
-SDK里有用到C++混编，因此要最好把main.m改成main.mm才能通过编译。
+~~微信等SDK不支持64位编译，因此引入后要把 Target Build Setting中的Architectures改为 $(ARCHS\_STANDARD\_32\_BIT)
+SDK里有用到C++混编，因此要最好把main.m改成main.mm才能通过编译。~~
+1.2.6版本已经支持64位，至此SDK已匹配64位编译
 
 ###更新
+1.2.6 更新64编译
+
+1.2.5
 微信SDK更新至1.5, 支持64位编译
 新浪微博SDK更新至2.5.1,支持64位编译
-QQ互联仍然是2.2, 不支持64位编译
+~~QQ互联仍然是2.2, 不支持64位编译～～
 
 ***注意*** 
 项目的info.plist文件里必须要注册相对应的URL,如图所示
