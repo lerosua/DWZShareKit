@@ -25,7 +25,7 @@ SDK里有用到C++混编，因此要最好把main.m改成main.mm才能通过编�
 [CocosPods](http://cocosPods.org) is the recommended method to install DWZShareKit, just add the following line to `Podfile`
 
 ```
-pod 'DWZShareKit', '~> 1.2.4'
+pod 'DWZShareKit'
 
 ```
 
