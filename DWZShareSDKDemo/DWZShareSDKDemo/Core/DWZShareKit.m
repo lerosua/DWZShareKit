@@ -8,7 +8,6 @@
 
 #import "DWZShareKit.h"
 #import "WeiboSDK.h"        //sina weibo
-//#import "WeiboApi.h"        //tencent weibo
 #import "TencentOAuth.h"
 #import "QQApiInterface.h"
 #import "TencentApiInterface.h"
@@ -18,14 +17,15 @@
 
 #import "DWZSocialView.h"
 #import "DWZShareContent.h"
+
+@import ImageIO;
+
 NSString *ShareKitKeyToken = @"ShareKitKeyToken";
 NSString *ShareKitKeyExpire = @"ShareKitKeyExpire";
 NSString *ShareKitKeyUserId = @"ShareKitKeyUserId";
 NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 
 @interface DWZShareKit()<WeiboSDKDelegate,
-//                        WBHttpRequestDelegate,
-//                        WeiboRequestDelegate,WeiboAuthDelegate,
                         TencentSessionDelegate,
                         WXApiDelegate,
                         QQApiInterfaceDelegate,
@@ -37,12 +37,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 @property (nonatomic,strong) NSString *sinaWeiboAppSecret;
 @property (nonatomic,strong) NSString *sinaWeiboAppUrl;
 @property (nonatomic,strong) NSString *sinaWeiboToken;
-//腾讯微博数据
-@property (nonatomic,strong) NSString *tcWeiboAppKey;
-@property (nonatomic,strong) NSString *tcWeiboAppSecret;
-@property (nonatomic,strong) NSString *tcWeiboAppUrl;
 
-//@property (nonatomic,strong) WeiboApi *tencentWeiboApi;
 @property (nonatomic,strong) NSString *tencentWeiboToken;
 @property (nonatomic,strong) NSString *tencentWeiboOpenId;
 //QQ空间数据
@@ -100,9 +95,6 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
                           redirectUri:(NSString *)redirectUri
 {
     DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    //shareSDK.tencentWeiboApi = [[WeiboApi alloc] initWithAppKey:appKey andSecret:appSecret andRedirectUri:redirectUri];
-    
-    
 }
 
 
@@ -347,7 +339,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     if(pContent.shareImage){
         NSData *shareData = UIImageJPEGRepresentation(pContent.shareImage, 0.7);
         NSArray *shareArray = @[shareData];
-        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:pContent.content previewImageData:imageData imageDataArray:shareArray];
+//        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:pContent.content previewImageData:imageData imageDataArray:shareArray];
+        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:pContent.content previewImageData:imageData];
+
     }else{
         newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:pContent.content previewImageData:imageData];
     }

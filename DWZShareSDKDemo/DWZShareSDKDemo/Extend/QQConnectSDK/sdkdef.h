@@ -9,6 +9,30 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/**
+ * \brief 设置sdk的log等级
+ */
+typedef enum {
+    TCOLogLevel_Disabled = -1,   // 关闭所有log
+    TCOLogLevel_Error = 0,
+    TCOLogLevel_Warning,
+    TCOLogLevel_Info,
+    TCOLogLevel_Debug,
+} TCOLogLevel;
+
+/**
+ * \brief 手机qq的当前版本
+ */
+typedef enum QQVersion
+{
+    kQQUninstall,
+    kQQVersion3_0,
+    kQQVersion4_0,      //支持sso登陆
+    kQQVersion4_2_1,    //ios7兼容
+    kQQVersion4_5,      //4.5版本，wpa会话
+    kQQVersion4_6,      //4.6版本，sso登陆信令通道切换
+    kQQVersion4_7,      //4.7版本 不确定新支持了什么样的属性
+} QQVersion;
 
 /**
  * \brief APIResponse.retCode可能的枚举常量
@@ -354,6 +378,78 @@ FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_GET_USER_INFO;
 
 /** 移动端获取用户信息 */
 FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_GET_SIMPLE_USER_INFO;
+
+/** 微云上传图片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_UPLOAD_PIC;
+
+/** 微云下载图片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DOWNLOAD_PIC;
+
+/** 微云获得图片列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_PIC_LIST;
+
+/** 微云删除图片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_PIC;
+
+/** 微云获取缩略图 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_PIC_THUMB;
+
+/** 微云上传音乐 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_UPLOAD_MUSIC;
+
+/** 微云下载音乐 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DOWNLOAD_MUSIC;
+
+/** 微云获取音乐列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_MUSIC_LIST;
+
+/** 微云删除音乐 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_MUSIC;
+
+/** 微云上传视频 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_UPLOAD_VIDEO;
+
+/** 微云下载视频 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DOWNLOAD_VIDEO;
+
+/** 微云获取视频列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_VIDEO_LIST;
+
+/** 微云删除视频 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_VIDEO;
+
+/** 微云上传照片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_UPLOAD_PHOTO;
+
+/** 微云下载照片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DOWNLOAD_PHOTO;
+
+/** 微云获得照片列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_PHOTO_LIST;
+
+/** 微云删除照片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_PHOTO;
+
+/** 微云获取图片缩略图 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_PHOTO_THUMB;
+
+/** 微云检查记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_CHECK_RECORD;
+
+/** 微云创建记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_CREATE_RECORD;
+
+/** 微云删除记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_RECORD;
+
+/** 微云获取记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_RECORD;
+
+/** 微云修改记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_MODIFY_RECORD;
+
+/** 微云获取所有记录列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_QUERY_ALL_RECORD;
 ///@}
 
 
