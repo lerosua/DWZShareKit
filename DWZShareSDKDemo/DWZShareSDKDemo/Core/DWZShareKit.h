@@ -91,7 +91,12 @@
  */
 + (instancetype) shareInstance;
 
-- (void) resetShareContent:(DWZShareContent *)content;
+#pragma mark - Share
+- (void)resetShareContent:(DWZShareContent *)content;
+
+- (void)shareContent:(DWZShareContent *)shareContent
+           shareType:(ShareType)shareType;
+
 #pragma mark - handleOpenURL
 /**
  *  @brief 通过URL启动第三方应用时传递的数据
@@ -113,7 +118,7 @@
  *  @return 暂未定义
  */
 + (id) showDefaultShareWith:(DWZShareContent *)content
-                serviceShareList:(NSArray *)shareList
+           serviceShareList:(NSArray *)shareList
                withDelegate:(id<DWZShareSDKDelegate>)pDelegate;
 
 + (id) showDefaultShareWith:(DWZShareContent *)content
@@ -177,7 +182,7 @@
  *  @param pImage  分享的图标
  *  @param pTitle  分享的标题
  *  @param pUrl    分享的URL
-
+ 
  *  @param shareImage 分享的大图
  *
  *  @return 分享内容对象
