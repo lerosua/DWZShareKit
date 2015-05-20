@@ -49,17 +49,6 @@
                        redirectUri:(NSString *)redirectUri;
 
 
-/**
- *	@brief	连接腾讯微博开放平台应用以使用相关功能,
- *          http://dev.t.qq.com上注册腾讯微博开放平台应用，并将相关信息填写到以下字段
- *
- *	@param 	appKey 	应用Key
- *	@param 	appSecret 	应用密钥
- *	@param 	redirectUri 	回调地址，此地址则为应用地址。
- */
-+ (void)connectTencentWeiboWithAppKey:(NSString *)appKey
-                            appSecret:(NSString *)appSecret
-                          redirectUri:(NSString *)redirectUri;
 
 
 /**

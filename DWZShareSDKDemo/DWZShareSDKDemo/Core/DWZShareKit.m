@@ -30,7 +30,8 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
                         TencentSessionDelegate,
                         WXApiDelegate,
                         QQApiInterfaceDelegate,
-                        DWZSocialDelegate
+                        DWZSocialDelegate,
+                        MFMailComposeViewControllerDelegate
                         >
 
 //新浪数据
@@ -89,15 +90,6 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     
     
 }
-
-
-+ (void)connectTencentWeiboWithAppKey:(NSString *)appKey
-                            appSecret:(NSString *)appSecret
-                          redirectUri:(NSString *)redirectUri
-{
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-}
-
 
 + (void)connectQZoneWithAppKey:(NSString *)appKey
                      appSecret:(NSString *)appSecret
@@ -163,7 +155,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 
 #pragma mark -
 - (void)socialButton:(UIButton *)sender clickedAtIndex:(NSInteger)index {
-    ShareType shareType = index;
+    ShareType shareType =(int) index;
     
     [self handleShareWithShareType:shareType];
 }
@@ -319,14 +311,14 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     NSData *imageData = UIImagePNGRepresentation(shareContent.image);
     [mailComposeViewController addAttachmentData:imageData mimeType:@"" fileName: @"Icon.png"];
     if (mailComposeViewController) {
-        [[[UIApplication sharedApplication] keyWindow].rootViewController presentModalViewController:mailComposeViewController animated:YES];
+        [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:mailComposeViewController animated:YES completion:nil];
     }
 }
 
 #pragma mark - 实现 MFMailComposeViewControllerDelegate
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {    //关闭邮件发送窗口
-    [controller dismissModalViewControllerAnimated:YES];
+    [controller dismissViewControllerAnimated:YES completion:nil];
     NSString *msg;
     switch (result) {
         case MFMailComposeResultCancelled:
@@ -420,8 +412,8 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     
     QQApiNewsObject *newsObj;
     if(pContent.shareImage){
-        NSData *shareData = UIImageJPEGRepresentation(pContent.shareImage, 0.7);
-        NSArray *shareArray = @[shareData];
+//        NSData *shareData = UIImageJPEGRepresentation(pContent.shareImage, 0.7);
+//        NSArray *shareArray = @[shareData];
 //        newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:pContent.content previewImageData:imageData imageDataArray:shareArray];
         newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:pContent.url] title:pContent.title description:pContent.content previewImageData:imageData];
 
