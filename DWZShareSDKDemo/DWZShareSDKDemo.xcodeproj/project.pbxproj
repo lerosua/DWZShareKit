@@ -347,7 +347,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = DWZ;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = lerosua;
 				TargetAttributes = {
 					E9F55A4C18FFBE3500A5E0E4 = {
@@ -536,7 +536,6 @@
 		E9F55A5F18FFBE3500A5E0E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -551,7 +550,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/SinaWeiboSDK",
-					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/TencentWeiboSDK",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/WeChatSDK",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/QQConnectSDK",
 				);
@@ -563,7 +561,6 @@
 		E9F55A6018FFBE3500A5E0E4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -578,7 +575,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/SinaWeiboSDK",
-					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/TencentWeiboSDK",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/WeChatSDK",
 					"$(PROJECT_DIR)/DWZShareSDKDemo/Extend/QQConnectSDK",
 				);

@@ -112,7 +112,7 @@
     if(self.socialTag == SinaWeiboDWZTag){
         [self sendSinaWeiboMessage:contentText];
     }else if (self.socialTag == TencentWeiboDWZTag){
-        [self sendTencentWeiboMessage:contentText];
+
     }
 }
 
@@ -139,11 +139,5 @@
 
 }
 
-- (void) sendTencentWeiboMessage:(NSString *)text
-{
-    
-//    [DWZShareSDK tencentWeiboSendMessage:text];
-    
-}
 
 @end

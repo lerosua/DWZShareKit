@@ -208,11 +208,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
             break;
         case ShareTypeTencentWeibo: //tencent weibo 暂不处理
         {
-            if ([DWZShareKit isTencentWeiboInstalled]) {
-                
-            } else {
-                
-            }
+
         }
             break;
         case ShareTypeQQ:
@@ -458,6 +454,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     NSLog(@"get weibo request");
     
 }
+- (void)didReceiveWeiboRequest:(WBBaseRequest *)request{
+    NSLog(@"get weibo request");
+}
 
 + (void)didReceiveWeiboResponse:(WBBaseResponse *)response
 {
@@ -588,14 +587,10 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 {
     NSLog(@"get qq login resp");
 }
-
-#pragma mark -
-+ (BOOL) isTencentWeiboInstalled
-{
-    NSURL *tencentWeiboURL = [NSURL URLWithString:@"tencentweibo://xx"];
-    return [[UIApplication sharedApplication] canOpenURL:tencentWeiboURL];
+- (void) isOnlineResponse:(NSDictionary *)response {
+    NSLog(@"qq isOnlineResponse");
 }
-
+#pragma mark -
 + (BOOL) isQQInstalled
 {
     return [QQApiInterface isQQInstalled] && [QQApiInterface isQQSupportApi];
@@ -723,6 +718,41 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 }
 
 + (void)tencentDidNotNetWork
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    
+    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
+        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:nil Success:NO];
+    }
+    
+}
+
+
+- (void)tencentDidLogin
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
+        NSDictionary *userInfo = @{ShareKitKeyToken: kit.tencentOAuth.accessToken,
+                                   ShareKitKeyExpire: kit.tencentOAuth.expirationDate,
+                                   ShareKitKeyUserId: kit.tencentOAuth.openId,
+                                   ShareKitKeyAppId:  kit.tencentOAuth.appId
+                                   };
+        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:userInfo Success:YES];
+    }
+    
+}
+
+- (void)tencentDidNotLogin:(BOOL)cancelled
+{
+    NSLog(@"qq login cancel");
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    
+    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
+        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:nil Success:NO];
+    }
+}
+
+- (void)tencentDidNotNetWork
 {
     DWZShareKit *kit = [DWZShareKit shareInstance];
     

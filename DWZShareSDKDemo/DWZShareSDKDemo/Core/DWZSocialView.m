@@ -83,7 +83,7 @@
     
     int i = 0;
     for (NSNumber *number in self.array) {
-        int num = [number integerValue];
+        int num = (int)[number integerValue];
         if ((i + 1) % 3) {
             x = (i + 1) % 3;
             y = (i + 1) / 3;
@@ -93,7 +93,7 @@
         }
 
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(90 * ( x - 1 ), 75 + 90 * y, 90, 30)];
-        label.text = [self shareTypeNameWith: [self.array[i] integerValue]];
+        label.text = [self shareTypeNameWith: [self.array[i] intValue]];
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:14.0f];
         label.textColor = [UIColor colorWithRed:95/255.0
@@ -104,11 +104,11 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(5 + 90 * ( x - 1 ), 10 + 90 * y, 80, 80);
         button.tag = num;
-        NSString *imageName =[self shareIconNameWith:[self.array[i] integerValue]];
+        NSString *imageName =[self shareIconNameWith:[self.array[i] intValue]];
 
         UIImage *image;
         if(imageName){
-            image = [UIImage imageNamed:[self shareIconNameWith:[self.array[i] integerValue]]];
+            image = [UIImage imageNamed:[self shareIconNameWith:[self.array[i] intValue]]];
         }
         
         //check app valide
