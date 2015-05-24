@@ -81,6 +81,13 @@ typedef enum
 }
 SSPublishContentMediaType;
 
+typedef enum {
+    OperationTypeUserCancel = 0, // 用户取消
+    OperationTypeNotNetwork = 1, // 没有网络导致失败
+    OperationTypeSuccess = 2, // 成功
+}
+OperationType;
+
 extern NSString *ShareKitKeyToken;
 extern NSString *ShareKitKeyExpire;
 extern NSString *ShareKitKeyUserId;

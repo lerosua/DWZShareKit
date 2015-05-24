@@ -15,22 +15,29 @@
 @class DWZShareKit;
 
 @protocol DWZShareSDKDelegate <NSObject>
+
+@optional
 /**
  *  shareSDK分享后的回调
  *
  *  @param socialType 所分享的社交类型
  *  @param sucess     分享的结果，YES为成功，反之失败,暂不计算失败类型
  */
-- (void) shareSDKResponse:(ShareType)socialType Success:(BOOL)success;
+- (void) shareSDKResponse:(ShareType)socialType operationType:(OperationType)operationType;
 
-@optional
 - (void) shareKit:(DWZShareKit *)kit willAction:(ShareType)socialType;
-- (void) shareKitResponse:(ShareType)socialType Success:(BOOL)success;
 
 @end
 
 @protocol DWZShareKitAuthDelegate <NSObject>
-- (void) shareSDKLoginResponse:(ShareType)socialType WithInfo:(NSDictionary *)userInfo Success:(BOOL)success;
+
+@optional
+- (void) shareSDKLoginResponse:(ShareType)socialType authInfo:(NSDictionary *)userInfo operationType:(OperationType)operationType;
+
+// 授权登录有几种情况，比如用户取消登录、网络不给力导致登录不了
+// 授权完成后，需要获取用户信息
+- (void) shareSDKUserInfo:(NSDictionary *)userInfo success:(BOOL)success;
+
 @end
 
 @interface DWZShareKit : NSObject
@@ -80,7 +87,8 @@
  */
 + (instancetype) shareInstance;
 
-#pragma mark - Share
+#pragma mark - Share Methods
+
 - (void)resetShareContent:(DWZShareContent *)content;
 
 - (void)shareContent:(DWZShareContent *)shareContent
@@ -178,6 +186,7 @@
 
 + (void) loginWithSinaWithDelegate:(id<DWZShareKitAuthDelegate>)pDelegate;
 + (void) loginWithQQWithDelegate:(id<DWZShareKitAuthDelegate>)pDelegate;
++ (BOOL) getQQLoginUserInfo;
 
 /**
  *  解决企业应用构建后bundleID变化后与新浪设置的bundleID不一致造成的不能返回的问题
@@ -185,4 +194,5 @@
  *  @param sinaBundleID 新浪应用里设置的bundleID
  */
 + (void) fixSinaBundleID:(NSString *)sinaBundleID;
+
 @end
