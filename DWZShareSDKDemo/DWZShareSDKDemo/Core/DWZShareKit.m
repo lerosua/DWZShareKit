@@ -79,14 +79,14 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
                        redirectUri:(NSString *)redirectUri
 {
     
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+    DWZShareKit *kit = [DWZShareKit shareInstance];
     
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:appKey];
     
-    shareSDK.sinaWeiboAppKey = appKey;
-    shareSDK.sinaWeiboAppSecret = appSecret;
-    shareSDK.sinaWeiboAppUrl = redirectUri;
+    kit.sinaWeiboAppKey = appKey;
+    kit.sinaWeiboAppSecret = appSecret;
+    kit.sinaWeiboAppUrl = redirectUri;
     
     
 }
@@ -94,20 +94,18 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 + (void)connectQZoneWithAppKey:(NSString *)appKey
                      appSecret:(NSString *)appSecret
 {
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    shareSDK.qqZoneAppKey = appKey;
-    shareSDK.qqZoneAppSecret = appSecret;
-    shareSDK.tencentOAuth = [[TencentOAuth alloc] initWithAppId:appKey andDelegate:(id<TencentSessionDelegate>)self];
-    
-    
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    kit.qqZoneAppKey = appKey;
+    kit.qqZoneAppSecret = appSecret;
+    kit.tencentOAuth = [[TencentOAuth alloc] initWithAppId:appKey andDelegate:kit];
 }
 
 + (void)connectWeChatWithAppId:(NSString *)appId
                      wechatCls:(Class)wechatCls
 {
     [WXApi registerApp:appId];
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    shareSDK.weChatAppId = appId;
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    kit.weChatAppId = appId;
     
 }
 #pragma mark -
@@ -120,12 +118,12 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
         return nil;
     }
     
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    shareSDK.shareContent = content;
-    shareSDK.socialList = shareList;
-    shareSDK.delegate = pDelegate;
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    kit.shareContent = content;
+    kit.socialList = shareList;
+    kit.delegate = pDelegate;
     
-    DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList withDelegate:shareSDK];
+    DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList withDelegate:kit];
     [view show];
     
     return nil;
@@ -141,11 +139,11 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
         return nil;
     }
     
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    shareSDK.shareContent = content;
-    shareSDK.socialList = shareList;
-    shareSDK.delegate = pDelegate;
-    DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList withDelegate:shareSDK];
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    kit.shareContent = content;
+    kit.socialList = shareList;
+    kit.delegate = pDelegate;
+    DWZSocialView *view = [[DWZSocialView alloc] initWithArray:shareList withDelegate:kit];
     view.customShareObject = shareObject;
     [view show];
     
@@ -178,21 +176,42 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 
 #pragma mark - Public API
 
+- (void)resetShareContent:(DWZShareContent *)content {
+    self.shareContent = content;
+}
+
 - (void)shareContent:(DWZShareContent *)shareContent
            shareType:(ShareType)shareType {
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    shareSDK.shareContent = shareContent;
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    kit.shareContent = shareContent;
     
     [self handleShareWithShareType:shareType];
+}
+
+
++ (BOOL)handleOpenURL:(NSURL *)url delegate:(id)pDelegate {
+    NSLog(@"get ---url %@",[url absoluteString]);
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    NSString *weiboURLPrefix = [DWZShareKit sinaWeiboForHandleURLPrefix];
+    NSString *wechatURLPrefix = [DWZShareKit wechatForHandleURLPrefx];
+    if ([[url absoluteString] hasPrefix:wechatURLPrefix]) {
+        return [WXApi handleOpenURL:url delegate:kit];
+    } else if ([[url absoluteString] hasPrefix:@"tencent"]) {
+        return [TencentOAuth HandleOpenURL:url];
+    } else if ([[url absoluteString] hasPrefix:weiboURLPrefix]) {
+        return [WeiboSDK handleOpenURL:url delegate:kit];
+    }
+    
+    return YES;
 }
 
 #pragma mark - Previte API
 
 - (void)handleShareWithShareType:(ShareType)shareType {
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+    DWZShareKit *kit = [DWZShareKit shareInstance];
     
-    if([shareSDK.delegate respondsToSelector:@selector(shareKit:willAction:)]){
-        [shareSDK.delegate shareKit:shareSDK willAction:shareType];
+    if([kit.delegate respondsToSelector:@selector(shareKit:willAction:)]){
+        [kit.delegate shareKit:kit willAction:shareType];
     }
     
     switch (shareType) {
@@ -234,9 +253,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 
 - (void)shareToSinaWeiBo {
     if ([WeiboSDK isWeiboAppInstalled]) {
-        DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+        DWZShareKit *kit = [DWZShareKit shareInstance];
         
-        WBMessageObject *obj = [DWZShareKit weiboMessageFrom:shareSDK.shareContent];
+        WBMessageObject *obj = [DWZShareKit weiboMessageFrom:kit.shareContent];
         WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:obj];
         request.userInfo = @{@"shareMessageFrom":@"DWZShareKitDemo"};
         [WeiboSDK sendRequest:request];
@@ -248,9 +267,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 
 - (void)shareToQQWithShareType:(ShareType)shareType {
     if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
-        DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+        DWZShareKit *kit = [DWZShareKit shareInstance];
         
-        QQApiNewsObject *newsObject = [DWZShareKit qqMessageFrom:shareSDK.shareContent];
+        QQApiNewsObject *newsObject = [DWZShareKit qqMessageFrom:kit.shareContent];
         SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObject];
         QQApiSendResultCode sent;
         if (shareType == ShareTypeQQ) {
@@ -258,7 +277,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
         } else if(shareType == ShareTypeQQSpace) {
             sent = [QQApiInterface SendReqToQZone:req];
         } else {
-            //消除警告
+            // 消除警告
             sent = EQQAPISENDFAILD;
         }
         NSLog(@"sent %d",sent);
@@ -271,17 +290,19 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 }
 
 - (void)shareToCustom {
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+    DWZShareKit *kit = [DWZShareKit shareInstance];
     
-    [shareSDK.delegate shareSDKResponse:ShareTypeCustom Success:YES];
+    if ([kit.delegate respondsToSelector:@selector(shareSDKResponse:operationType:)]) {
+        [kit.delegate shareSDKResponse:ShareTypeCustom operationType:OperationTypeSuccess];
+    }
 }
 
 - (void)shareToWeChatWithShareType:(ShareType)shareType {
     if ([WXApi isWXAppInstalled]) {
-        DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+        DWZShareKit *kit = [DWZShareKit shareInstance];
         
         SendMessageToWXReq *wechatReq = [[SendMessageToWXReq alloc] init];
-        WXMediaMessage *message = [DWZShareKit wechatMessageFrom:shareSDK.shareContent shareType:shareType];
+        WXMediaMessage *message = [DWZShareKit wechatMessageFrom:kit.shareContent shareType:shareType];
         wechatReq.message = message;
         wechatReq.bText = NO;
         if (shareType == ShareTypeWeChatSession) {
@@ -297,8 +318,8 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 }
 
 - (void)shareToEmail {
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    DWZShareContent *shareContent = shareSDK.shareContent;
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    DWZShareContent *shareContent = kit.shareContent;
     
     MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
     mailComposeViewController.mailComposeDelegate = self;
@@ -311,31 +332,60 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     }
 }
 
-#pragma mark - 实现 MFMailComposeViewControllerDelegate
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
-{    //关闭邮件发送窗口
-    [controller dismissViewControllerAnimated:YES completion:nil];
-    NSString *msg;
-    switch (result) {
-        case MFMailComposeResultCancelled:
-            msg = @"用户取消编辑邮件";
-            break;
-        case MFMailComposeResultSaved:
-            msg = @"用户成功保存邮件";
-            break;
-        case MFMailComposeResultSent:
-            msg = @"用户点击发送，将邮件放到队列中，还没发送";
-            break;
-        case MFMailComposeResultFailed:
-            msg = @"用户试图保存或者发送邮件失败";
-            break;
-        default:
-            msg = @"";
-            break;
+#pragma mark - fixSinaBundleID
+
++ (void) fixSinaBundleID:(NSString *)sinaBundleID
+{
+    Class c = objc_getClass("WeiboSDK3rdApp");
+    id block = ^NSString*()
+    {
+        return sinaBundleID;
+    };
+    
+    SEL selctor = NSSelectorFromString(@"bundleID");
+    IMP test = imp_implementationWithBlock(block);
+    Method origMethod = class_getInstanceMethod(c,
+                                                selctor);
+    
+    if(!class_addMethod(c, selctor, test,
+                        method_getTypeEncoding(origMethod)))
+    {
+        method_setImplementation(origMethod, test);
     }
 }
 
-#pragma mark - sina weibo
+#pragma mark - URL Prefix Handle Methods
+
++ (NSString *) sinaWeiboForHandleURLPrefix
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    return [NSString stringWithFormat:@"wb%@",kit.sinaWeiboAppKey];
+}
++ (NSString *) wechatForHandleURLPrefx
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    return [NSString stringWithFormat:@"%@://",kit.weChatAppId];
+}
+
++ (NSString *) sinaWeiboToken
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    return kit.sinaWeiboToken;
+}
+
++ (NSString *) tencentWeiboToken
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    return kit.tencentWeiboToken;
+}
++ (NSString *) tencentWeiboOpenId
+{
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    return kit.tencentWeiboOpenId;
+}
+
+#pragma mark - Get Message Model Helper Methods
+
 + (WBMessageObject *)weiboMessageFrom:(DWZShareContent *)pContent
 {
     WBMessageObject *message = [WBMessageObject message];
@@ -419,96 +469,82 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     return newsObj;
 }
 
-#pragma mark -
-+ (NSString *) sinaWeiboForHandleURLPrefix
-{
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    return [NSString stringWithFormat:@"wb%@",shareSDK.sinaWeiboAppKey];
-}
-+ (NSString *) wechatForHandleURLPrefx
-{
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    return [NSString stringWithFormat:@"%@://",shareSDK.weChatAppId];
+#pragma mark - MFMailComposeViewController Delegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{    //关闭邮件发送窗口
+    [controller dismissViewControllerAnimated:YES completion:nil];
+    NSString *msg;
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            msg = @"用户取消编辑邮件";
+            break;
+        case MFMailComposeResultSaved:
+            msg = @"用户成功保存邮件";
+            break;
+        case MFMailComposeResultSent:
+            msg = @"用户点击发送，将邮件放到队列中，还没发送";
+            break;
+        case MFMailComposeResultFailed:
+            msg = @"用户试图保存或者发送邮件失败";
+            break;
+        default:
+            msg = @"";
+            break;
+    }
 }
 
-+ (NSString *) sinaWeiboToken
-{
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    return shareSDK.sinaWeiboToken;
-}
+#pragma mark - sina weibo delegate
 
-+ (NSString *) tencentWeiboToken
-{
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    return shareSDK.tencentWeiboToken;
-}
-+ (NSString *) tencentWeiboOpenId
-{
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
-    return shareSDK.tencentWeiboOpenId;
-}
-
-#pragma mark - weibo回调
-+ (void)didReceiveWeiboRequest:(WBBaseRequest *)request
-{
-    NSLog(@"get weibo request");
-    
-}
 - (void)didReceiveWeiboRequest:(WBBaseRequest *)request{
     NSLog(@"get weibo request");
 }
 
-+ (void)didReceiveWeiboResponse:(WBBaseResponse *)response
+- (void)didReceiveWeiboResponse:(WBBaseResponse *)response
 {
     NSLog(@"get weibo response");
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+    DWZShareKit *kit = [DWZShareKit shareInstance];
     
-    if([response isKindOfClass:WBSendMessageToWeiboResponse.class]){
+    if([response isKindOfClass:[WBSendMessageToWeiboResponse class]]){
+        WeiboSDKResponseStatusCode statusCode = response.statusCode;
         
-        if(response.statusCode == WeiboSDKResponseStatusCodeSuccess){
+        if(statusCode == WeiboSDKResponseStatusCodeSuccess) {
             //新浪分享成功
             NSLog(@"sina share success");
-            [shareSDK.delegate shareSDKResponse:ShareTypeSinaWeibo Success:YES];
+            if ([kit.delegate respondsToSelector:@selector(shareSDKResponse:operationType:)]) {
+                [kit.delegate shareSDKResponse:ShareTypeSinaWeibo operationType:OperationTypeSuccess];
+            }
             
-        }else{
-            [shareSDK.delegate shareSDKResponse:ShareTypeSinaWeibo Success:NO];
-            NSLog(@"sina share cancel");
+        } else {
+            OperationType operationType = OperationTypeNotNetwork;
+            if (statusCode == WeiboSDKResponseStatusCodeUserCancel) {
+                operationType = OperationTypeUserCancel;
+            }
+            if ([kit.delegate respondsToSelector:@selector(shareSDKResponse:operationType:)]) {
+                [kit.delegate shareSDKResponse:ShareTypeSinaWeibo operationType:operationType];
+            }
         }
         
     }else if ([response isKindOfClass:[WBAuthorizeResponse class]]){
-        if([shareSDK.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
-            WBAuthorizeResponse *authResponse = (WBAuthorizeResponse *)response;
+        if ([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:authInfo:operationType:)]) {
+            WBAuthorizeResponse *authorizeResponse = (WBAuthorizeResponse *)response;
             
-            if(response.statusCode == WeiboSDKResponseStatusCodeSuccess && authResponse.accessToken && authResponse.expirationDate && authResponse.userID){
+            OperationType operationType = OperationTypeSuccess;
+            
+            if(response.statusCode == WeiboSDKResponseStatusCodeSuccess && authorizeResponse.accessToken && authorizeResponse.expirationDate && authorizeResponse.userID){
                 NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] initWithDictionary:response.userInfo];
-                [shareSDK.authDelegate shareSDKLoginResponse:ShareTypeSinaWeibo WithInfo:userInfo Success:YES];
-            }else{
-                [shareSDK.authDelegate shareSDKLoginResponse:ShareTypeSinaWeibo WithInfo:nil Success:NO];
+                [kit.authDelegate shareSDKLoginResponse:ShareTypeSinaWeibo authInfo:userInfo operationType:operationType];
+            } else {
+                if (response.statusCode == WeiboSDKResponseStatusCodeAuthDeny) {
+                    operationType = OperationTypeNotNetwork;
+                } else {
+                    operationType = OperationTypeUserCancel;
+                }
+                [kit.authDelegate shareSDKLoginResponse:ShareTypeSinaWeibo authInfo:nil operationType:operationType];
             }
         }
     }
 }
-- (void)didReceiveWeiboResponse:(WBBaseResponse *)response
-{
-}
-
-#pragma mark - 系统回调
-+ (BOOL)handleOpenURL:(NSURL *)url delegate:(id)pDelegate
-{
-    NSLog(@"get ---url %@",[url absoluteString]);
-    NSString *weiboURLPrefix = [DWZShareKit sinaWeiboForHandleURLPrefix];
-    NSString *wechatURLPrefix = [DWZShareKit wechatForHandleURLPrefx];
-    if ([[url absoluteString] hasPrefix:wechatURLPrefix]) {
-        return [WXApi handleOpenURL:url delegate:(id<WXApiDelegate>)self];
-    } else if ([[url absoluteString] hasPrefix:@"tencent"]) {
-        return [TencentOAuth HandleOpenURL:url];
-    } else if ([[url absoluteString] hasPrefix:weiboURLPrefix]) {
-        return [WeiboSDK handleOpenURL:url delegate:(id<WeiboSDKDelegate>)self];
-    }
-    
-    return YES;
-}
-
 
 #pragma mark -
 #pragma mark  WeiboRequestDelegate
@@ -540,56 +576,54 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     
 }
 
+#pragma mark - wechat & qq & qqzone delegate
 
-
-
-
-
-#pragma mark - wechat delegate
-+ (void) onReq:(BaseReq *)req
-{
+- (void)onReq:(BaseReq *)req {
     NSLog(@"get req %@",req);
-    
     
 }
 
-+ (void) onResp:(BaseResp *)resp
-{
+- (void)onResp:(BaseResp *)resp {
     NSLog(@"get resp %@",resp);
-    DWZShareKit *shareSDK = [DWZShareKit shareInstance];
+    DWZShareKit *kit = [DWZShareKit shareInstance];
     
     if([resp isKindOfClass:[SendMessageToWXResp class]]){
         if(resp.errCode == 0){
             NSLog(@"wechat share success");
-            [shareSDK.delegate shareSDKResponse:ShareTypeWeChatSession Success:YES];
+            if ([kit.delegate respondsToSelector:@selector(shareSDKResponse:operationType:)]) {
+                [kit.delegate shareSDKResponse:ShareTypeWeChatSession operationType:OperationTypeSuccess];
+            }
             
         }else{
             NSLog(@"wechat share cancel");
-            [shareSDK.delegate shareSDKResponse:ShareTypeWeChatSession Success:NO];
+            if ([kit.delegate respondsToSelector:@selector(shareSDKResponse:operationType:)]) {
+                [kit.delegate shareSDKResponse:ShareTypeWeChatSession operationType:OperationTypeUserCancel];
+            }
             
         }
     }else if ([resp isKindOfClass:[QQBaseResp class]]){
         SendMessageToQQResp *sendResp = (SendMessageToQQResp *)resp;
         if(sendResp.errorDescription == nil){
             NSLog(@"qq share sucess");
-            [shareSDK.delegate shareSDKResponse:ShareTypeQQ Success:YES];
+            if ([kit.delegate respondsToSelector:@selector(shareSDKResponse:operationType:)]) {
+                [kit.delegate shareSDKResponse:ShareTypeQQ operationType:OperationTypeSuccess];
+            }
         }else{
             NSLog(@"qq share cancel");
-            [shareSDK.delegate shareSDKResponse:ShareTypeQQ Success:NO];
+            if ([kit.delegate respondsToSelector:@selector(shareSDKResponse:operationType:)]) {
+                [kit.delegate shareSDKResponse:ShareTypeQQ operationType:OperationTypeUserCancel];
+            }
         }
     }
 }
-- (void) onReq:(QQBaseReq *)req
-{
-    NSLog(@"get qq req login");
+
+/**
+ 处理QQ在线状态的回调
+ */
+- (void)isOnlineResponse:(NSDictionary *)response {
+    
 }
-- (void) onResp:(QQBaseResp *)resp
-{
-    NSLog(@"get qq login resp");
-}
-- (void) isOnlineResponse:(NSDictionary *)response {
-    NSLog(@"qq isOnlineResponse");
-}
+
 #pragma mark -
 + (BOOL) isQQInstalled
 {
@@ -660,86 +694,55 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     kit.authDelegate = pDelegate;
     if([QQApiInterface isQQInstalled]){
         NSArray* permissions = [NSArray arrayWithObjects:
-                                kOPEN_PERMISSION_GET_USER_INFO,
-                                kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
-                                kOPEN_PERMISSION_ADD_ALBUM,
-                                kOPEN_PERMISSION_ADD_IDOL,
-                                kOPEN_PERMISSION_ADD_ONE_BLOG,
-                                kOPEN_PERMISSION_ADD_PIC_T,
-                                kOPEN_PERMISSION_ADD_SHARE,
-                                kOPEN_PERMISSION_ADD_TOPIC,
-                                kOPEN_PERMISSION_CHECK_PAGE_FANS,
-                                kOPEN_PERMISSION_DEL_IDOL,
-                                kOPEN_PERMISSION_DEL_T,
-                                kOPEN_PERMISSION_GET_FANSLIST,
-                                kOPEN_PERMISSION_GET_IDOLLIST,
-                                kOPEN_PERMISSION_GET_INFO,
-                                kOPEN_PERMISSION_GET_OTHER_INFO,
-                                kOPEN_PERMISSION_GET_REPOST_LIST,
-                                kOPEN_PERMISSION_LIST_ALBUM,
-                                kOPEN_PERMISSION_UPLOAD_PIC,
-                                kOPEN_PERMISSION_GET_VIP_INFO,
-                                kOPEN_PERMISSION_GET_VIP_RICH_INFO,
-                                kOPEN_PERMISSION_GET_INTIMATE_FRIENDS_WEIBO,
-                                kOPEN_PERMISSION_MATCH_NICK_TIPS_WEIBO,
-                                nil];
+                                 kOPEN_PERMISSION_GET_USER_INFO,
+                                 kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
+                                 kOPEN_PERMISSION_ADD_ALBUM,
+                                 kOPEN_PERMISSION_ADD_IDOL,
+                                 kOPEN_PERMISSION_ADD_ONE_BLOG,
+                                 kOPEN_PERMISSION_ADD_PIC_T,
+                                 kOPEN_PERMISSION_ADD_SHARE,
+                                 kOPEN_PERMISSION_ADD_TOPIC,
+                                 kOPEN_PERMISSION_CHECK_PAGE_FANS,
+                                 kOPEN_PERMISSION_DEL_IDOL,
+                                 kOPEN_PERMISSION_DEL_T,
+                                 kOPEN_PERMISSION_GET_FANSLIST,
+                                 kOPEN_PERMISSION_GET_IDOLLIST,
+                                 kOPEN_PERMISSION_GET_INFO,
+                                 kOPEN_PERMISSION_GET_OTHER_INFO,
+                                 kOPEN_PERMISSION_GET_REPOST_LIST,
+                                 kOPEN_PERMISSION_LIST_ALBUM,
+                                 kOPEN_PERMISSION_UPLOAD_PIC,
+                                 kOPEN_PERMISSION_GET_VIP_INFO,
+                                 kOPEN_PERMISSION_GET_VIP_RICH_INFO,
+                                 kOPEN_PERMISSION_GET_INTIMATE_FRIENDS_WEIBO,
+                                 kOPEN_PERMISSION_MATCH_NICK_TIPS_WEIBO,
+                                 nil];
         
-        [kit.tencentOAuth authorize:permissions inSafari:NO];
+        [kit.tencentOAuth authorize:permissions inSafari:YES];
         
     }else{
         NSLog(@"use webview login QQ");
     }
 }
 
++ (BOOL) getQQLoginUserInfo {
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    return [kit.tencentOAuth getUserInfo];
+}
 
 #pragma mark - tencent qq login delegate
-+ (void)tencentDidLogin
-{
-    DWZShareKit *kit = [DWZShareKit shareInstance];
-    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
-        NSDictionary *userInfo = @{ShareKitKeyToken: kit.tencentOAuth.accessToken,
-                                   ShareKitKeyExpire: kit.tencentOAuth.expirationDate,
-                                   ShareKitKeyUserId: kit.tencentOAuth.openId,
-                                   ShareKitKeyAppId:  kit.tencentOAuth.appId
-                                   };
-        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:userInfo Success:YES];
-    }
-    
-}
-
-+ (void)tencentDidNotLogin:(BOOL)cancelled
-{
-    NSLog(@"qq login cancel");
-    DWZShareKit *kit = [DWZShareKit shareInstance];
-    
-    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
-        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:nil Success:NO];
-    }
-}
-
-+ (void)tencentDidNotNetWork
-{
-    DWZShareKit *kit = [DWZShareKit shareInstance];
-    
-    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
-        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:nil Success:NO];
-    }
-    
-}
-
 
 - (void)tencentDidLogin
 {
     DWZShareKit *kit = [DWZShareKit shareInstance];
-    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
+    if ([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:authInfo:operationType:)]) {
         NSDictionary *userInfo = @{ShareKitKeyToken: kit.tencentOAuth.accessToken,
                                    ShareKitKeyExpire: kit.tencentOAuth.expirationDate,
                                    ShareKitKeyUserId: kit.tencentOAuth.openId,
                                    ShareKitKeyAppId:  kit.tencentOAuth.appId
                                    };
-        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:userInfo Success:YES];
+        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ authInfo:userInfo operationType:OperationTypeSuccess];
     }
-    
 }
 
 - (void)tencentDidNotLogin:(BOOL)cancelled
@@ -747,19 +750,26 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     NSLog(@"qq login cancel");
     DWZShareKit *kit = [DWZShareKit shareInstance];
     
-    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
-        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:nil Success:NO];
+    if ([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:authInfo:operationType:)]) {
+        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ authInfo:nil operationType:OperationTypeUserCancel];
     }
 }
 
 - (void)tencentDidNotNetWork
 {
     DWZShareKit *kit = [DWZShareKit shareInstance];
-    
-    if([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:WithInfo:Success:)]){
-        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ WithInfo:nil Success:NO];
+    if ([kit.authDelegate respondsToSelector:@selector(shareSDKLoginResponse:authInfo:operationType:)]) {
+        [kit.authDelegate shareSDKLoginResponse:ShareTypeQQ authInfo:nil operationType:OperationTypeNotNetwork];
     }
+}
+
+- (void)getUserInfoResponse:(APIResponse*) response {
+    DWZShareKit *kit = [DWZShareKit shareInstance];
     
+    BOOL success = (response.retCode == URLREQUEST_SUCCEED);
+    if ([kit.authDelegate respondsToSelector:@selector(shareSDKUserInfo:success:)]) {
+        [kit.authDelegate shareSDKUserInfo:(success ? response.jsonResponse : nil) success:success];
+    }
 }
 
 - (NSArray *)getAuthorizedPermissions:(NSArray *)permissions withExtraParams:(NSDictionary *)extraParams
@@ -767,35 +777,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
     return nil;
 }
 
-+ (void)tencentDidLogout
+- (void)tencentDidLogout
 {
     NSLog(@"qq DidLogout");
 }
 
-#pragma mark -
-- (void) resetShareContent:(DWZShareContent *)content
-{
-    self.shareContent = content;
-}
-
-#pragma mark -
-+ (void) fixSinaBundleID:(NSString *)sinaBundleID
-{
-    Class c = objc_getClass("WeiboSDK3rdApp");
-    id block = ^NSString*()
-    {
-        return sinaBundleID;
-    };
-    
-    SEL selctor = NSSelectorFromString(@"bundleID");
-    IMP test = imp_implementationWithBlock(block);
-    Method origMethod = class_getInstanceMethod(c,
-                                                selctor);
-    
-    if(!class_addMethod(c, selctor, test,
-                        method_getTypeEncoding(origMethod)))
-    {
-        method_setImplementation(origMethod, test);
-    }
-}
 @end
