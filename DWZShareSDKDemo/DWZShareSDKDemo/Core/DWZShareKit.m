@@ -10,7 +10,6 @@
 #import "WeiboSDK.h"        //sina weibo
 #import "TencentOAuth.h"
 #import "QQApiInterface.h"
-#import "TencentApiInterface.h"
 #import "WXApi.h"           //wechat
 #import "DWZShareViewController.h"
 #import <objc/runtime.h>
@@ -266,7 +265,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 }
 
 - (void)shareToQQWithShareType:(ShareType)shareType {
-    if([QQApiInterface isQQInstalled]|| [TencentApiInterface isTencentAppInstall:kIphoneQZONE]){
+    if([QQApiInterface isQQInstalled]|| [TencentOAuth iphoneQZoneInstalled]){
         DWZShareKit *kit = [DWZShareKit shareInstance];
         
         QQApiNewsObject *newsObject = [DWZShareKit qqMessageFrom:kit.shareContent];

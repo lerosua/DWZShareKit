@@ -38,6 +38,20 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>wtloginmqq2</string>
+		<string>mqqopensdkapiV3</string>
+		<string>mqqwpa</string>
+		<string>mqqopensdkapiV2</string>
+		<string>mqqOpensdkSSoLogin</string>
+		<string>mqq</string>
+		<string>weixin</string>
+		<string>sinaweibo</string>
+		<string>sinaweibohd</string>
+		<string>weibosdk2.5</string>
+		<string>weibosdk</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIMainStoryboardFile</key>
