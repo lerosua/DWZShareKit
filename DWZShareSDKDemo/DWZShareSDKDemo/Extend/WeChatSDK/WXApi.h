@@ -133,6 +133,16 @@
  */
 +(BOOL) sendReq:(BaseReq*)req;
 
+/*! @brief 发送Auth请求到微信，支持用户没安装微信，等待微信返回onResp
+ *
+ * 函数调用后，会切换到微信的界面。第三方应用程序等待微信返回onResp。微信在异步处理完成后一定会调用onResp。支持SendAuthReq类型。
+ * @param req 具体的发送请求，在调用函数后，请自己释放。
+ * @param viewController 当前界面对象。
+ * @param delegate  WXApiDelegate对象，用来接收微信触发的消息。
+ * @return 成功返回YES，失败返回NO。
+ */
++(BOOL) sendAuthReq:(SendAuthReq*) req viewController : (UIViewController*) viewController delegate:(id<WXApiDelegate>) delegate;
+
 
 /*! @brief 收到微信onReq的请求，发送对应的应答给微信，并切换到微信界面
  *
