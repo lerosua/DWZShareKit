@@ -224,11 +224,6 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
             [self shareToSinaWeiBo];
         }
             break;
-        case ShareTypeTencentWeibo: //tencent weibo 暂不处理
-        {
-
-        }
-            break;
         case ShareTypeQQ:
         case ShareTypeQQSpace://QQZone
         {
@@ -237,6 +232,7 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
             break;
         case ShareTypeWeChatSession:   //wechat好友
         case ShareTypeWeChatTimeline:  //wechat 朋友圈
+        case ShareTypeWeChatFav:       //wechat 收藏
         {
             [self shareToWeChatWithShareType:shareType];
         }
@@ -245,6 +241,9 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
             [self shareToEmail];
         }
             break;
+        case ShareTypeCopy: {
+            [self shareToCopyURL];
+        }
         default:
             break;
     }
@@ -306,7 +305,10 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
         wechatReq.bText = NO;
         if (shareType == ShareTypeWeChatSession) {
             wechatReq.scene = WXSceneSession;
-        } else {
+        }else if (shareType == ShareTypeWeChatFav){
+            wechatReq.scene = WXSceneFavorite;
+        }
+        else {
             wechatReq.scene = WXSceneTimeline;
         }
         [WXApi sendReq:wechatReq];
@@ -330,6 +332,17 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
         [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:mailComposeViewController animated:YES completion:nil];
     }
 }
+
+- (void) shareToCopyURL {
+    DWZShareKit *kit = [DWZShareKit shareInstance];
+    DWZShareContent *shareContent = kit.shareContent;
+    
+    if (shareContent.url) {
+        [[UIPasteboard generalPasteboard] setString:shareContent.url];
+    }
+
+}
+
 
 #pragma mark - fixSinaBundleID
 

@@ -32,5 +32,6 @@
  *  @return 处理后的UIImage对象
  */
 + (UIImage *)hanleImage:(UIImage *)image CoverWithColor:(UIColor *)color;
-
+//返回图片的灰阶图
++ (UIImage *)grayImage:(UIImage *)sourceImage;
 @end

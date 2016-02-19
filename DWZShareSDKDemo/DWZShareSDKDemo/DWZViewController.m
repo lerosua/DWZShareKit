@@ -39,7 +39,7 @@
 //    [DWZShareKit showDefaultShareWith:content serviceShareList:shareArray withDelegate:self];
     
     
-    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeSinaWeibo, ShareTypeQQ, ShareTypeQQSpace, ShareTypeWeChatTimeline, ShareTypeCustom, nil];
+    NSArray *shareArray = [DWZShareKit getShareListWithType:ShareTypeSinaWeibo, ShareTypeQQ, ShareTypeQQSpace, ShareTypeWeChatTimeline, ShareTypeWeChatFav, ShareTypeCopy,nil];
     
     UIImage *image = [UIImage imageNamed:@"dwzsharesdk_qq"];
     DWZShareContent *content = [DWZShareKit content:@"视频描述" image:image title:@"视频标题" url:@"http://baidu.com"];

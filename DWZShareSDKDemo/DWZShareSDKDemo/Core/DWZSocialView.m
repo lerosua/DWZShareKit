@@ -107,9 +107,6 @@
         NSString *imageName =[self shareIconNameWith:[self.array[i] intValue]];
 
         UIImage *image;
-        if(imageName){
-            image = [UIImage imageNamed:[self shareIconNameWith:[self.array[i] intValue]]];
-        }
         
         //check app valide
         switch (num) {
@@ -118,8 +115,8 @@
                     if(![DWZShareKit canClickWhenNoInstalled]){
                         button.enabled = NO;
                     }
-                    image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
-
+                    imageName =[NSString stringWithFormat:@"%@_disabled",imageName];
+                    label.textColor = [UIColor grayColor];
                 }
                 break;
                 case ShareTypeQQ:
@@ -128,15 +125,20 @@
                     if(![DWZShareKit canClickWhenNoInstalled]){
                         button.enabled = NO;
                     }
-                    image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:140/255 green:140/255 blue:140/255 alpha:1.0]];
+                    imageName =[NSString stringWithFormat:@"%@_disabled",imageName];
 
+                    label.textColor = [UIColor grayColor];
 
                 }
                 break;
                 case ShareTypeWeChatSession:
                 case ShareTypeWeChatTimeline:
+                case ShareTypeWeChatFav:
                 if(![DWZShareKit isWeChatInstalled]){
-                    image = [DWZImageHandle hanleImage:image CoverWithColor:[UIColor colorWithRed:240/255 green:240/255 blue:240/255 alpha:1.0]];
+                    imageName =[NSString stringWithFormat:@"%@_disabled",imageName];
+                    label.textColor = [UIColor grayColor];
+
+
                     if(![DWZShareKit canClickWhenNoInstalled]){
                         button.enabled = NO;
                     }
@@ -153,6 +155,10 @@
                 break;
             default:
                 break;
+        }
+        
+        if(!image){
+            image = [UIImage imageNamed:imageName];
         }
         [button setImage:image forState:UIControlStateNormal];
         [button addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -210,10 +216,10 @@
 {
     switch (type) {
         case ShareTypeSinaWeibo:
-            return  @"新浪微博";
+            return  @"微博";
             break;
         case ShareTypeQQ:
-            return  @"QQ好友";
+            return  @"QQ";
             break;
         case ShareTypeQQSpace:
             return  @"QQ空间";
@@ -222,7 +228,19 @@
             return  @"微信好友";
             break;
         case ShareTypeWeChatTimeline:
-            return  @"微信朋友圈";
+            return  @"朋友圈";
+            break;
+        case ShareTypeWeChatFav:
+            return @"微信收藏";
+            break;
+        case ShareTypeEmail:
+            return @"邮件";
+            break;
+        case ShareTypeSMS:
+            return @"短信";
+            break;
+        case ShareTypeCopy:
+            return @"复制链接";
             break;
             
         default:
@@ -235,21 +253,32 @@
 {
     switch (type) {
         case ShareTypeSinaWeibo:
-            return  @"dwzsharesdk_sinaweibo";
+            return  @"icon_weibo";
             break;
         case ShareTypeQQ:
-            return  @"dwzsharesdk_qq";
+            return  @"icon_qq";
             break;
         case ShareTypeQQSpace:
-            return  @"dwzsharesdk_qqzone";
+            return  @"icon_qzone";
             break;
         case ShareTypeWeChatSession:
-            return  @"dwzsharesdk_wechat";
+            return  @"icon_wx";
             break;
         case ShareTypeWeChatTimeline:
-            return  @"dwzsharesdk_wechattimeline";
+            return  @"icon_wx_friend";
             break;
-            
+        case ShareTypeWeChatFav:
+            return @"icon_wx_collect";
+            break;
+        case ShareTypeSMS:
+            return @"icon_sms";
+            break;
+        case ShareTypeEmail:
+            return @"icon_sms";
+            break;
+        case ShareTypeCopy:
+            return @"icon_copy";
+            break;
         default:
             break;
     }

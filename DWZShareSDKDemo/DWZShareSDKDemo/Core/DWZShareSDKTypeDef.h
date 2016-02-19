@@ -18,9 +18,8 @@ typedef enum
     ShareTypeQQSpace = 4,           /**< QQ空间 */
     ShareTypeWeChatSession = 5,     /**< 微信好友 */
     ShareTypeWeChatTimeline = 6,    /**< 微信朋友圈 */
-    
-    ShareTypeEmail = 99,            /**< 邮件 */
-    
+    ShareTypeWeChatFavor    = 7,    /**< 微信收藏   */
+        
     ShareTypeSohuWeibo = 24,         /**< 搜狐微博 */
     ShareType163Weibo = 23,          /**< 网易微博 */
     ShareTypeDouBan = 22,            /**< 豆瓣社区 */
@@ -36,7 +35,7 @@ typedef enum
     ShareTypeInstagram = 15,        /**< Instagram */
     ShareTypeLinkedIn = 16,         /**< LinkedIn */
     ShareTypeTumblr = 17,           /**< Tumbir */
-    ShareTypeMail = 18,             /**< 邮件分享 */
+    ShareTypeEmail = 18,             /**< 邮件分享 */
     ShareTypeSMS = 19,              /**< 短信分享 */
     ShareTypeAirPrint = 20,         /**< 打印 */
     ShareTypeCopy = 21,             /**< 拷贝 */
