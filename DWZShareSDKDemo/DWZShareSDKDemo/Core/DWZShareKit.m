@@ -451,13 +451,15 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
         WXWebpageObject *webpageObject = [WXWebpageObject object];
         webpageObject.webpageUrl = pContent.url;
         
-        if(pContent.image){
-            NSData *imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
-            [message setThumbData:imageData];
-        }
+
         message.mediaObject = webpageObject;
     }
     
+    //设置缩略图
+    if(pContent.image){
+        NSData *imageData = UIImageJPEGRepresentation(pContent.image, 0.7);
+        [message setThumbData:imageData];
+    }
     return message;
 }
 
