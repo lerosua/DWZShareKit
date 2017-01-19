@@ -42,6 +42,10 @@
 
 @interface DWZShareKit : NSObject
 
+@property (nonatomic,weak) id<DWZShareSDKDelegate> delegate;
+@property (nonatomic,weak) id<DWZShareKitAuthDelegate> authDelegate;
+
+
 #pragma mark - connect
 /**
  *  @brief 连接新浪微博开放平台

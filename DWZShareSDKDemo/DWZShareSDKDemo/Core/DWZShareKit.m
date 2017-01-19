@@ -49,8 +49,6 @@ NSString *ShareKitKeyAppId = @"ShareKitKeyAppId";
 //微信数据
 @property (nonatomic,strong) NSString *weChatAppId;
 
-@property (nonatomic,weak) id<DWZShareSDKDelegate> delegate;
-@property (nonatomic,weak) id<DWZShareKitAuthDelegate> authDelegate;
 
 @property (nonatomic,strong) DWZShareContent *shareContent;
 @property (nonatomic,strong) NSArray *socialList;
